@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球宏观数据源图谱 · 私募基金经理决策参考</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c0f;
+  --bg2: #111318;
+  --bg3: #181c22;
+  --bg4: #1e232b;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --text2: #9ba3b4;
+  --text3: #5e6678;
+  --gold: #c9a84c;
+  --gold2: #f0cc7a;
+  --gold-dim: rgba(201,168,76,0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --amber: #fb923c;
+  --amber-dim: rgba(251,146,60,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.1);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.1);
+  --font-serif: 'Noto Serif SC', serif;
+  --font-sans: 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,12,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0a0c0f;
+  font-family: var(--font-mono);
+}
+
+.header-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-item {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-family: var(--font-sans);
+}
+
+.nav-item:hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.header-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 64px 40px 48px;
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+.hero-title span {
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text2);
+  max-width: 560px;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-num {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 48px 0 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+  min-width: 20px;
+}
+
+.section-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.section-desc {
+  font-size: 12px;
+  color: var(--text2);
+  margin-left: auto;
+  max-width: 320px;
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ── CARD GRID ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* ── DATA CARD ── */
+.card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--border2);
+  background: var(--bg3);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.card-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.b-official { background: rgba(167,139,250,0.15); color: #a78bfa; border: 0.5px solid rgba(167,139,250,0.25); }
+.b-free     { background: rgba(74,222,128,0.12); color: #4ade80; border: 0.5px solid rgba(74,222,128,0.2); }
+.b-mixed    { background: rgba(96,165,250,0.12); color: #60a5fa; border: 0.5px solid rgba(96,165,250,0.2); }
+.b-paid     { background: rgba(251,146,60,0.12); color: #fb923c; border: 0.5px solid rgba(251,146,60,0.2); }
+
+.card-url-row {
+  margin-bottom: 10px;
+}
+
+.card-url {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 0.5px solid rgba(201,168,76,0.3);
+  transition: color 0.15s, border-color 0.15s;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.card-url:hover {
+  color: var(--gold2);
+  border-color: var(--gold2);
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg4);
+  color: var(--text3);
+  border: 0.5px solid var(--border);
+}
+
+/* ── TRUST BAR ── */
+.trust-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+}
+
+.trust-label {
+  font-size: 11px;
+  color: var(--text3);
+  min-width: 40px;
+  font-family: var(--font-mono);
+}
+
+.trust-track {
+  flex: 1;
+  height: 3px;
+  background: var(--bg4);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.trust-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.t5 { background: linear-gradient(90deg, #1D9E75, #4ade80); width: 100%; }
+.t4 { background: linear-gradient(90deg, #185FA5, #60a5fa); width: 80%; }
+.t3 { background: linear-gradient(90deg, #BA7517, #fb923c); width: 60%; }
+
+.trust-stars {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  min-width: 32px;
+  text-align: right;
+}
+
+.s5 { color: #4ade80; }
+.s4 { color: #60a5fa; }
+.s3 { color: #fb923c; }
+
+/* ── WARN BOX ── */
+.warn {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(251,146,60,0.07);
+  border: 0.5px solid rgba(251,146,60,0.2);
+  border-radius: 6px;
+  font-size: 11px;
+  color: #fb923c;
+  line-height: 1.6;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  margin-top: 48px;
+  padding: 24px 28px;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  border-left: 3px solid var(--red);
+}
+
+.disclaimer-title {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.disclaimer-body {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.9;
+}
+
+.disclaimer-body li {
+  margin-bottom: 6px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.disclaimer-body li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--text3);
+}
+
+/* ── PRIORITY TABLE ── */
+.priority-section {
+  padding: 48px 0 0;
+}
+
+.priority-title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.ptable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ptable th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+
+.ptable td {
+  padding: 12px 14px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: top;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.ptable tr:hover td {
+  background: var(--bg3);
+}
+
+.ptable tr:last-child td {
+  border-bottom: none;
+}
+
+.prio-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.p1 { background: rgba(74,222,128,0.12); color: #4ade80; }
+.p2 { background: rgba(96,165,250,0.12); color: #60a5fa; }
+.p3 { background: rgba(251,146,60,0.12); color: #fb923c; }
+.p4 { background: rgba(94,102,120,0.2); color: #9ba3b4; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 32px 40px;
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+}
+
+.footer-text {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+
+/* ── LEGEND BAR ── */
+.legend-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  margin: 32px 0 0;
+}
+
+.legend-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-right: 4px;
+}
+
+.leg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ── SCROLL ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeUp 0.4s ease both;
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.30s; }
+
+/* ── GLOW ACCENT ── */
+.accent-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.4;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .site-header { padding: 0 20px; }
+  .hero { padding: 40px 20px 32px; }
+  .hero-title { font-size: 26px; }
+  .main { padding: 0 20px 60px; }
+  .cards { grid-template-columns: 1fr; }
+  .section-desc { display: none; }
+  .hero-stats { gap: 20px; }
+  footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  .header-nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-mark">M∑</div>
+    <span>全球宏观数据图谱</span>
+  </div>
+  <nav class="header-nav">
+    <a class="nav-item" href="#liquidity">流动性</a>
+    <a class="nav-item" href="#fx">汇率</a>
+    <a class="nav-item" href="#flows">资金流</a>
+    <a class="nav-item" href="#gold">黄金</a>
+    <a class="nav-item" href="#copper">铜</a>
+    <a class="nav-item" href="#priority">配置优先级</a>
+  </nav>
+  <span class="header-badge">UPDATED 2026-04-09</span>
+</header>
+
+<div class="accent-line"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">私募基金经理 · 全球资产配置决策参考</div>
+  <h1 class="hero-title">宏观主要矛盾<span>数据源</span>整合框架</h1>
+  <p class="hero-sub">覆盖美国、日本、欧洲金融条件与流动性边际变化，全球主要经济体汇率比价，大类资产资金流动监测，以及黄金、铜期现货库存与央行持仓分析。所有数据源均经过实际核实，标注可信度与获取方式。</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">18+</span>
+      <span class="stat-label">核验数据源</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <span class="stat-label">分析模块</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">11</span>
+      <span class="stat-label">官方/央行来源</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">-0.43</span>
+      <span class="stat-label">美国NFCI（3/27）</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">$6.7T</span>
+      <span class="stat-label">Fed总资产（4/1）</span>
+    </div>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<div class="main">
+  <div class="legend-bar">
+    <span class="legend-label">数据获取方式：</span>
+    <span class="leg"><span class="badge b-official">官方</span> 央行/国际组织直接发布</span>
+    <span class="leg"><span class="badge b-free">免费</span> 公开可直接获取</span>
+    <span class="leg"><span class="badge b-mixed">有限免费</span> 注册后可获取基础版</span>
+    <span class="leg"><span class="badge b-paid">付费</span> 需订阅或终端</span>
+  </div>
+
+<!-- ── MODULE 1 ── -->
+<section class="section" id="liquidity">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div class="section-icon" style="background:rgba(96,165,250,0.12)">💧</div>
+    <h2 class="section-title">金融条件 &amp; 流动性边际</h2>
+    <div class="section-desc">美国 / 欧元区 / 日本<br>金融条件指数 · 央行资产负债表 · 利率</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">FRED · St. Louis Fed</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://fred.stlouisfed.org" target="_blank" rel="noopener">fred.stlouisfed.org</a>
+      </div>
+      <p class="card-desc">美联储经济数据库，覆盖资产负债表（WALCL）、联邦基金利率、SOFR、TGA账户余额、逆回购规模等核心流动性指标。每周四4:30ET发布H.4.1报告。截至2026年4月1日，Fed总资产约$6.7万亿。</p>
+      <div class="card-tags">
+        <span class="tag">每周更新</span><span class="tag">API可用</span><span class="tag">CSV下载</span><span class="tag">历史数据完整</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">Chicago Fed · NFCI / ANFCI</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.chicagofed.org/research/data/nfci/current-data" target="_blank" rel="noopener">chicagofed.org/research/data/nfci</a>
+      </div>
+      <p class="card-desc">美国国家金融条件指数，含风险/信贷/杠杆三分项，每周三8:30ET更新。2026年3月27日读数为−0.43（宽松区间）。ANFCI剔除经济周期因素，是更纯粹的金融条件信号。</p>
+      <div class="card-tags">
+        <span class="tag">每周三8:30ET</span><span class="tag">含ANFCI</span><span class="tag">三分项拆解</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">Fed FCI-G（联储金融条件指数）</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.federalreserve.gov/econres/notes/feds-notes/a-new-index-to-measure-us-financial-conditions-20230630.html" target="_blank" rel="noopener">federalreserve.gov · FEDS Notes</a>
+      </div>
+      <p class="card-desc">联储自建金融条件指数，综合国债收益率、公司债利差、抵押贷款利率、股票市值、房价六大变量。月/季度更新，最新数据截至2026年3月20日，提供CSV下载及源码。</p>
+      <div class="card-tags">
+        <span class="tag">月/季度</span><span class="tag">CSV+代码开放</span><span class="tag">六变量综合</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">ECB · 欧央行数据门户</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.ecb.europa.eu/stats/html/index.en.html" target="_blank" rel="noopener">ecb.europa.eu/stats</a>
+      </div>
+      <p class="card-desc">欧洲央行统计数据门户，含资产购买规模（APP/PEPP）、TLTRO余额、欧元区M2、各国国债利差。欧元区金融条件分析的一手来源，多语言，数据可下载。</p>
+      <div class="card-tags">
+        <span class="tag">月度/周度</span><span class="tag">TLTRO余额</span><span class="tag">利差数据</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">BOJ · 日本央行统计</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.boj.or.jp/en/statistics/index.htm" target="_blank" rel="noopener">boj.or.jp/en/statistics</a>
+      </div>
+      <p class="card-desc">日本央行官方统计，含YCC政策下的JGB持仓、ETF持仓、准备金余额及货币供应数据。日银ETF持仓数据月度更新，滞后约1个月，近年已大幅减少ETF购买。</p>
+      <div class="card-tags">
+        <span class="tag">月度/周度</span><span class="tag">ETF持仓</span><span class="tag">YCC跟踪</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">Goldman Sachs GS FCI</span>
+        <div class="badges"><span class="badge b-paid">付费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.goldmansachs.com/intelligence/pages/gs-research.html" target="_blank" rel="noopener">goldmansachs.com · Bloomberg Terminal</a>
+      </div>
+      <p class="card-desc">高盛全球金融条件指数，覆盖美/欧/日/中/新兴市场，买方最广泛引用的商业FCI。需Bloomberg Terminal完整订阅，无免费公开版。媒体摘要数据口径不完全一致，不建议直接依赖。</p>
+      <div class="card-tags">
+        <span class="tag">日度数据</span><span class="tag">需Bloomberg</span><span class="tag">多国覆盖</span>
+      </div>
+      <div class="warn">⚠ 需付费终端订阅，无法核实免费版原始数据</div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t4"></div></div>
+        <span class="trust-stars s4">★★★★</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MODULE 2 ── -->
+<section class="section" id="fx">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div class="section-icon" style="background:rgba(45,212,191,0.1)">💱</div>
+    <h2 class="section-title">主要经济体汇率比价</h2>
+    <div class="section-desc">NEER/REER · 美元指数 · CFTC持仓</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">BIS 有效汇率指数 NEER/REER</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.bis.org/statistics/eer.htm" target="_blank" rel="noopener">bis.org/statistics/eer</a>
+      </div>
+      <p class="card-desc">国际清算银行发布各主要货币名义/实际有效汇率，是跨经济体汇率竞争力分析的权威基准，覆盖60+经济体，月度更新，可下载完整历史序列。</p>
+      <div class="card-tags">
+        <span class="tag">月度</span><span class="tag">60+货币</span><span class="tag">1964年起历史数据</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">Fed H.10 外汇汇率</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.federalreserve.gov/releases/h10/" target="_blank" rel="noopener">federalreserve.gov/releases/h10</a>
+      </div>
+      <p class="card-desc">美联储每周发布主要货币对美元汇率H.10报告，含美元广义/狭义指数。与ICE发布的DXY实时指数结合，判断美元周期位置的权威官方来源。</p>
+      <div class="card-tags">
+        <span class="tag">每周更新</span><span class="tag">美元指数</span><span class="tag">主要货币对</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">CFTC COT 期货持仓报告</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noopener">cftc.gov/MarketReports/CommitmentsofTraders</a>
+      </div>
+      <p class="card-desc">CFTC每周五发布主要货币期货持仓（机构/杠杆基金/大户/散户），是判断汇率多空力量和仓位拥挤度的核心数据，不可替代。数据滞后3个交易日。</p>
+      <div class="card-tags">
+        <span class="tag">每周五发布</span><span class="tag">滞后3天</span><span class="tag">仓位拥挤度</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">MacroMicro 汇率可视化</span>
+        <div class="badges"><span class="badge b-mixed">有限免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://en.macromicro.me" target="_blank" rel="noopener">en.macromicro.me</a>
+      </div>
+      <p class="card-desc">整合BIS、Fed、IMF汇率及利差数据的可视化平台，注册免费用核心图表，适合快速可视化验证。付费可下载全量历史数据。使用需核实其数据来源标注。</p>
+      <div class="card-tags">
+        <span class="tag">聚合可视化</span><span class="tag">注册免费基础版</span><span class="tag">二手整合</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t4"></div></div>
+        <span class="trust-stars s4">★★★★</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MODULE 3 ── -->
+<section class="section" id="flows">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div class="section-icon" style="background:rgba(251,146,60,0.1)">🌊</div>
+    <h2 class="section-title">全球大类资产资金流动</h2>
+    <div class="section-desc">基金流量 · 跨境资本 · 外国持有美债</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">EPFR Global</span>
+        <div class="badges"><span class="badge b-paid">付费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://epfr.com" target="_blank" rel="noopener">epfr.com</a>
+      </div>
+      <p class="card-desc">全球最权威基金流量数据库，覆盖155,000+份额类、追踪$70万亿AUM，1995年起历史数据，100%主要投行使用。每周四发布Global Navigator报告。数据直接来自基金管理人/托管方，日/周/月多频次。</p>
+      <div class="card-tags">
+        <span class="tag">日度更新</span><span class="tag">机构标准</span><span class="tag">年度订阅</span><span class="tag">价格不公开</span>
+      </div>
+      <div class="warn">⚠ 全量数据需年度订阅，无免费公开版。BofA每周基金流量报告是有限度的免费替代。</div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">IIF 国际金融协会资本流动追踪</span>
+        <div class="badges"><span class="badge b-mixed">有限免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.iif.com/Research/Capital-Flows-Tracker" target="_blank" rel="noopener">iif.com/Research/Capital-Flows-Tracker</a>
+      </div>
+      <p class="card-desc">IIF每月/每日发布新兴市场资本流动追踪，方法论对应国际收支账户口径，与EPFR互补但口径不同。会员机构免费，部分摘要数据对外公开。</p>
+      <div class="card-tags">
+        <span class="tag">月度/日度</span><span class="tag">EM重点覆盖</span><span class="tag">BoP口径</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t4"></div></div>
+        <span class="trust-stars s4">★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">美国财政部 TIC 数据</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/mfh.txt" target="_blank" rel="noopener">ticdata.treasury.gov</a>
+      </div>
+      <p class="card-desc">美国财政部月度发布外国持有美国证券数据（TIC），是追踪全球美债需求结构、判断各国去美元化进程的权威来源。数据滞后约6周，不适合高频交易参考。</p>
+      <div class="card-tags">
+        <span class="tag">月度</span><span class="tag">滞后约6周</span><span class="tag">美债持有结构</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">BIS 国际银行统计 LBS/CBS</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.bis.org/statistics/bankstats.htm" target="_blank" rel="noopener">bis.org/statistics/bankstats</a>
+      </div>
+      <p class="card-desc">BIS跨境银行贷款与存款数据（LBS区位统计/CBS合并统计），是全球银行体系流动性传导最全面官方数据，季度更新，约滞后1季度。跨境资本流动学术研究必备。</p>
+      <div class="card-tags">
+        <span class="tag">季度</span><span class="tag">滞后1季</span><span class="tag">60+报告国</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MODULE 4 ── -->
+<section class="section" id="gold">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div class="section-icon" style="background:rgba(201,168,76,0.12)">🥇</div>
+    <h2 class="section-title">黄金：期现库存 &amp; 央行持仓</h2>
+    <div class="section-desc">WGC · COMEX仓单 · LBMA定盘 · CFTC持仓</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">WGC Goldhub · 央行黄金持仓</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-mixed">有限免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.gold.org/goldhub/data/gold-reserves-by-country" target="_blank" rel="noopener">gold.org/goldhub/data/gold-reserves-by-country</a>
+      </div>
+      <p class="card-desc">世界黄金协会官方数据门户，汇编IMF IFS央行持仓统计。2026年2月最新数据：全球央行净买入19吨（低于2025年月均26吨），人行连续16个月增持至2308吨（占储备10%）。注册后可访问更多历史数据。</p>
+      <div class="card-tags">
+        <span class="tag">月度更新</span><span class="tag">滞后约6周</span><span class="tag">IMF IFS底层数据</span>
+      </div>
+      <div class="warn">⚠ 已知结构性缺口：2025年约57%央行购金为"未申报购买"，实际持仓高于公开数字</div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">IMF IFS / COFER</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://data.imf.org/?sk=4c514d48-b6ba-49ed-8ab9-52b0c1a0179b" target="_blank" rel="noopener">data.imf.org · IFS统计</a>
+      </div>
+      <p class="card-desc">IMF国际金融统计（IFS）是WGC央行持仓数据的原始来源。COFER报告全球官方外汇储备货币构成。部分国家存在报告滞后和不定期修订，且存在已知"未申报"问题。</p>
+      <div class="card-tags">
+        <span class="tag">季度</span><span class="tag">存在报告滞后</span><span class="tag">储备构成分析</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">COMEX 黄金仓库库存</span>
+        <div class="badges"><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.cmegroup.com/trading/metals/precious/gold.html" target="_blank" rel="noopener">cmegroup.com · 黄金合约 GC</a>
+      </div>
+      <p class="card-desc">CME Group每日发布COMEX黄金仓库库存，区分已登记（Registered）与合格（Eligible）仓单。截至2026年4月6日，黄金库存约16.3百万盎司。库存持续下降是现货需求强劲信号。</p>
+      <div class="card-tags">
+        <span class="tag">日度更新</span><span class="tag">CME官方来源</span><span class="tag">Registered/Eligible分项</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">LBMA 黄金定盘价</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.lbma.org.uk/prices-and-data/precious-metal-prices" target="_blank" rel="noopener">lbma.org.uk/prices-and-data</a>
+      </div>
+      <p class="card-desc">伦敦金属交易协会LBMA每日发布AM/PM定盘价，是国际黄金定价基准，由ICE平台运作。期现价差（基差）可间接反映现货紧张程度。实时完整报价需付费订阅。</p>
+      <div class="card-tags">
+        <span class="tag">每日两次定盘</span><span class="tag">全球定价基准</span><span class="tag">基差分析</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">CFTC COT · 黄金期货持仓（GC）</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noopener">cftc.gov · GC黄金合约持仓</a>
+      </div>
+      <p class="card-desc">CFTC每周发布COMEX黄金期货持仓分类报告，区分管理基金/生产商/掉期交易商。是判断黄金投机仓位拥挤度的标准工具，仓位极度多头时需警惕反转风险。</p>
+      <div class="card-tags">
+        <span class="tag">每周五发布</span><span class="tag">滞后3天</span><span class="tag">仓位拥挤度</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MODULE 5 ── -->
+<section class="section" id="copper">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div class="section-icon" style="background:rgba(251,146,60,0.1)">🔴</div>
+    <h2 class="section-title">铜：三大交易所库存 &amp; 期现结构</h2>
+    <div class="section-desc">LME · SHFE · COMEX · 套利价差</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">LME · 仓库库存报告</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.lme.com/Market-data/Reports-and-data/Warehouse-and-stocks-reports" target="_blank" rel="noopener">lme.com/Market-data/Reports-and-data/Warehouse-and-stocks-reports</a>
+      </div>
+      <p class="card-desc">伦敦金属交易所每日发布铜及其他基本金属仓库库存报告，是全球铜市最重要的现货参考指标。每日伦敦时间17:50更新，次日免费数据可直接下载。</p>
+      <div class="card-tags">
+        <span class="tag">日度更新</span><span class="tag">全球仓库分布</span><span class="tag">次日免费下载</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">SHFE · 上期所库存</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="http://www.shfe.com.cn/statements/report/" target="_blank" rel="noopener">shfe.com.cn · 周度库存报告</a>
+      </div>
+      <p class="card-desc">上海期货交易所每周五发布铜/铝/锌等金属库存，是判断中国国内需求侧最直接的库存指标。与LME/COMEX三所合并可构建全球综合库存视图，是铜市供需分析的必备数据。</p>
+      <div class="card-tags">
+        <span class="tag">每周五</span><span class="tag">中国需求代理</span><span class="tag">中文界面</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">COMEX · 铜仓库库存</span>
+        <div class="badges"><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.cmegroup.com/trading/metals/base/copper.html" target="_blank" rel="noopener">cmegroup.com · 铜合约 HG</a>
+      </div>
+      <p class="card-desc">CME每日发布COMEX铜仓库库存（以磅计量），覆盖美国多个指定仓库。COMEX−LME铜价价差（arb）是跨市场套利信号，也反映东西方需求相对强弱，是铜市分析不可忽略的变量。</p>
+      <div class="card-tags">
+        <span class="tag">日度</span><span class="tag">25,000磅/合约</span><span class="tag">LME-COMEX套利参考</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">MacroMicro · 三所合并铜库存</span>
+        <div class="badges"><span class="badge b-mixed">有限免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://en.macromicro.me/collections/68/copper-relative/112858/world-copper-inventories-of-the-three-major-exchanges-lme-shfe-comex-combined" target="_blank" rel="noopener">en.macromicro.me · 铜三所合并</a>
+      </div>
+      <p class="card-desc">整合LME+SHFE+COMEX三所合并铜库存可视化图表，快速判断全球供需总体状态。数据来源为三交所官方数据二次整合，注册免费使用基础图表。</p>
+      <div class="card-tags">
+        <span class="tag">三所合并视图</span><span class="tag">注册免费</span><span class="tag">二手整合</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t4"></div></div>
+        <span class="trust-stars s4">★★★★</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-name">CFTC COT · 铜期货持仓（HG）</span>
+        <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
+      </div>
+      <div class="card-url-row">
+        <a class="card-url" href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noopener">cftc.gov · HG铜合约持仓</a>
+      </div>
+      <p class="card-desc">CFTC铜期货持仓分类报告，监测管理基金净多/净空仓位变化。铜与宏观周期高度相关（"Dr. Copper"），若管理基金持仓极度拥挤，警惕逆转风险。</p>
+      <div class="card-tags">
+        <span class="tag">每周五</span><span class="tag">仓位拥挤度</span><span class="tag">宏观先行指标</span>
+      </div>
+      <div class="trust-row">
+        <span class="trust-label">可信度</span>
+        <div class="trust-track"><div class="trust-fill t5"></div></div>
+        <span class="trust-stars s5">★★★★★</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRIORITY TABLE ── -->
+<section class="priority-section" id="priority">
+  <h2 class="priority-title">配置优先级 · 数据订阅建议</h2>
+  <table class="ptable">
+    <thead>
+      <tr>
+        <th style="width:90px">优先级</th>
+        <th style="width:280px">数据源</th>
+        <th>核心用途</th>
+        <th style="width:120px">成本</th>
+        <th style="width:80px">频次</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="prio-badge p1">必须</span></td>
+        <td style="color:var(--text)">FRED + Chicago Fed NFCI + CFTC COT + LME/SHFE/COMEX库存 + WGC Goldhub</td>
+        <td>流动性监控、汇率仓位、大宗库存、央行购金——构成日常监控基础层</td>
+        <td><span style="color:#4ade80">免费</span></td>
+        <td style="color:var(--text3);font-family:var(--font-mono);font-size:11px">日/周</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p2">高度建议</span></td>
+        <td style="color:var(--text)">Bloomberg Terminal（含GS FCI、EPFR摘要、实时汇率、公司债利差）</td>
+        <td>提升数据时效与深度，接入商业金融条件指数和实时跨资产数据</td>
+        <td><span style="color:#fb923c">付费</span></td>
+        <td style="color:var(--text3);font-family:var(--font-mono);font-size:11px">实时</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p3">视规模决定</span></td>
+        <td style="color:var(--text)">EPFR Global 全量订阅</td>
+        <td>精细化资金流向分析，区分机构/ETF/散户的国别/行业/资产类别流动</td>
+        <td><span style="color:#fb923c">年度订阅</span></td>
+        <td style="color:var(--text3);font-family:var(--font-mono);font-size:11px">日/周</td>
+      </tr>
+      <tr>
+        <td><span class="prio-badge p4">可替代</span></td>
+        <td style="color:var(--text)">MacroMicro · 聚合可视化（注册免费版）</td>
+        <td>日常快速可视化验证，适合需要快速浏览宏观图表但暂无Bloomberg的场景</td>
+        <td><span style="color:#4ade80">注册免费</span></td>
+        <td style="color:var(--text3);font-family:var(--font-mono);font-size:11px">日/周</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ── DISCLAIMER ── -->
+<div class="disclaimer">
+  <div class="disclaimer-title">⚠ 已核实的数据盲区与不确定项</div>
+  <ul class="disclaimer-body">
+    <li><b>央行黄金"未申报购买"</b>：据WGC，2025年约57%央行购金通过非公开渠道发生，IMF/WGC数字系统性低估实际持仓。这是已知结构性缺口，无法通过公开数据源弥补。</li>
+    <li><b>EPFR资金流量数据</b>：全量数据需年度付费订阅，价格不公开。BofA美林每周基金流量报告（通过媒体二次发布）是有限替代，但口径与EPFR原始数据不完全一致。</li>
+    <li><b>高盛GS FCI等商业金融条件指数</b>：方法论未完全公开，需Bloomberg Terminal获取，仅依赖媒体二次引用存在口径失真风险。</li>
+    <li><b>日本央行ETF持仓</b>：月度更新，滞后约1个月。日银近年已大幅减少ETF购买，该数据对判断日本股市边际资金流入的指示意义已明显下降。</li>
+    <li><b>中国上海保税仓铜库存</b>：该数据由Fastmarkets/SMM等商业机构发布，含估算成分，可信度低于LME/SHFE/COMEX官方交易所数据，使用时需注意来源说明。</li>
+    <li><b>本页面数据</b>：仅供辅助决策分析参考，不构成投资建议。所有投资决策的责任由投资者自行承担。</li>
+  </ul>
+</div>
+
+</div><!-- /.main -->
+
+<footer>
+  <span class="footer-text">全球宏观数据源图谱 · 私募基金经理决策参考 · 数据核实截至 2026-04-09</span>
+  <span class="footer-text">数据来源：Fed · BIS · IMF · WGC · CME · LME · SHFE · CFTC · ECB · BOJ</span>
+</footer>
+
+</body>
+</html>
