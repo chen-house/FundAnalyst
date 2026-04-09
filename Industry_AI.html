@@ -3,152 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI产业链进展追踪 · 私募基金经理决策参考</title>
+<title>AI产业链进展追踪 · 每日检查清单</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#080b0e;--bg2:#0f1318;--bg3:#161b22;--bg4:#1c2230;
-  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
   --text:#dde2ed;--text2:#8a95aa;--text3:#4e5a6e;
-  --c1:#7ee8a2;--c1d:rgba(126,232,162,0.1);
-  --c2:#79c0ff;--c2d:rgba(121,192,255,0.1);
-  --c3:#f0883e;--c3d:rgba(240,136,62,0.1);
-  --c4:#d2a8ff;--c4d:rgba(210,168,255,0.1);
-  --c5:#ff7b72;--c5d:rgba(255,123,114,0.1);
-  --c6:#ffa657;--c6d:rgba(255,166,87,0.1);
+  --c1:#7ee8a2;--c2:#79c0ff;--c3:#f0883e;--c4:#d2a8ff;--c5:#ff7b72;--c6:#ffa657;
   --gold:#c9a84c;--gold2:#f0cc7a;
   --font-serif:'Noto Serif SC',serif;
   --font-sans:'Noto Sans SC',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.7}
 
-/* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(8,11,14,0.93);backdrop-filter:blur(16px);
-  border-bottom:0.5px solid var(--border);height:54px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 36px}
-.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-serif);font-size:14px}
-.lm{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#7ee8a2,#79c0ff);
-  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
-  color:#080b0e;font-family:var(--font-mono)}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(8,11,14,0.95);backdrop-filter:blur(16px);
+  border-bottom:0.5px solid var(--border);height:52px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 32px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--font-serif);font-size:13px}
+.lm{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--c1),var(--c2));
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#080b0e;font-family:var(--font-mono)}
 nav{display:flex;gap:2px}
-.ni{padding:4px 10px;border-radius:5px;font-size:11px;color:var(--text2);
-  text-decoration:none;transition:all .18s;font-family:var(--font-sans)}
+.ni{padding:4px 10px;border-radius:5px;font-size:11px;color:var(--text2);font-family:var(--font-sans);
+  background:none;border:none;cursor:pointer;outline:none;transition:all .15s}
 .ni:hover{background:var(--bg3);color:var(--text)}
-.ts{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.05em}
+.today-badge{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.04em}
 
-/* HERO */
-.hero{padding:56px 36px 44px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:360px;height:360px;
-  background:radial-gradient(circle,rgba(121,192,255,0.05) 0%,transparent 70%);pointer-events:none}
-.eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--c2);letter-spacing:.15em;
-  text-transform:uppercase;margin-bottom:14px}
-.htitle{font-family:var(--font-serif);font-size:34px;font-weight:700;line-height:1.25;
-  color:var(--text);margin-bottom:14px;max-width:600px}
+.prog-wrap{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:11px 32px}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.prog-label{font-size:12px;color:var(--text2)}
+.prog-count{font-family:var(--font-mono);font-size:12px;color:var(--c1)}
+.prog-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:2px;transition:width .4s ease;width:0%}
+.prog-secs{display:flex;gap:14px;margin-top:7px;flex-wrap:wrap}
+.ps{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+.psdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+.hero{padding:40px 32px 32px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(121,192,255,0.04) 0%,transparent 70%);pointer-events:none}
+.eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--c2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.htitle{font-family:var(--font-serif);font-size:29px;font-weight:700;line-height:1.25;color:var(--text);margin-bottom:9px}
 .htitle span{color:var(--c2)}
-.hsub{font-size:13px;color:var(--text2);max-width:540px;line-height:1.85;margin-bottom:26px}
-.hstats{display:flex;gap:28px;flex-wrap:wrap}
-.hs{display:flex;flex-direction:column;gap:2px}
-.hsn{font-family:var(--font-mono);font-size:21px;font-weight:500}
-.hsl{font-size:10px;color:var(--text3);letter-spacing:.05em}
+.hsub{font-size:12px;color:var(--text2);max-width:580px;line-height:1.85}
 
-/* LAYER TABS */
-.ltabs{display:flex;gap:6px;padding:20px 36px 0;flex-wrap:wrap}
-.lt{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;
-  border:0.5px solid var(--border2);color:var(--text2);background:none;transition:all .2s;
-  font-family:var(--font-sans)}
-.lt:hover,.lt.active{background:var(--bg3);color:var(--text);border-color:var(--border2)}
-.lt.l1.active{background:rgba(121,192,255,0.12);color:var(--c2);border-color:rgba(121,192,255,0.3)}
-.lt.l2.active{background:rgba(126,232,162,0.1);color:var(--c1);border-color:rgba(126,232,162,0.25)}
-.lt.l3.active{background:rgba(210,168,255,0.1);color:var(--c4);border-color:rgba(210,168,255,0.25)}
-.lt.l4.active{background:rgba(240,136,62,0.1);color:var(--c3);border-color:rgba(240,136,62,0.25)}
-.lt.l5.active{background:rgba(255,166,87,0.1);color:var(--c6);border-color:rgba(255,166,87,0.25)}
-
-/* MAIN */
-.main{max-width:1380px;margin:0 auto;padding:0 36px 80px}
-
-/* CAPEX BANNER */
-.capex{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;
-  margin:28px 0;padding:20px;background:var(--bg2);border:0.5px solid var(--border);border-radius:12px}
-.cx{text-align:center}
-.cxn{font-family:var(--font-mono);font-size:22px;font-weight:500;margin-bottom:2px}
-.cxl{font-size:10px;color:var(--text3);letter-spacing:.04em}
-.cxs{font-size:11px;color:var(--text2);margin-top:2px}
-
-/* SECTION */
-.sec{padding:40px 0 0}
-.shead{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;
-  border-bottom:0.5px solid var(--border)}
-.snum{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:18px}
-.sicon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;
-  justify-content:center;font-size:15px;flex-shrink:0}
-.stitle{font-family:var(--font-serif);font-size:17px;font-weight:600;color:var(--text)}
-.sdesc{font-size:11px;color:var(--text2);margin-left:auto;max-width:300px;text-align:right;line-height:1.6}
-
-/* SUB SECTION */
-.subsec{margin-bottom:24px}
-.subtitle{font-size:12px;font-weight:500;color:var(--text2);font-family:var(--font-mono);
-  letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;padding-left:2px;
-  display:flex;align-items:center;gap:8px}
-.subtitle::after{content:'';flex:1;height:0.5px;background:var(--border)}
-
-/* CARDS */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
-.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;
-  padding:16px 18px;transition:border-color .18s,background .18s;position:relative;overflow:hidden}
-.card:hover{border-color:var(--border2);background:var(--bg3)}
-.ctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:6px}
-.cname{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
-.badges{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
-.badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:4px;
-  white-space:nowrap;letter-spacing:.03em}
-.bo{background:rgba(210,168,255,0.12);color:#d2a8ff;border:0.5px solid rgba(210,168,255,0.22)}
-.bf{background:rgba(126,232,162,0.1);color:#7ee8a2;border:0.5px solid rgba(126,232,162,0.18)}
-.bm{background:rgba(121,192,255,0.1);color:#79c0ff;border:0.5px solid rgba(121,192,255,0.18)}
-.bp{background:rgba(240,136,62,0.1);color:#f0883e;border:0.5px solid rgba(240,136,62,0.18)}
-.bw{background:rgba(255,123,114,0.1);color:#ff7b72;border:0.5px solid rgba(255,123,114,0.18)}
-.curl{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;
-  border-bottom:0.5px solid rgba(201,168,76,0.28);transition:color .15s,border-color .15s;
-  word-break:break-all;display:block;margin-bottom:8px;line-height:1.5}
-.curl:hover{color:var(--gold2);border-color:var(--gold2)}
-.cdesc{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:10px}
-.ctags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);
-  color:var(--text3);border:0.5px solid var(--border)}
-.trust{display:flex;align-items:center;gap:7px;padding-top:9px;border-top:0.5px solid var(--border)}
-.tlabel{font-size:10px;color:var(--text3);min-width:40px;font-family:var(--font-mono)}
-.ttrack{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
-.tfill{height:100%;border-radius:2px}
-.t5{background:linear-gradient(90deg,#1D9E75,#7ee8a2);width:100%}
-.t4{background:linear-gradient(90deg,#185FA5,#79c0ff);width:80%}
-.t3{background:linear-gradient(90deg,#BA7517,#f0883e);width:60%}
-.t2{background:linear-gradient(90deg,#8a3030,#ff7b72);width:40%}
-.tscore{font-size:10px;font-family:var(--font-mono);min-width:30px;text-align:right}
-.s5{color:#7ee8a2}.s4{color:#79c0ff}.s3{color:#f0883e}.s2{color:#ff7b72}
-.warn{margin-top:8px;padding:7px 9px;background:rgba(240,136,62,0.07);
-  border:0.5px solid rgba(240,136,62,0.18);border-radius:5px;font-size:11px;color:#f0883e;line-height:1.6}
-.info{margin-top:8px;padding:7px 9px;background:rgba(121,192,255,0.06);
-  border:0.5px solid rgba(121,192,255,0.15);border-radius:5px;font-size:11px;color:#79c0ff;line-height:1.6}
-
-/* HIGHLIGHT DATA ROW */
-.datarow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;
-  margin:16px 0;padding:16px;background:var(--bg2);border:0.5px solid var(--border);
-  border-radius:10px;border-left:3px solid var(--c2)}
-.dr{display:flex;flex-direction:column;gap:3px}
-.drv{font-family:var(--font-mono);font-size:16px;font-weight:500;color:var(--text)}
-.drl{font-size:11px;color:var(--text2)}
-.drs{font-size:10px;color:var(--text3);font-style:italic}
+.main{max-width:1320px;margin:0 auto;padding:0 32px 80px}
 
 /* CHAIN MAP */
-.chain{display:flex;gap:0;margin:20px 0;overflow-x:auto;padding-bottom:4px}
-.cblock{flex-shrink:0;min-width:120px;background:var(--bg2);border:0.5px solid var(--border);
-  border-radius:0;padding:10px 14px;position:relative}
+.chain-wrap{margin:24px 0 0}
+.chain-label{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
+.chain{display:flex;gap:0;overflow-x:auto;padding-bottom:4px}
+.cblock{flex-shrink:0;min-width:120px;background:var(--bg2);border:0.5px solid var(--border);padding:10px 14px}
 .cblock:first-child{border-radius:8px 0 0 8px}
 .cblock:last-child{border-radius:0 8px 8px 0}
-.cbtitle{font-size:11px;font-weight:500;color:var(--text);margin-bottom:6px}
+.cbtitle{font-size:11px;font-weight:500;margin-bottom:6px}
 .cbitem{font-size:10px;color:var(--text2);line-height:1.7;display:flex;align-items:center;gap:4px}
 .cbitem::before{content:'·';color:var(--text3)}
 .arrow{display:flex;align-items:center;padding:0 2px;color:var(--text3);font-size:16px;flex-shrink:0}
@@ -156,29 +67,80 @@ nav{display:flex;gap:2px}
 .chot .cbtitle{color:var(--c5)}
 .cwarm{border-color:rgba(240,136,62,0.25);background:rgba(240,136,62,0.04)}
 .cwarm .cbtitle{color:var(--c3)}
+.chain-note{font-size:10px;color:var(--text3);margin-top:6px}
 
-/* DISCLAIMER */
-.disc{margin:40px 0 0;padding:20px 24px;background:var(--bg2);border:0.5px solid var(--border);
-  border-radius:11px;border-left:3px solid var(--c5)}
-.discttl{font-family:var(--font-serif);font-size:13px;font-weight:600;color:var(--c5);
-  margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.discbody{font-size:11px;color:var(--text2);line-height:1.9}
-.discbody li{margin-bottom:5px;padding-left:14px;position:relative}
-.discbody li::before{content:'▸';position:absolute;left:0;color:var(--text3)}
+.sec{padding:28px 0 0}
+.shead{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:11px;border-bottom:0.5px solid var(--border)}
+.snum{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:16px}
+.sicon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.stitle{font-family:var(--font-serif);font-size:16px;font-weight:600;color:var(--text)}
+.sfreq{margin-left:auto;display:flex;align-items:center;gap:5px}
+.freq{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:10px}
+.fq{background:rgba(121,192,255,0.1);color:var(--c2);border:0.5px solid rgba(121,192,255,0.2)}
+.fe{background:rgba(240,136,62,0.1);color:var(--c3);border:0.5px solid rgba(240,136,62,0.2)}
+.fw{background:rgba(126,232,162,0.1);color:var(--c1);border:0.5px solid rgba(126,232,162,0.2)}
 
-/* LEGEND */
-.legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 18px;
-  background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;margin:24px 0 0}
-.ll{font-size:11px;font-weight:500;color:var(--text2);margin-right:4px}
-.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.sublabel{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;
+  margin:15px 0 9px;display:flex;align-items:center;gap:8px}
+.sublabel::after{content:'';flex:1;height:0.5px;background:var(--border)}
 
-/* TABLE */
-.ptable{width:100%;border-collapse:collapse;font-size:12px}
-.ptable th{text-align:left;font-weight:500;font-size:10px;color:var(--text3);
-  font-family:var(--font-mono);letter-spacing:.08em;padding:9px 12px;
-  border-bottom:0.5px solid var(--border);background:var(--bg2)}
-.ptable td{padding:11px 12px;border-bottom:0.5px solid var(--border);
-  vertical-align:top;color:var(--text2);line-height:1.6}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:10px}
+
+.cl-item{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;
+  padding:13px 15px;cursor:pointer;transition:all .18s;user-select:none}
+.cl-item:hover{border-color:var(--border2);background:var(--bg3)}
+.cl-item.checked{border-color:rgba(126,232,162,0.3);background:rgba(126,232,162,0.03)}
+.cl-item.checked .cl-name{color:var(--text3);text-decoration:line-through}
+.cl-item.checked .chk{background:var(--c1);border-color:var(--c1)}
+.cl-item.checked .chk::after{opacity:1}
+.cl-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0;
+  margin-top:1px;transition:all .15s;position:relative}
+.chk::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:10px;color:#080b0e;opacity:0;transition:opacity .15s}
+.cl-info{flex:1;min-width:0}
+.cl-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;transition:color .15s}
+.cl-src{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;
+  display:block;margin-bottom:6px;border-bottom:0.5px solid rgba(201,168,76,0.25);width:fit-content;transition:color .15s}
+.cl-src:hover{color:var(--gold2)}
+.cl-what{font-size:11px;color:var(--text2);line-height:1.75;margin-bottom:7px}
+.cl-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.cl-tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);color:var(--text3);border:0.5px solid var(--border)}
+.cl-time{font-family:var(--font-mono);font-size:10px;color:var(--text3);background:var(--bg4);padding:2px 7px;border-radius:4px;border:0.5px solid var(--border)}
+.cl-rule{margin-top:8px;padding:6px 10px;background:rgba(121,192,255,0.05);border-left:2px solid rgba(121,192,255,0.3);
+  border-radius:0 5px 5px 0;font-size:11px;color:var(--c2);line-height:1.65}
+.cl-warn{margin-top:8px;padding:6px 9px;background:rgba(240,136,62,0.06);border:0.5px solid rgba(240,136,62,0.18);
+  border-radius:5px;font-size:11px;color:var(--c3);line-height:1.6}
+.cl-item.checked .cl-rule,.cl-item.checked .cl-warn{opacity:0.4}
+
+/* CAPEX TABLE */
+.capex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:14px 0;
+  padding:16px;background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;border-left:3px solid var(--c2)}
+.cx{display:flex;flex-direction:column;gap:3px}
+.cx-company{font-size:11px;font-weight:500;color:var(--text)}
+.cx-link{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;
+  border-bottom:0.5px solid rgba(201,168,76,0.25);display:inline-block;margin-bottom:2px}
+.cx-link:hover{color:var(--gold2)}
+.cx-note{font-size:10px;color:var(--text2);line-height:1.6}
+.cx-src{font-size:10px;color:var(--text3);font-style:italic}
+
+/* RELEASE CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px}
+.cal-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;padding:12px 14px}
+.cal-ttl{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
+.cal-q .cal-ttl{color:var(--c2)}.cal-e .cal-ttl{color:var(--c3)}.cal-w .cal-ttl{color:var(--c1)}.cal-s .cal-ttl{color:var(--gold)}
+.cal-list{font-size:11px;color:var(--text2);line-height:1.9}
+.cal-list li{list-style:none;padding-left:13px;position:relative}
+.cal-list li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%}
+.cal-q .cal-list li::before{background:var(--c2)}.cal-e .cal-list li::before{background:var(--c3)}
+.cal-w .cal-list li::before{background:var(--c1)}.cal-s .cal-list li::before{background:var(--gold)}
+.cal-dt{color:var(--text3);font-family:var(--font-mono);font-size:10px}
+
+/* PRIORITY TABLE */
+.ptable{width:100%;border-collapse:collapse;font-size:12px;margin-top:13px}
+.ptable th{text-align:left;font-weight:500;font-size:10px;color:var(--text3);font-family:var(--font-mono);
+  letter-spacing:.08em;padding:8px 11px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.ptable td{padding:9px 11px;border-bottom:0.5px solid var(--border);vertical-align:top;color:var(--text2);line-height:1.6}
 .ptable tr:hover td{background:var(--bg3)}
 .ptable tr:last-child td{border-bottom:none}
 .pb{font-family:var(--font-mono);font-size:10px;padding:2px 7px;border-radius:4px}
@@ -187,55 +149,78 @@ nav{display:flex;gap:2px}
 .pb3{background:rgba(240,136,62,0.1);color:#f0883e}
 .pb4{background:rgba(94,102,120,0.15);color:#8a95aa}
 
-footer{padding:24px 36px;border-top:0.5px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 16px;
+  background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;margin:20px 0 0}
+.ll{font-size:11px;font-weight:500;color:var(--text2);margin-right:4px}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:4px;border:0.5px solid}
+.bo{background:rgba(210,168,255,0.12);color:#d2a8ff;border-color:rgba(210,168,255,0.22)}
+.bf{background:rgba(126,232,162,0.1);color:#7ee8a2;border-color:rgba(126,232,162,0.18)}
+.bm{background:rgba(121,192,255,0.1);color:#79c0ff;border-color:rgba(121,192,255,0.18)}
+.bp{background:rgba(240,136,62,0.1);color:#f0883e;border-color:rgba(240,136,62,0.18)}
+
+.disc{margin:28px 0 0;padding:15px 19px;background:var(--bg2);border:0.5px solid var(--border);
+  border-radius:10px;border-left:3px solid var(--c5)}
+.disc-ttl{font-size:12px;font-weight:500;color:var(--c5);margin-bottom:7px}
+.disc-body{font-size:11px;color:var(--text2);line-height:1.9}
+.disc-body li{margin-bottom:4px;padding-left:13px;position:relative;list-style:none}
+.disc-body li::before{content:'▸';position:absolute;left:0;color:var(--text3)}
+
+footer{padding:20px 32px;border-top:0.5px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .ft{font-size:10px;color:var(--text3);font-family:var(--font-mono)}
 
 @media(max-width:768px){
-  .hdr{padding:0 16px}.hero{padding:36px 16px 28px}.main{padding:0 16px 60px}
-  .ltabs{padding:14px 16px 0}.htitle{font-size:24px}.chain{flex-direction:column}
-  .arrow{display:none}.cblock{border-radius:8px!important;margin-bottom:4px}
-  nav{display:none}.sdesc{display:none}}
-
-@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card{animation:fu .35s ease both}
-.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}
-.card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.16s}
-.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+  .hdr,.prog-wrap,.hero,.main{padding-left:16px;padding-right:16px}
+  .htitle{font-size:23px}
+  nav{display:none}
+  .prog-secs{display:none}
+  .cl-grid,.cal-grid{grid-template-columns:1fr}
+  .chain{flex-direction:column}
+  .arrow{display:none}
+  .cblock{border-radius:8px!important;margin-bottom:4px}
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="hdr">
-  <div class="logo"><div class="lm">AI∑</div><span>AI产业链进展追踪</span></div>
+  <div class="logo"><div class="lm">AI∑</div><span>AI产业链每日检查清单</span></div>
   <nav>
-    <a class="ni" href="#compute">算力</a>
-    <a class="ni" href="#memory">存力</a>
-    <a class="ni" href="#network">运力</a>
-    <a class="ni" href="#power">电力</a>
-    <a class="ni" href="#capex">资本开支</a>
-    <a class="ni" href="#priority">配置建议</a>
+    <button class="ni" onclick="document.getElementById('capex').scrollIntoView({behavior:'smooth'})">资本开支</button>
+    <button class="ni" onclick="document.getElementById('compute').scrollIntoView({behavior:'smooth'})">算力</button>
+    <button class="ni" onclick="document.getElementById('memory').scrollIntoView({behavior:'smooth'})">存力</button>
+    <button class="ni" onclick="document.getElementById('network').scrollIntoView({behavior:'smooth'})">运力</button>
+    <button class="ni" onclick="document.getElementById('power').scrollIntoView({behavior:'smooth'})">电力</button>
+    <button class="ni" onclick="document.getElementById('calendar').scrollIntoView({behavior:'smooth'})">发布日历</button>
+    <button class="ni" onclick="document.getElementById('priority').scrollIntoView({behavior:'smooth'})">配置建议</button>
   </nav>
-  <span class="ts">UPDATED 2026-04-09</span>
+  <span class="today-badge" id="today-date"></span>
 </header>
 
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-top">
+    <span class="prog-label">今日扫描进度</span>
+    <span class="prog-count" id="prog-text">0 / 0 项已完成</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-secs" id="prog-secs"></div>
+</div>
+
+<!-- HERO -->
 <section class="hero">
   <div class="eyebrow">私募基金经理 · AI产业链配置决策参考</div>
   <h1 class="htitle">AI产业链<span>深度数据</span>追踪框架</h1>
-  <p class="hsub">覆盖算力（GPU/CPU/TPU/ASIC）、存力（HBM/DRAM/NAND）、运力（CPO/LPO/OCS）、电力四大一级环节，及主要厂商资本开支、订单与技术迭代进展。所有数据来源经实际核实，标注可信度与获取途径。</p>
-  <div class="hstats">
-    <div class="hs"><span class="hsn" style="color:var(--c2)">$650B+</span><span class="hsl">五大超大规模商2026年资本开支</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--c1)">$62.3B</span><span class="hsl">NVIDIA Q4 FY26数据中心营收</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--c3)">4.9%</span><span class="hsl">2026年DRAM供应缺口（高盛预测）</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--c4)">1,100</span><span class="hsl">TWh：2026全球数据中心耗电量（IEA）</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--c5)">≥2028</span><span class="hsl">CPO大规模商用预计时间节点</span></div>
-  </div>
+  <p class="hsub">覆盖算力（GPU/CPU/TPU/ASIC）、存力（HBM/DRAM/NAND）、运力（CPO/LPO/OCS）、电力四大环节，及主要厂商资本开支与技术迭代进展。每次打开点击直达官网查看最新数据，本页不存储任何数值。</p>
 </section>
 
-<!-- CHAIN MAP -->
 <div class="main">
-<div style="margin-top:24px">
-  <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">AI基础设施产业链总览</div>
+
+<!-- CHAIN MAP -->
+<div class="chain-wrap">
+  <div class="chain-label">AI基础设施产业链总览</div>
   <div class="chain">
     <div class="cblock chot">
       <div class="cbtitle">算力</div>
@@ -257,12 +242,11 @@ footer{padding:24px 36px;border-top:0.5px solid var(--border);
       <div class="cbtitle">运力</div>
       <div class="cbitem">CPO（共封装光）</div>
       <div class="cbitem">LPO（线性可插拔）</div>
-      <div class="cbitem">NPO/XPO</div>
       <div class="cbitem">OCS（光路交换）</div>
     </div>
     <div class="arrow">›</div>
     <div class="cblock">
-      <div class="cbtitle">电力</div>
+      <div class="cbtitle" style="color:var(--c3)">电力</div>
       <div class="cbitem">变压器 / 配电</div>
       <div class="cbitem">天然气（短期）</div>
       <div class="cbitem">SMR核能</div>
@@ -273,443 +257,566 @@ footer{padding:24px 36px;border-top:0.5px solid var(--border);
       <div class="cbtitle" style="color:var(--c2)">超大规模云</div>
       <div class="cbitem">AWS / Azure</div>
       <div class="cbitem">Google Cloud</div>
-      <div class="cbitem">Meta AI</div>
-      <div class="cbitem">Oracle Cloud</div>
+      <div class="cbitem">Meta AI / Oracle</div>
     </div>
   </div>
-  <div style="font-size:10px;color:var(--text3);margin-top:6px">🔴 红色边框 = 当前主要瓶颈环节 &nbsp;|&nbsp; 🟠 橙色边框 = 技术演进关键节点</div>
-</div>
-
-<!-- CAPEX OVERVIEW -->
-<div id="capex" class="sec">
-  <div class="shead">
-    <span class="snum">00</span>
-    <div class="sicon" style="background:rgba(121,192,255,0.1)">💰</div>
-    <h2 class="stitle">超大规模商资本开支 2026（已公告）</h2>
-    <div class="sdesc">来源：各公司财报电话会议 / SEC 8-K<br>均为可核实的管理层指引数据</div>
-  </div>
-  <div class="capex">
-    <div class="cx"><div class="cxn" style="color:var(--c3)">$200B</div><div class="cxl">AMAZON AWS</div><div class="cxs">↑+53% YoY</div></div>
-    <div class="cx"><div class="cxn" style="color:var(--c2)">$175-185B</div><div class="cxl">ALPHABET</div><div class="cxs">↑+93% YoY</div></div>
-    <div class="cx"><div class="cxn" style="color:var(--c1)">$145B</div><div class="cxl">MICROSOFT</div><div class="cxs">年化运行率</div></div>
-    <div class="cx"><div class="cxn" style="color:var(--c4)">$115-135B</div><div class="cxl">META</div><div class="cxs">↑+80% YoY</div></div>
-    <div class="cx"><div class="cxn" style="color:var(--c6)">$50B</div><div class="cxl">ORACLE</div><div class="cxs">目标值</div></div>
-    <div class="cx"><div class="cxn" style="color:var(--text)">≈$650-700B</div><div class="cxl">五大合计</div><div class="cxs">约75%用于AI基础设施</div></div>
-  </div>
-  <div class="info" style="margin-top:0">ℹ 数据来源：各公司2025年Q4/2026年Q1财报电话会议及SEC 8-K文件，Bloomberg/CNBC均有对应报道核实。注意：Amazon和Microsoft已警告自由现金流将大幅下降甚至转负。</div>
+  <div class="chain-note">🔴 红色边框 = 当前主要瓶颈环节（算力/存力） &nbsp;|&nbsp; 🟠 橙色边框 = 技术演进关键节点（运力）</div>
 </div>
 
 <div class="legend">
   <span class="ll">数据来源类型：</span>
-  <span class="li"><span class="badge bo">官方</span> 监管申报/公司官网</span>
+  <span class="li"><span class="badge bo">官方</span> SEC申报/公司IR</span>
   <span class="li"><span class="badge bf">免费</span> 公开可获取</span>
-  <span class="li"><span class="badge bm">有限免费</span> 注册可获基础版</span>
-  <span class="li"><span class="badge bp">付费</span> 订阅/报告</span>
-  <span class="li"><span class="badge bw">⚠ 存疑</span> 含估算或不确定性</span>
+  <span class="li"><span class="badge bm">有限免费</span> 注册基础版</span>
+  <span class="li"><span class="badge bp">付费</span> 订阅制</span>
 </div>
 
-<!-- ── MODULE 1: 算力 ── -->
+<!-- ═══ 00 资本开支 ═══ -->
+<section class="sec" id="capex">
+  <div class="shead">
+    <span class="snum">00</span>
+    <div class="sicon" style="background:rgba(121,192,255,0.1)">💰</div>
+    <h2 class="stitle">超大规模商资本开支 · 财报直达</h2>
+    <div class="sfreq"><span class="freq fq">季度财报更新</span></div>
+  </div>
+  <div class="sublabel">点击链接前往官方IR / SEC获取最新指引数据</div>
+  <div class="capex-grid">
+    <div class="cx">
+      <div class="cx-company">Amazon AWS</div>
+      <a class="cx-link" href="https://ir.aboutamazon.com/sec-filings/annual-reports" target="_blank" rel="noopener">ir.aboutamazon.com · SEC 8-K/10-K</a>
+      <div class="cx-note">查看最新季报中AWS资本开支指引，管理层电话会议是第一手数据</div>
+      <div class="cx-src">发布频次：季度 · Q结束后约4-6周</div>
+    </div>
+    <div class="cx">
+      <div class="cx-company">Alphabet（Google）</div>
+      <a class="cx-link" href="https://abc.xyz/investor/" target="_blank" rel="noopener">abc.xyz/investor · SEC EDGAR</a>
+      <div class="cx-note">关注Google Cloud资本开支分项及Gemini基础设施投入节奏</div>
+      <div class="cx-src">发布频次：季度</div>
+    </div>
+    <div class="cx">
+      <div class="cx-company">Microsoft</div>
+      <a class="cx-link" href="https://www.microsoft.com/en-us/investor" target="_blank" rel="noopener">microsoft.com/investor · Azure capex</a>
+      <div class="cx-note">注意微软财年从7月开始，跟踪Azure AI营收增速中AI贡献的百分点</div>
+      <div class="cx-src">发布频次：季度</div>
+    </div>
+    <div class="cx">
+      <div class="cx-company">Meta Platforms</div>
+      <a class="cx-link" href="https://investor.fb.com/financials" target="_blank" rel="noopener">investor.fb.com · 季报</a>
+      <div class="cx-note">关注全年capex指引区间变化，以及AI基础设施占总capex比例</div>
+      <div class="cx-src">发布频次：季度</div>
+    </div>
+    <div class="cx">
+      <div class="cx-company">Oracle</div>
+      <a class="cx-link" href="https://investor.oracle.com" target="_blank" rel="noopener">investor.oracle.com · 季报</a>
+      <div class="cx-note">关注OCI云基础设施建设进度及GPU租赁收入增速</div>
+      <div class="cx-src">发布频次：季度（财年2月结束）</div>
+    </div>
+    <div class="cx">
+      <div class="cx-company">SEC EDGAR（全量申报）</div>
+      <a class="cx-link" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany" target="_blank" rel="noopener">sec.gov · EDGAR全文检索</a>
+      <div class="cx-note">所有上市公司8-K重大事项、10-Q季报、10-K年报原始文件，是资本开支数据的原始来源</div>
+      <div class="cx-src">实时更新 · 免费</div>
+    </div>
+  </div>
+  <div class="cl-rule" style="margin-top:0;border-radius:5px">
+    📐 判读标准：关注季度同比增速是否加速/减速 · 全年指引是否上调/下调 · AI占总capex比例变化<br>
+    ⚠ 财报电话会议是最权威来源，媒体报道数字需回溯原文核实，避免口径混淆
+  </div>
+</section>
+
+<!-- ═══ 01 算力 ═══ -->
 <section class="sec" id="compute">
   <div class="shead">
     <span class="snum">01</span>
     <div class="sicon" style="background:rgba(121,192,255,0.1)">🖥</div>
-    <h2 class="stitle">算力：GPU · TPU · ASIC · CPU</h2>
-    <div class="sdesc">NVIDIA财报 · SEC EDGAR · TrendForce · SemiAnalysis</div>
+    <h2 class="stitle">算力 · GPU / TPU / ASIC / CPU</h2>
+    <div class="sfreq"><span class="freq fq">季度财报 + 随时技术公告</span></div>
   </div>
+  <div class="sublabel">核心厂商财报直达</div>
+  <div class="cl-grid" id="g-compute">
 
-  <!-- KEY DATA -->
-  <div class="datarow">
-    <div class="dr"><div class="drv" style="color:var(--c2)">$62.3B</div><div class="drl">NVIDIA Q4 FY26数据中心营收</div><div class="drs">同比+75%，环比+22%（SEC 8-K核实）</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c1)">$500B+</div><div class="drl">Blackwell+Rubin合并订单规模</div><div class="drs">管理层财报电话披露，延伸至2026年底</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c3)">$11.0B</div><div class="drl">NVIDIA网络营收（NVLink/InfiniBand）</div><div class="drs">同比+263%，反映互联瓶颈需求爆发</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c4)">B300主力</div><div class="drl">Blackwell B300已占B系列2/3销量</div><div class="drs">Rubin平台预计H2 2026发布</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">一手数据与官方信息源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">NVIDIA 投资者关系 / SEC EDGAR</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://investor.nvidia.com/financial-information/sec-filings/default.aspx" target="_blank" rel="noopener">investor.nvidia.com · SEC EDGAR (8-K/10-Q/10-K)</a>
-        <p class="cdesc">NVIDIA官方财报及SEC申报文件，是GPU供需、营收、订单积压的唯一一手数据来源。Q4 FY26数据中心营收$62.3B已在SEC 8-K中核实，含算力/网络分项。</p>
-        <div class="ctags"><span class="tag">季报/年报</span><span class="tag">数据中心分项</span><span class="tag">8-K实时披露</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">SEC EDGAR · 超大规模商财报</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany" target="_blank" rel="noopener">sec.gov/cgi-bin/browse-edgar</a>
-        <p class="cdesc">Amazon/Google/Meta/Microsoft的季报（10-Q）、年报（10-K）和重大事项披露（8-K）均在此搜索，是资本开支数据的原始来源，优于任何媒体报道。</p>
-        <div class="ctags"><span class="tag">原始法律文件</span><span class="tag">季度更新</span><span class="tag">全文可搜索</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">TrendForce · 半导体市场研究</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.trendforce.com" target="_blank" rel="noopener">trendforce.com</a>
-        <p class="cdesc">台湾研调机构，专注GPU/AI服务器/内存供应链，季度GPU出货预测是产业链分析的重要参考。免费版提供摘要数据，完整数据需付费订阅。需注意该机构预测数据含估算成分。</p>
-        <div class="ctags"><span class="tag">季度出货预测</span><span class="tag">供应链数据</span><span class="tag">含估算</span></div>
-        <div class="warn">⚠ 预测数据含不同程度估算，建议与财报数据交叉验证</div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">SemiAnalysis · 产业深度研究</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.semianalysis.com" target="_blank" rel="noopener">semianalysis.com</a>
-        <p class="cdesc">Dylan Patel主导的半导体/AI基础设施深度分析，CPO、NVLink、超大规模商采购策略等均有一手渠道数据。付费订阅制，部分文章免费开放。机构级专业度最高的独立研究之一。</p>
-        <div class="ctags"><span class="tag">Substack付费</span><span class="tag">供应链一手渠道</span><span class="tag">产业深度</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">AMD · Intel · Broadcom 投资者关系</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://ir.amd.com" target="_blank" rel="noopener">ir.amd.com · intc.com · investors.broadcom.com</a>
-        <p class="cdesc">追踪AMD MI300X/MI400、Intel Gaudi3/Falcon Shores、Broadcom ASIC定制芯片的官方渠道，是判断NVIDIA竞争格局与超大规模商自研芯片进展的必要对照来源。</p>
-        <div class="ctags"><span class="tag">季报数据</span><span class="tag">AI加速器营收</span><span class="tag">ASIC定制</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">WSTS · 全球半导体贸易统计</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.wsts.org" target="_blank" rel="noopener">wsts.org</a>
-        <p class="cdesc">全球半导体行业协会发布月度/年度出货数据，覆盖逻辑/存储/模拟等分类。预测2026年全球半导体市场增长25%+ YoY至约$975B。是行业整体规模判断的官方口径。</p>
-        <div class="ctags"><span class="tag">月度出货数据</span><span class="tag">行业口径标准</span><span class="tag">免费下载</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">NVIDIA 季报 · 数据中心营收分项</div>
+        <a class="cl-src" href="https://investor.nvidia.com/financial-information/sec-filings/default.aspx" target="_blank" rel="noopener" onclick="event.stopPropagation()">investor.nvidia.com · SEC 8-K / 10-Q</a>
+        <div class="cl-what">查看数据中心营收（算力+网络分项）、毛利率、管理层对订单积压和下季指引的描述。这是GPU供需最权威的一手数据。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方首发</span><span class="cl-time">财季末后约4-5周</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点关注：数据中心营收同比增速方向 · 网络营收（NVLink/InfiniBand）占比变化 · 毛利率趋势<br>管理层对"供需状况"和"订单能见度"的原话是最重要的前瞻信号</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">AMD · AI加速器营收（MI系列）</div>
+        <a class="cl-src" href="https://ir.amd.com/financial-information/sec-filings" target="_blank" rel="noopener" onclick="event.stopPropagation()">ir.amd.com · 季报 + 投资者日</a>
+        <div class="cl-what">查看数据中心GPU分项（MI300X/MI400系列）营收及全年指引，是判断NVIDIA市场份额竞争格局的参照数据。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 关注：AMD数据中心GPU指引上调/下调 → 反映超大规模商对非NVIDIA供应链的依赖度变化</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">TSMC 季报 · CoWoS先进封装产能</div>
+        <a class="cl-src" href="https://investor.tsmc.com/english/quarterly-results" target="_blank" rel="noopener" onclick="event.stopPropagation()">investor.tsmc.com · 季报电话会议</a>
+        <div class="cl-what">查看N3/N2先进制程产能利用率，及CoWoS先进封装产能扩张进度。CoWoS是NVIDIA GB系列GPU的核心供应瓶颈，每季度财报电话必须追踪。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span><span class="cl-time">每月10日营收数据</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点关注：管理层对CoWoS产能是否仍然供不应求的表述 · 先进封装占总营收比例变化<br>TSMC每月10日公布月营收，是比季报更高频的前瞻信号</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Broadcom / Marvell · ASIC定制芯片营收</div>
+        <a class="cl-src" href="https://investors.broadcom.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">investors.broadcom.com · ir.marvell.com</a>
+        <div class="cl-what">查看超大规模商定制ASIC（Google TPU/Amazon Trainium/Meta MTIA）相关营收。是判断"NVIDIA替代路径"进展的关键数据。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 ASIC定制芯片营收持续高增长 → 超大规模商自研芯片战略加速，长期对NVIDIA市场份额有结构性影响</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">TrendForce · GPU季度出货预测</div>
+        <a class="cl-src" href="https://www.trendforce.com/research/server/" target="_blank" rel="noopener" onclick="event.stopPropagation()">trendforce.com · AI服务器研究</a>
+        <div class="cl-what">台湾研调机构发布的GPU/AI服务器季度出货量预测，是供应链分析的重要参考，但含估算成分，需与财报数据交叉验证。</div>
+        <div class="cl-meta"><span class="cl-tag">季度预测</span><span class="cl-tag">含估算</span><span class="cl-tag">摘要免费</span></div>
+      </div></div>
+      <div class="cl-warn">⚠ 预测数据含模型估算，不等同于实际出货量，建议仅作为方向性参考，以财报数据为准</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">NVIDIA GTC · 技术路线图公告</div>
+        <a class="cl-src" href="https://www.nvidia.com/en-us/on-demand/gtc/" target="_blank" rel="noopener" onclick="event.stopPropagation()">nvidia.com/on-demand/gtc · 录像免费公开</a>
+        <div class="cl-what">NVIDIA年度技术大会，Blackwell/Rubin/CPO路线图、NVLink架构演进等技术发布的官方来源。演讲录像免费公开，是技术节点判断最权威的来源。</div>
+        <div class="cl-meta"><span class="cl-tag">年度</span><span class="cl-tag">录像免费</span><span class="cl-tag">技术路线图</span></div>
+      </div></div>
+      <div class="cl-rule">📐 GTC披露的下一代产品路线图是算力板块12-18个月景气预期的定价基础，需详细阅读Jensen Huang主题演讲</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'compute')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">WSTS · 全球半导体行业出货统计</div>
+        <a class="cl-src" href="https://www.wsts.org/esummit/monthlydata" target="_blank" rel="noopener" onclick="event.stopPropagation()">wsts.org · 月度出货数据</a>
+        <div class="cl-what">全球半导体行业协会发布月度/年度出货数据，覆盖逻辑/存储/模拟等分类，是判断行业整体规模和增速的官方口径。</div>
+        <div class="cl-meta"><span class="cl-tag">月度</span><span class="cl-tag">行业标准口径</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 用于判断AI驱动的逻辑芯片增速是否持续高于传统存储/消费电子，判断产业分化的宏观趋势</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 2: 存力 ── -->
+<!-- ═══ 02 存力 ═══ -->
 <section class="sec" id="memory">
   <div class="shead">
     <span class="snum">02</span>
     <div class="sicon" style="background:rgba(126,232,162,0.1)">🧠</div>
-    <h2 class="stitle">存力：HBM · DRAM · NAND · SSD · HDD</h2>
-    <div class="sdesc">SK Hynix / Micron 财报 · Gartner · Counterpoint</div>
+    <h2 class="stitle">存力 · HBM / DRAM / NAND / SSD</h2>
+    <div class="sfreq"><span class="freq fw">季度财报 + 月度价格数据</span></div>
   </div>
+  <div class="sublabel">内存厂商财报与价格数据</div>
+  <div class="cl-grid" id="g-memory">
 
-  <div class="datarow" style="border-left-color:var(--c5)">
-    <div class="dr"><div class="drv" style="color:var(--c5)">已售罄</div><div class="drl">SK Hynix/Micron HBM容量</div><div class="drs">2026年全年产能已被预订（财报电话核实）</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c3)">+20%</div><div class="drl">HBM3E 2026年提价幅度</div><div class="drs">Samsung+SK Hynix对NVIDIA定价（TrendForce/韩媒报道）</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c3)">4.9%</div><div class="drl">2026年DRAM供应缺口（Goldman Sachs）</div><div class="drs">过去15年最严峻缺口，2027年仍有2.5%</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c1)">62%</div><div class="drl">SK Hynix HBM市场份额</div><div class="drs">Counterpoint Research Q2 2025数据</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">HBM / DRAM 关键数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">SK Hynix 投资者关系</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.skhynix.com/eng/ir/financialStatement.do" target="_blank" rel="noopener">skhynix.com/eng/ir/financialStatement</a>
-        <p class="cdesc">SK Hynix官方季报，披露HBM营收占比、产能利用率及HBM4产品路线图。该公司掌握约62%全球HBM市场份额，是AI存储最重要的跟踪标的。2025年3季度财报明确HBM+DRAM容量"已基本售罄"。</p>
-        <div class="ctags"><span class="tag">季报</span><span class="tag">HBM3E/HBM4路线图</span><span class="tag">韩英双语</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Micron Technology 投资者关系</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://investors.micron.com" target="_blank" rel="noopener">investors.micron.com</a>
-        <p class="cdesc">Micron季报（按财年8月结束），披露HBM收入指引、服务器DRAM/NAND价格趋势。管理层在FY26 Q1明确HBM容量"sold out through calendar 2026"。毛利率预测反映内存超级周期利润弹性。</p>
-        <div class="ctags"><span class="tag">季报含分市场指引</span><span class="tag">HBM容量披露</span><span class="tag">NAND价格</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Samsung Electronics 投资者关系</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.samsung.com/us/investor-relations/" target="_blank" rel="noopener">samsung.com/investor-relations</a>
-        <p class="cdesc">三星官方IR，季报披露内存/非内存/系统半导体分部。HBM4研发进展、与NVIDIA供货谈判进程是重点跟踪项。注意：三星DS部门财报粒度相对低于SK Hynix。</p>
-        <div class="ctags"><span class="tag">季报</span><span class="tag">HBM4进展</span><span class="tag">NAND/DRAM分项</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Gartner · 内存市场预测</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.gartner.com/en/information-technology/semiconductor" target="_blank" rel="noopener">gartner.com/en/information-technology/semiconductor</a>
-        <p class="cdesc">Gartner预测2026年DRAM价格+47%（已通过Network World等媒体引用核实摘要），HBM价格预计2Q26前持续上涨，2H26因三星/Micron产能加入略有回落。完整报告需付费订阅。</p>
-        <div class="ctags"><span class="tag">季度价格预测</span><span class="tag">付费报告</span><span class="tag">摘要可通过媒体获取</span></div>
-        <div class="warn">⚠ 完整数据需付费；摘要数据通过媒体二次引用存在口径偏差风险</div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Counterpoint Research · HBM市场份额</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.counterpointresearch.com/research-topics/semiconductors/" target="_blank" rel="noopener">counterpointresearch.com/semiconductors</a>
-        <p class="cdesc">Counterpoint Research专业跟踪HBM出货量及市场份额（SK Hynix 62% Q2 2025数据可通过其新闻稿核实）。是判断厂商竞争格局的重要来源，完整数据需付费。</p>
-        <div class="ctags"><span class="tag">季度市场份额</span><span class="tag">厂商竞争跟踪</span><span class="tag">部分新闻稿免费</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">DRAMeXchange (TrendForce) · 价格追踪</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.dramexchange.com" target="_blank" rel="noopener">dramexchange.com</a>
-        <p class="cdesc">TrendForce旗下专注DRAM/NAND现货及合约价格的数据平台，是业内最广泛引用的内存价格追踪来源。部分价格数据及每周快报免费开放，季度完整报告需付费。</p>
-        <div class="ctags"><span class="tag">周度价格</span><span class="tag">合约/现货分项</span><span class="tag">含估算</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">SK Hynix 季报 · HBM产能与路线图</div>
+        <a class="cl-src" href="https://www.skhynix.com/eng/ir/financialStatement.do" target="_blank" rel="noopener" onclick="event.stopPropagation()">skhynix.com/eng/ir · 季报+财报电话</a>
+        <div class="cl-what">查看HBM营收占比、产能利用率、HBM4产品路线图进展。SK Hynix是全球HBM市场最大供应商，其财报是HBM超级周期最直接的基本面数据。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方首发</span><span class="cl-time">季末后约4周</span></div>
+      </div></div>
+      <div class="cl-rule">📐 关键指标：HBM营收占总营收比例变化 · HBM4何时开始量产 · 管理层对2026/2027年产能是否已售罄的表述<br>若产能"已全年售罄" → HBM超级周期延续信号</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Micron 季报 · HBM + 服务器DRAM</div>
+        <a class="cl-src" href="https://investors.micron.com/financial-information/sec-filings" target="_blank" rel="noopener" onclick="event.stopPropagation()">investors.micron.com · 季报（财年8月结束）</a>
+        <div class="cl-what">查看HBM收入指引、服务器DRAM价格趋势、毛利率展望。Micron财报电话会议对内存价格周期有极强预测性，管理层表述是判断内存价格走向的关键。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span><span class="cl-tag">财年8月结束</span></div>
+      </div></div>
+      <div class="cl-rule">📐 Micron毛利率快速上升 → 内存价格上涨周期确认<br>毛利率出现拐头下行 → 供需平衡点临近，价格周期可能见顶</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Samsung 季报 · HBM4进展 + DS部门</div>
+        <a class="cl-src" href="https://www.samsung.com/global/ir/financial-data/quarterly-results/" target="_blank" rel="noopener" onclick="event.stopPropagation()">samsung.com/global/ir · 季报</a>
+        <div class="cl-what">查看设备解决方案（DS）部门营收及HBM4研发/供货进展。三星HBM份额追赶SK Hynix的进度，是判断HBM价格是否进入竞争性下行的关键变量。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 三星HBM4获NVIDIA认证并开始大批量供货 → HBM供给增加，价格压力上升的信号</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">DRAMeXchange · DRAM/NAND价格追踪</div>
+        <a class="cl-src" href="https://www.dramexchange.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">dramexchange.com · 周度价格数据</a>
+        <div class="cl-what">TrendForce旗下专注DRAM/NAND现货及合约价格的数据平台，是业内最广泛引用的内存价格追踪来源。部分周度价格免费开放。</div>
+        <div class="cl-meta"><span class="cl-tag">周度</span><span class="cl-tag">含估算成分</span><span class="cl-tag">摘要免费</span></div>
+      </div></div>
+      <div class="cl-warn">⚠ 合约价格含模型估算，不等同于实际成交价。三星/SK Hynix与NVIDIA具体合约价从未对外公开，媒体引用价格均为估算</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Gartner · 内存市场价格周期预测</div>
+        <a class="cl-src" href="https://www.gartner.com/en/information-technology/semiconductor" target="_blank" rel="noopener" onclick="event.stopPropagation()">gartner.com · 半导体市场研究</a>
+        <div class="cl-what">Gartner季度发布DRAM/NAND价格预测，含HBM价格展望。完整报告需付费，但摘要数据通过媒体引用可获取部分内容。</div>
+        <div class="cl-meta"><span class="cl-tag">季度预测</span><span class="cl-tag">付费报告</span><span class="cl-tag">媒体摘要可查</span></div>
+      </div></div>
+      <div class="cl-warn">⚠ 完整数据需付费订阅，媒体引用的摘要存在口径偏差风险，建议与财报数据交叉验证</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'memory')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Counterpoint Research · HBM市场份额</div>
+        <a class="cl-src" href="https://www.counterpointresearch.com/research-topics/semiconductors/" target="_blank" rel="noopener" onclick="event.stopPropagation()">counterpointresearch.com · 半导体</a>
+        <div class="cl-what">季度发布HBM出货量及各厂商市场份额数据，是判断SK Hynix/三星/Micron竞争格局最常被机构引用的来源。完整数据需付费。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">付费</span><span class="cl-tag">新闻稿部分免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 关注SK Hynix市场份额是否持续维持&gt;50%，以及三星追赶速度，是判断HBM价格竞争节奏的核心参数</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 3: 运力 ── -->
+<!-- ═══ 03 运力 ═══ -->
 <section class="sec" id="network">
   <div class="shead">
     <span class="snum">03</span>
     <div class="sicon" style="background:rgba(210,168,255,0.1)">🔗</div>
-    <h2 class="stitle">运力：CPO · LPO · NPO / XPO · OCS</h2>
-    <div class="sdesc">IDTechEx · LightCounting · OFC会议 · SemiAnalysis</div>
+    <h2 class="stitle">运力 · CPO / LPO / OCS / 光互联</h2>
+    <div class="sfreq"><span class="freq fq">季度财报 + OFC等行业会议</span></div>
   </div>
+  <div class="sublabel">光互联产业链数据源</div>
+  <div class="cl-grid" id="g-network">
 
-  <div class="datarow" style="border-left-color:var(--c4)">
-    <div class="dr"><div class="drv" style="color:var(--c4)">≥2028</div><div class="drl">CPO大规模商用时间节点</div><div class="drs">NVIDIA已披露，当前以LPO/DSP模块为主</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c1)">$20B+</div><div class="drl">CPO市场规模预测（至2036年）</div><div class="drs">IDTechEx报告，CAGR 37%（需付费核实）</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c2)">800G→1.6T</div><div class="drl">2025主流→2026趋势光模块规格</div><div class="drs">OFC 2026行业共识，已可观察到出货数据</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c3)">-36%</div><div class="drl">LPO替换DSP后的网络功耗降幅</div><div class="drs">SemiAnalysis CPO深度报告核算</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">运力产业链关键数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">NVIDIA GTC 技术公告</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.nvidia.com/en-us/on-demand/gtc/" target="_blank" rel="noopener">nvidia.com/en-us/on-demand/gtc</a>
-        <p class="cdesc">NVIDIA GTC 2025明确披露Spectrum X Photonics和Quantum X Photonics的CPO路线图，CPO将于约2028年用于scale-up连接。GTC演讲录像免费公开，是最权威的CPO时间节点来源。</p>
-        <div class="ctags"><span class="tag">技术路线图官方</span><span class="tag">CPO时间节点</span><span class="tag">免费公开</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">LightCounting · 光通信市场数据</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.lightcounting.com" target="_blank" rel="noopener">lightcounting.com</a>
-        <p class="cdesc">专注光学互联市场的权威调研机构，覆盖100G至3.2T各规格收发模块出货预测，含超大规模商采购分项（Amazon/Google/Meta/Microsoft/Oracle各自模型）。报告需付费，部分新闻简报免费。</p>
-        <div class="ctags"><span class="tag">季度出货预测</span><span class="tag">100G~3.2T全覆盖</span><span class="tag">付费报告</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">OFC年度会议（光纤通信会议）</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.ofcconference.org" target="_blank" rel="noopener">ofcconference.org</a>
-        <p class="cdesc">全球光通信行业年度最重要会议（2026年已举行），是CPO/LPO/OCS技术进展的一手信息来源。论文摘要和部分演讲公开，完整内容需注册或付费。会后行业媒体摘要免费可读。</p>
-        <div class="ctags"><span class="tag">年度技术标准</span><span class="tag">论文摘要免费</span><span class="tag">行业共识来源</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">IDTechEx · CPO市场研究报告</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.idtechex.com/en/research-report/co-packaged-optics-cpo/1138" target="_blank" rel="noopener">idtechex.com · CPO 2026-2036</a>
-        <p class="cdesc">IDTechEx发布的CPO市场研究报告，预测市场规模至2036年超$20B，CAGR 37%。该机构已通过EDN等行业媒体引用证实存在此报告，但具体数据需购买报告验证。</p>
-        <div class="ctags"><span class="tag">10年市场预测</span><span class="tag">付费报告</span><span class="tag">CAGR 37%</span></div>
-        <div class="warn">⚠ 市场规模预测含模型假设，需结合LightCounting等交叉验证</div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t3"></div></div><span class="tscore s3">★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Lumentum / Coherent / Marvell IR</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://investor.lumentum.com" target="_blank" rel="noopener">investor.lumentum.com · ir.coherent.com · ir.marvell.com</a>
-        <p class="cdesc">三家光互联核心企业财报，可通过营收分项（数据中心/电信/企业）追踪真实出货数据，是比市场调研更可信的交叉验证来源。Lumentum已进入OCS供货（Google），Coherent供400G/800G模块。</p>
-        <div class="ctags"><span class="tag">季报出货数据</span><span class="tag">实际营收佐证</span><span class="tag">OCS/CPO进展</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">SemiAnalysis · CPO深度报告</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://newsletter.semianalysis.com/p/co-packaged-optics-cpo-book-scaling" target="_blank" rel="noopener">newsletter.semianalysis.com · CPO报告</a>
-        <p class="cdesc">SemiAnalysis出版的CPO深度系列报告，覆盖LPO→CPO技术演进、TSMC COUPE封装、NVLink/InfiniBand对比，是目前最系统的CPO技术与产业链分析。付费Substack订阅，部分公开。</p>
-        <div class="ctags"><span class="tag">技术与产业深度</span><span class="tag">LPO/CPO对比</span><span class="tag">Substack付费</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'network')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Lumentum / Coherent / Marvell 季报</div>
+        <a class="cl-src" href="https://investor.lumentum.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">investor.lumentum.com · ir.coherent.com · ir.marvell.com</a>
+        <div class="cl-what">三家光互联核心企业季报，通过数据中心/电信/企业分项营收，追踪800G→1.6T模块出货量、OCS订单及CPO技术进展的真实商业化情况。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">实际营收验证</span><span class="cl-tag">比调研更可信</span></div>
+      </div></div>
+      <div class="cl-rule">📐 数据中心光模块营收持续高增长 → 800G/1.6T规模化出货确认<br>Lumentum OCS相关营收出现 → Google大规模OCS采购落地信号</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'network')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">NVIDIA GTC · CPO / NVLink路线图</div>
+        <a class="cl-src" href="https://www.nvidia.com/en-us/on-demand/gtc/" target="_blank" rel="noopener" onclick="event.stopPropagation()">nvidia.com/on-demand/gtc · 免费公开录像</a>
+        <div class="cl-what">NVIDIA是CPO商用时间表的定义者。GTC已明确CPO用于scale-up连接约2028年落地，当前以LPO/DSP模块为主流，是运力技术节点判断的官方基准。</div>
+        <div class="cl-meta"><span class="cl-tag">年度</span><span class="cl-tag">官方路线图</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 CPO大规模商用预计≥2028年，当前主流仍是800G/1.6T DSP+LPO模块<br>关注NVIDIA是否提前调整CPO时间节点，这将直接影响光互联产业链估值</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'network')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">OFC年度会议 · 光纤通信行业大会</div>
+        <a class="cl-src" href="https://www.ofcconference.org" target="_blank" rel="noopener" onclick="event.stopPropagation()">ofcconference.org · 年度会议</a>
+        <div class="cl-what">全球光通信行业年度最重要会议，CPO/LPO/OCS技术标准和路线图的一手来源。论文摘要和部分演讲公开，会后行业媒体摘要免费可读。</div>
+        <div class="cl-meta"><span class="cl-tag">年度</span><span class="cl-tag">行业共识</span><span class="cl-tag">摘要免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 OFC展示的主流方向代表未来2-3年行业路径，是光互联标的技术路线判断的重要参考</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'network')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">LightCounting · 光通信市场预测报告</div>
+        <a class="cl-src" href="https://www.lightcounting.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">lightcounting.com · 订阅报告</a>
+        <div class="cl-what">专注光学互联市场的权威调研，覆盖100G至3.2T各规格收发模块出货预测，含超大规模商各自采购分项模型，是机构最常引用的光通信市场数据来源。</div>
+        <div class="cl-meta"><span class="cl-tag">季度预测</span><span class="cl-tag">付费报告</span><span class="cl-tag">新闻稿部分免费</span></div>
+      </div></div>
+      <div class="cl-warn">⚠ 完整报告需付费订阅，是光通信最权威的第三方数据，但预测含模型假设，需结合厂商实际财报数据验证</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'network')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">SemiAnalysis · CPO深度报告</div>
+        <a class="cl-src" href="https://www.semianalysis.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">semianalysis.com · Substack付费</a>
+        <div class="cl-what">目前最系统的CPO技术与产业链深度分析，覆盖LPO→CPO演进逻辑、TSMC COUPE封装、NVLink与InfiniBand对比、功耗量化测算。</div>
+        <div class="cl-meta"><span class="cl-tag">不定期深度报告</span><span class="cl-tag">Substack付费</span><span class="cl-tag">部分免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 CPO每减少一层DSP信号转换，可降低约36%网络功耗 — 功耗经济性是CPO最终商用的核心驱动力</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 4: 电力 ── -->
+<!-- ═══ 04 电力 ═══ -->
 <section class="sec" id="power">
   <div class="shead">
     <span class="snum">04</span>
     <div class="sicon" style="background:rgba(240,136,62,0.1)">⚡</div>
-    <h2 class="stitle">电力：供电约束 · 核能 · 电网瓶颈</h2>
-    <div class="sdesc">IEA · EIA · Lawrence Berkeley Lab · EPRI</div>
+    <h2 class="stitle">电力 · 供电约束 / 核能 / 电网</h2>
+    <div class="sfreq"><span class="freq fe">年度报告 + 季度电网数据</span></div>
   </div>
+  <div class="sublabel">电力约束权威数据源</div>
+  <div class="cl-grid" id="g-power">
 
-  <div class="datarow" style="border-left-color:var(--c3)">
-    <div class="dr"><div class="drv" style="color:var(--c3)">1,100 TWh</div><div class="drl">IEA预测2026年全球数据中心耗电量</div><div class="drs">相当于日本全国用电量，IEA官方来源</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c5)">10 GW</div><div class="drl">2026年底AI专属数据中心负荷（Uptime Institute）</div><div class="drs">受电网互联时间表制约，非纯需求上限</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c1)">325-580 TWh</div><div class="drl">美国数据中心2028年耗电预测范围</div><div class="drs">Lawrence Berkeley National Lab，区间较宽</div></div>
-    <div class="dr"><div class="drv" style="color:var(--c2)">2027</div><div class="drl">三里岛核电站重启计划（微软PPA）</div><div class="drs">Constellation Energy官方公告</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">电力约束权威数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">IEA · 国际能源署数据中心报告</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.iea.org/energy-system/buildings/data-centres-and-data-transmission-networks" target="_blank" rel="noopener">iea.org · Data Centres and Transmission Networks</a>
-        <p class="cdesc">国际能源署是全球数据中心电力消耗数据最权威来源，定期更新预测模型，2026年1,100 TWh预测已被多家机构引用核实。报告免费公开，含分国别/分应用场景数据。</p>
-        <div class="ctags"><span class="tag">年度更新</span><span class="tag">全球覆盖</span><span class="tag">免费开放</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">EIA · 美国能源信息署</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.eia.gov/consumption/commercial/" target="_blank" rel="noopener">eia.gov · 商业建筑能源消费调查</a>
-        <p class="cdesc">美国官方能源数据，含电力消费、发电来源、价格趋势等。结合AI数据中心需求增长预测，是判断电价上行压力和核能/天然气竞争格局的官方数据基础。</p>
-        <div class="ctags"><span class="tag">月度/年度数据</span><span class="tag">电价趋势</span><span class="tag">发电来源结构</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Lawrence Berkeley 国家实验室报告</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://eta.lbl.gov/publications/united-states-data-center-energy" target="_blank" rel="noopener">eta.lbl.gov · 美国数据中心能耗报告</a>
-        <p class="cdesc">美国能源部国家实验室发布的权威数据中心能耗研究，提供2023-2028年预测范围（325-580 TWh），被哈佛Belfer Center等学术机构引用。报告含方法论和不确定性说明。</p>
-        <div class="ctags"><span class="tag">5年预测范围</span><span class="tag">含不确定区间</span><span class="tag">学术权威</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">PJM / ERCOT · 电网运营商报告</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.pjm.com/planning/resource-adequacy-planning" target="_blank" rel="noopener">pjm.com · ercot.com · 资源充足性规划</a>
-        <p class="cdesc">PJM（美东）和ERCOT（德克萨斯）是受数据中心电力需求冲击最大的两个区域电网，其年度容量市场报告和互联排队数据反映电网约束现状。PJM预计2027年出现6GW缺口。</p>
-        <div class="ctags"><span class="tag">年度容量规划</span><span class="tag">互联排队数据</span><span class="tag">2027缺口预警</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Constellation Energy / NuScale IR</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://investor.constellationenergy.com" target="_blank" rel="noopener">investor.constellationenergy.com</a>
-        <p class="cdesc">Constellation Energy（三里岛重启/微软PPA）和NuScale（SMR第一家NRC获批设计）是核能数据中心供电最具体的商业化案例，其IR披露PPA合同条款和时间节点。</p>
-        <div class="ctags"><span class="tag">PPA合同进展</span><span class="tag">SMR商用时间表</span><span class="tag">三里岛2027重启</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Uptime Institute · 数据中心年度报告</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://uptimeinstitute.com/research-publications" target="_blank" rel="noopener">uptimeinstitute.com/research-publications</a>
-        <p class="cdesc">Uptime Institute发布年度全球数据中心行业报告，含电力负载增长、PUE效率趋势、基础设施投资等数据，是行业非政府口径最权威的报告之一。部分报告需注册获取。</p>
-        <div class="ctags"><span class="tag">年度报告</span><span class="tag">PUE效率追踪</span><span class="tag">注册可获基础版</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">IEA · 数据中心能耗报告</div>
+        <a class="cl-src" href="https://www.iea.org/energy-system/buildings/data-centres-and-data-transmission-networks" target="_blank" rel="noopener" onclick="event.stopPropagation()">iea.org · Data Centres & Networks</a>
+        <div class="cl-what">国际能源署发布全球数据中心电力消耗预测，是最权威的能耗数据来源，每年更新，报告免费公开。包含国别/应用场景分项数据。</div>
+        <div class="cl-meta"><span class="cl-tag">年度更新</span><span class="cl-tag">全球覆盖</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 IEA的全球数据中心耗电量预测是电力约束投资主题的基础数据，每次更新都对变压器/电网/核能板块有催化作用</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">EIA · 美国能源信息署</div>
+        <a class="cl-src" href="https://www.eia.gov/electricity/data.php" target="_blank" rel="noopener" onclick="event.stopPropagation()">eia.gov · 电力数据</a>
+        <div class="cl-what">美国官方能源数据，含电力消费增速、发电来源结构、批发电价趋势。AI数据中心电力需求推动美国用电量历史性上行，EIA是最权威的量化数据。</div>
+        <div class="cl-meta"><span class="cl-tag">月度/年度</span><span class="cl-tag">官方</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 关注：美国数据中心电力消费年增速是否持续加速 · 弗吉尼亚州（北弗吉尼亚数据中心集群）的电力需求增量是最直接的代理指标</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">PJM / ERCOT · 电网容量规划报告</div>
+        <a class="cl-src" href="https://www.pjm.com/planning/resource-adequacy-planning" target="_blank" rel="noopener" onclick="event.stopPropagation()">pjm.com · ercot.com · 资源充足性规划</a>
+        <div class="cl-what">美东（PJM）和德克萨斯（ERCOT）两大电网运营商的容量市场报告和互联排队数据。两者受AI数据中心冲击最大，其电网承载能力预测是"电力瓶颈"投资主题的官方数据依据。</div>
+        <div class="cl-meta"><span class="cl-tag">年度容量规划</span><span class="cl-tag">季度更新</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 PJM容量市场价格飙升 → 电力供需紧张的市场化信号，对电厂/变压器/备用电源板块有直接定价影响</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Constellation Energy · 三里岛重启进展</div>
+        <a class="cl-src" href="https://investor.constellationenergy.com" target="_blank" rel="noopener" onclick="event.stopPropagation()">investor.constellationenergy.com · IR</a>
+        <div class="cl-what">Constellation Energy官方IR，追踪三里岛核电站重启（微软20年PPA）的工程进度和并网时间表。是核能数据中心供电商业化的标志性案例，预计2027年重启。</div>
+        <div class="cl-meta"><span class="cl-tag">季度</span><span class="cl-tag">官方</span><span class="cl-tag">核能PPA标杆</span></div>
+      </div></div>
+      <div class="cl-rule">📐 三里岛重启进度 → 核能数据中心供电路径的可行性标杆<br>若出现进度延误 → SMR/核能概念投资预期降温信号</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Lawrence Berkeley Lab · 数据中心能耗研究</div>
+        <a class="cl-src" href="https://eta.lbl.gov/publications/united-states-data-center-energy" target="_blank" rel="noopener" onclick="event.stopPropagation()">eta.lbl.gov · 美国数据中心能耗报告</a>
+        <div class="cl-what">美国能源部国家实验室发布的权威数据中心能耗研究，提供2023-2028年预测区间，被哈佛Belfer Center等学术机构引用。含方法论和不确定性区间说明。</div>
+        <div class="cl-meta"><span class="cl-tag">年度</span><span class="cl-tag">官方学术</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 该报告提供预测区间而非点预测，反映了真实的不确定性。建议引用区间而非单一数字，避免过度精确化</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'power')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">Uptime Institute · 数据中心年度报告</div>
+        <a class="cl-src" href="https://uptimeinstitute.com/research-publications" target="_blank" rel="noopener" onclick="event.stopPropagation()">uptimeinstitute.com · 年度报告</a>
+        <div class="cl-what">数据中心行业最权威的非政府口径年度报告，含电力负载增长、PUE效率趋势、基础设施投资数据。部分报告需注册获取。</div>
+        <div class="cl-meta"><span class="cl-tag">年度</span><span class="cl-tag">注册可获基础版</span></div>
+      </div></div>
+      <div class="cl-rule">📐 关注PUE（电源使用效率）趋势 — PUE持续下降意味着液冷/先进冷却技术加速渗透，对应冷却设备产业链受益</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 5: 厂商资本开支追踪 ── -->
-<section class="sec" id="capex-track">
+<!-- ═══ 05 发布日历 ═══ -->
+<section class="sec" id="calendar">
   <div class="shead">
     <span class="snum">05</span>
-    <div class="sicon" style="background:rgba(255,166,87,0.1)">📊</div>
-    <h2 class="stitle">厂商资本开支 · 订单 · 技术迭代跟踪</h2>
-    <div class="sdesc">财报电话 · SEC 8-K · 各公司IR · 分析师报告</div>
+    <div class="sicon" style="background:rgba(201,168,76,0.1)">🗓</div>
+    <h2 class="stitle">数据发布规律日历</h2>
+    <div class="sfreq"><span class="freq fw">固定时间窗口，提前标注</span></div>
   </div>
-  <div class="cards">
-    <div class="card">
-      <div class="ctop"><span class="cname">Earnings Call Transcripts · 财报电话录音</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-      <a class="curl" href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">seekingalpha.com/earnings · Motley Fool · TIKR.com</a>
-      <p class="cdesc">财报电话会议是资本开支指引的最直接来源，SeekingAlpha/Motley Fool提供延迟版文字记录（免费有限），TIKR.com提供结构化财务数据。建议直接听官方IR电话录音，避免媒体二次失真。</p>
-      <div class="ctags"><span class="tag">季度更新</span><span class="tag">管理层原话</span><span class="tag">有限免费</span></div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
+  <div class="cal-grid">
+    <div class="cal-card cal-q">
+      <div class="cal-ttl">季度财报窗口</div>
+      <ul class="cal-list">
+        <li>NVIDIA（财年1月结束） <span class="cal-dt">2/5/8/11月</span></li>
+        <li>TSMC月营收 <span class="cal-dt">每月10日</span></li>
+        <li>SK Hynix / Samsung <span class="cal-dt">季末后约4周</span></li>
+        <li>Micron（财年8月结束） <span class="cal-dt">3/6/9/12月</span></li>
+        <li>Lumentum / Coherent <span class="cal-dt">季末后约5周</span></li>
+        <li>Amazon / Google / Meta / Microsoft <span class="cal-dt">季末后约4周</span></li>
+      </ul>
     </div>
-    <div class="card">
-      <div class="ctop"><span class="cname">TSMC 投资者关系（代工制造）</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-      <a class="curl" href="https://investor.tsmc.com" target="_blank" rel="noopener">investor.tsmc.com</a>
-      <p class="cdesc">TSMC季报披露先进制程（N3/N2）产能利用率和资本开支，是判断AI芯片供应侧最关键的代工数据来源。CoWoS先进封装产能是NVIDIA GB系列GPU的核心瓶颈，每季度财报电话必听。</p>
-      <div class="ctags"><span class="tag">季报</span><span class="tag">先进制程利用率</span><span class="tag">CoWoS封装产能</span></div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
+    <div class="cal-card cal-e">
+      <div class="cal-ttl">重要行业会议</div>
+      <ul class="cal-list">
+        <li>OFC光纤通信会议 <span class="cal-dt">每年3月</span></li>
+        <li>NVIDIA GTC <span class="cal-dt">每年3月</span></li>
+        <li>Hot Chips（芯片架构） <span class="cal-dt">每年8月</span></li>
+        <li>Flash Memory Summit <span class="cal-dt">每年8月</span></li>
+        <li>SC超算大会 <span class="cal-dt">每年11月</span></li>
+        <li>CES消费电子展 <span class="cal-dt">每年1月</span></li>
+      </ul>
     </div>
-    <div class="card">
-      <div class="ctop"><span class="cname">Goldman Sachs / JPMorgan 研究报告</span><div class="badges"><span class="badge bp">付费</span></div></div>
-      <a class="curl" href="https://www.goldmansachs.com/intelligence/pages/gs-research.html" target="_blank" rel="noopener">goldmansachs.com/intelligence · jpmorgan.com/research</a>
-      <p class="cdesc">高盛科技/半导体团队和摩根大通的AI基础设施研究，含DRAM供需预测（高盛4.9%缺口数据已通过媒体摘要核实）。完整报告需Bloomberg Terminal或机构账户访问，免费版不可得。</p>
-      <div class="ctags"><span class="tag">DRAM供需预测</span><span class="tag">需Bloomberg</span><span class="tag">机构级研究</span></div>
-      <div class="warn">⚠ 原始完整报告需付费终端，媒体引用摘要需核实原始口径</div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
+    <div class="cal-card cal-w">
+      <div class="cal-ttl">持续跟踪数据</div>
+      <ul class="cal-list">
+        <li>WSTS月度出货 <span class="cal-dt">每月约第20天</span></li>
+        <li>DRAMeXchange价格 <span class="cal-dt">每周</span></li>
+        <li>IEA数据中心报告 <span class="cal-dt">年度（每年更新）</span></li>
+        <li>EIA电力月报 <span class="cal-dt">每月约第20天</span></li>
+        <li>PJM容量规划 <span class="cal-dt">年度</span></li>
+      </ul>
     </div>
-    <div class="card">
-      <div class="ctop"><span class="cname">DIGITIMES · 台湾供应链媒体</span><div class="badges"><span class="badge bp">付费</span></div></div>
-      <a class="curl" href="https://www.digitimes.com" target="_blank" rel="noopener">digitimes.com</a>
-      <p class="cdesc">台湾最专业的科技供应链媒体，最早报道HBM价格谈判、台积电CoWoS产能、NVIDIA GB300供货等信息，信源多为台湾供应链。部分文章需付费订阅，是TrendForce/Gartner的重要替代信源。</p>
-      <div class="ctags"><span class="tag">台湾供应链先行信号</span><span class="tag">付费订阅</span><span class="tag">周期性敏感信息</span></div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-    </div>
-    <div class="card">
-      <div class="ctop"><span class="cname">The Information · AI行业深度报道</span><div class="badges"><span class="badge bp">付费</span></div></div>
-      <a class="curl" href="https://www.theinformation.com" target="_blank" rel="noopener">theinformation.com</a>
-      <p class="cdesc">专注科技行业一手报道的订阅制媒体，在OpenAI/Anthropic/超大规模商AI战略等话题上有较多独家信源报道。适合追踪AI模型技术迭代和厂商战略动向，年费约$399。</p>
-      <div class="ctags"><span class="tag">一手信源报道</span><span class="tag">AI战略跟踪</span><span class="tag">年费$399</span></div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-    </div>
-    <div class="card">
-      <div class="ctop"><span class="cname">Epoch AI · AI算力基准追踪</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-      <a class="curl" href="https://epochai.org/data/training-runs" target="_blank" rel="noopener">epochai.org/data/training-runs</a>
-      <p class="cdesc">非营利机构追踪大模型训练算力（FLOPs）、参数量、训练数据集等技术参数，是判断AI技术迭代速度与算力需求增长最系统的开放数据集。更新频繁，基础数据免费。</p>
-      <div class="ctags"><span class="tag">训练算力追踪</span><span class="tag">开放数据</span><span class="tag">技术迭代速度判断</span></div>
-      <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
+    <div class="cal-card cal-s">
+      <div class="cal-ttl">2026年关键节点</div>
+      <ul class="cal-list">
+        <li>Rubin平台（NVIDIA下代）<span class="cal-dt">预计H2 2026</span></li>
+        <li>HBM4量产启动 <span class="cal-dt">2026年中</span></li>
+        <li>三里岛重启 <span class="cal-dt">预计2027</span></li>
+        <li>SK Hynix M15X新厂 <span class="cal-dt">2027年中</span></li>
+        <li>Samsung P5新厂 <span class="cal-dt">2028年</span></li>
+        <li>CPO大规模商用 <span class="cal-dt">预计≥2028</span></li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- ── PRIORITY TABLE ── -->
+<!-- ═══ 06 配置建议 ═══ -->
 <section class="sec" id="priority">
   <div class="shead">
     <span class="snum">06</span>
     <div class="sicon" style="background:rgba(126,232,162,0.1)">🎯</div>
-    <h2 class="stitle">产业链配置方向 · 数据订阅建议</h2>
+    <h2 class="stitle">数据订阅优先级 · 配置建议</h2>
   </div>
   <table class="ptable">
     <thead>
       <tr>
         <th style="width:80px">优先级</th>
+        <th style="width:90px">频次</th>
         <th style="width:240px">数据源</th>
         <th>配置决策用途</th>
-        <th style="width:100px">成本</th>
-        <th style="width:70px">时效</th>
+        <th style="width:80px">成本</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><span class="pb pb1">必须</span></td>
-        <td style="color:var(--text)">NVIDIA/AMD/Intel/TSMC IR + SEC EDGAR + SK Hynix/Micron/Samsung IR</td>
-        <td>GPU算力、HBM供需、代工产能——构成AI产业链基本面分析基础，无可替代</td>
+        <td><span class="freq fq" style="font-size:10px">季度</span></td>
+        <td style="color:var(--text)">NVIDIA + TSMC + SK Hynix + Micron + Samsung IR</td>
+        <td>算力/存力/代工基本面，无可替代的一手数据，全部免费直查</td>
         <td><span style="color:#7ee8a2">免费</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">季度</td>
       </tr>
       <tr>
         <td><span class="pb pb1">必须</span></td>
-        <td style="color:var(--text)">IEA数据中心报告 + EIA + Lawrence Berkeley + PJM/ERCOT</td>
-        <td>电力约束是2026年AI基础设施最核心瓶颈，直接影响数据中心扩建时间表</td>
+        <td><span class="freq fq" style="font-size:10px">季度</span></td>
+        <td style="color:var(--text)">SEC EDGAR · 超大规模商财报 + 8-K</td>
+        <td>资本开支指引原始来源，优于任何媒体报道，避免口径失真</td>
         <td><span style="color:#7ee8a2">免费</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">年度</td>
+      </tr>
+      <tr>
+        <td><span class="pb pb1">必须</span></td>
+        <td><span class="freq fw" style="font-size:10px">年度</span></td>
+        <td style="color:var(--text)">IEA数据中心报告 + EIA + Lawrence Berkeley Lab</td>
+        <td>电力约束是AI基础设施最核心瓶颈，官方数据是电力/核能主题配置的基础</td>
+        <td><span style="color:#7ee8a2">免费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb2">高度建议</span></td>
-        <td style="color:var(--text)">TrendForce/DRAMeXchange + DIGITIMES + Gartner摘要</td>
-        <td>HBM/DRAM价格前瞻、供应链节点信号，建议与财报交叉验证，不可单独作为决策依据</td>
-        <td><span style="color:#f0883e">付费</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">周/月</td>
+        <td><span class="freq fq" style="font-size:10px">季度</span></td>
+        <td style="color:var(--text)">Lumentum + Coherent + Marvell 季报</td>
+        <td>光互联实际出货量验证，比市场调研报告更可信，免费直查</td>
+        <td><span style="color:#7ee8a2">免费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb2">高度建议</span></td>
-        <td style="color:var(--text)">SemiAnalysis + LightCounting（运力/CPO专题）</td>
-        <td>CPO/LPO技术演进时间节点、光互联市场数据——运力投资决策的专业参考</td>
-        <td><span style="color:#f0883e">付费</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">月度</td>
+        <td><span class="freq fe" style="font-size:10px">周度</span></td>
+        <td style="color:var(--text)">DRAMeXchange 内存价格追踪</td>
+        <td>HBM/DRAM价格前瞻信号，建议与财报毛利率数据交叉验证</td>
+        <td><span style="color:#f0883e">摘要免费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb3">视需求</span></td>
-        <td style="color:var(--text)">Goldman Sachs / JPMorgan AI基础设施研究（Bloomberg）</td>
-        <td>机构级供需模型与供应链预测，价格周期和竞争格局判断，需Bloomberg Terminal</td>
-        <td><span style="color:#f0883e">Bloomberg</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">季度</td>
+        <td><span class="freq fq" style="font-size:10px">季度</span></td>
+        <td style="color:var(--text)">TrendForce · GPU/AI服务器出货预测</td>
+        <td>供应链方向性参考，含估算成分，不可单独作为决策依据</td>
+        <td><span style="color:#f0883e">摘要免费</span></td>
+      </tr>
+      <tr>
+        <td><span class="pb pb3">视需求</span></td>
+        <td><span class="freq fq" style="font-size:10px">季度</span></td>
+        <td style="color:var(--text)">LightCounting · 光通信市场预测</td>
+        <td>CPO/LPO市场规模预测，运力投资决策专业参考，完整版需付费</td>
+        <td><span style="color:#f0883e">付费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb4">可替代</span></td>
-        <td style="color:var(--text)">Epoch AI + WSTS（技术迭代与行业规模参考）</td>
-        <td>AI训练算力增长趋势和半导体行业整体规模，辅助宏观量级判断，免费可获取</td>
-        <td><span style="color:#7ee8a2">免费</span></td>
-        <td style="color:var(--text3);font-family:var(--font-mono);font-size:10px">月/年</td>
+        <td><span class="freq fw" style="font-size:10px">不定期</span></td>
+        <td style="color:var(--text)">SemiAnalysis · 半导体深度研究</td>
+        <td>CPO/NVLink等技术深度分析，供应链一手渠道，适合技术细节验证</td>
+        <td><span style="color:#f0883e">Substack付费</span></td>
       </tr>
     </tbody>
   </table>
 </section>
 
-<!-- DISCLAIMER -->
 <div class="disc">
-  <div class="discttl">⚠ 已核实的数据盲区与不确定项</div>
-  <ul class="discbody">
-    <li><b>GPU订单积压数据</b>：NVIDIA披露的"$500B+ Blackwell+Rubin订单"来自管理层财报电话，属于管理层引导而非审计财务数据，不等同于锁定收入，需结合实际季度出货量交叉验证。</li>
-    <li><b>HBM/DRAM价格数据</b>：TrendForce/DRAMeXchange的合约价格含模型估算，不等同于真实成交价。三星/SK Hynix与NVIDIA的具体合约价格从未对外公开，媒体报道的"提价20%"来自韩媒未具名信源。</li>
-    <li><b>CPO市场规模预测</b>：IDTechEx的$20B(2036)、CAGR 37%等预测数字为付费报告内容，本文无法核实建模假设，且CPO商用时间节点本身存在较大不确定性（NVIDIA明确约2028年，但量产依赖良率突破）。</li>
-    <li><b>电力消耗预测区间较宽</b>：Lawrence Berkeley Lab给出2028年325-580 TWh的宽幅预测区间，反映AI工作负载增速的根本不确定性，不宜引用单点数字作为决策依据。</li>
-    <li><b>NPO/XPO术语说明</b>：NPO（Near-Package Optics）和XPO（eXternal Packaged Optics）目前尚无统一行业标准定义，不同厂商使用同类术语含义不同，建议以具体技术规格而非缩写为准。</li>
-    <li><b>本页所有数据</b>：仅供辅助决策分析参考，不构成投资建议。核实截至2026年4月9日，部分市场预测数据将随厂商指引变化而快速过时。</li>
+  <div class="disc-ttl">⚠ 重要说明与数据盲区</div>
+  <ul class="disc-body">
+    <li><b>本页不存储任何数值</b>：所有具体数据（营收、出货量、价格）均需前往原始来源获取最新值，本页仅提供框架结构、直达链接和判读标准，每次打开均反映最新状态，不存在数据过时问题。</li>
+    <li><b>勾选状态不持久化</b>：刷新页面后勾选状态重置，每次使用时重新勾选，确保每次都是完整的新一轮扫描。</li>
+    <li><b>GPU订单积压数据</b>：NVIDIA管理层财报电话中披露的订单数字为管理层引导，非审计财务数据，不等同于锁定收入，需结合实际季度出货量验证。</li>
+    <li><b>HBM/DRAM价格数据</b>：DRAMeXchange的合约价格含模型估算，三星/SK Hynix与NVIDIA的具体合约价格从未对外公开，媒体报道的提价幅度均来自未具名信源，可信度有限。</li>
+    <li><b>CPO市场规模预测</b>：IDTechEx/LightCounting等机构的长期市场规模预测含建模假设，不确定性极高，CPO大规模商用时间节点本身存在较大不确定性（NVIDIA明确约2028年，但依赖良率突破）。</li>
+    <li><b>NPO/XPO术语</b>：目前无统一行业标准定义，不同厂商含义不同，建议以具体技术规格而非缩写作为判断依据。</li>
+    <li><b>本页所有内容</b>：仅供辅助决策分析参考，不构成投资建议。框架核实截至2026年4月9日。</li>
   </ul>
 </div>
 
 </div><!-- /.main -->
 
 <footer>
-  <span class="ft">AI产业链进展追踪 · 私募基金经理决策参考 · 核实截至 2026-04-09</span>
-  <span class="ft">数据来源：NVIDIA · SEC EDGAR · SK Hynix · Micron · Samsung · IEA · EIA · TSMC · TrendForce · LightCounting · SemiAnalysis</span>
+  <span class="ft">AI产业链进展追踪 · 每日检查清单 · 框架核实截至 2026-04-09</span>
+  <span class="ft">数据来源：NVIDIA · TSMC · SEC EDGAR · SK Hynix · Micron · Samsung · IEA · EIA · LME · LightCounting</span>
 </footer>
 
+<script>
+// 今日日期
+(function(){
+  var d = new Date();
+  var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+  var wk = ['日','一','二','三','四','五','六'];
+  document.getElementById('today-date').textContent =
+    y + '-' + (m<10?'0'+m:m) + '-' + (day<10?'0'+day:day) + '  周' + wk[d.getDay()];
+})();
+
+// 各分区计数
+var counts = {compute:0, memory:0, network:0, power:0};
+var totals = {};
+var colors = {compute:'#79c0ff', memory:'#7ee8a2', network:'#d2a8ff', power:'#f0883e'};
+var labels = {compute:'算力', memory:'存力', network:'运力', power:'电力'};
+
+function initCounts(){
+  Object.keys(counts).forEach(function(s){
+    totals[s] = document.querySelectorAll('#g-'+s+' .cl-item').length;
+    counts[s] = 0;
+  });
+  updateProgress();
+}
+
+function chk(el, sec){
+  el.classList.toggle('checked');
+  counts[sec] = document.querySelectorAll('#g-'+sec+' .cl-item.checked').length;
+  updateProgress();
+}
+
+function updateProgress(){
+  var total = 0, done = 0;
+  Object.keys(totals).forEach(function(s){ total += totals[s]; done += counts[s]; });
+  document.getElementById('prog-text').textContent = done + ' / ' + total + ' 项已完成';
+  document.getElementById('prog-fill').style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+  var html = '';
+  Object.keys(labels).forEach(function(s){
+    html += '<div class="ps"><div class="psdot" style="background:'+colors[s]+'"></div>'
+          + labels[s] + ': ' + counts[s] + '/' + totals[s] + '</div>';
+  });
+  document.getElementById('prog-secs').innerHTML = html;
+}
+
+initCounts();
+</script>
 </body>
 </html>
