@@ -3,184 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A股交易方向与市场情绪 · 私募基金经理决策参考</title>
+<title>A股交易方向与市场情绪 · 每日检查清单</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#07090c;--bg2:#0d1117;--bg3:#141920;--bg4:#1a2030;
-  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
   --text:#dde2ee;--text2:#8a94a8;--text3:#4c5569;
-  --red:#f85149;--red-d:rgba(248,81,73,0.1);
-  --green:#3fb950;--green-d:rgba(63,185,80,0.1);
-  --blue:#79c0ff;--blue-d:rgba(121,192,255,0.1);
-  --gold:#d4a72c;--gold2:#f0cc7a;--gold-d:rgba(212,167,44,0.1);
-  --purple:#c084fc;--purple-d:rgba(192,132,252,0.1);
-  --orange:#fb923c;--orange-d:rgba(251,146,60,0.1);
-  --teal:#2dd4bf;--teal-d:rgba(45,212,191,0.1);
+  --red:#f85149;--green:#3fb950;--blue:#79c0ff;
+  --gold:#d4a72c;--gold2:#f0cc7a;
+  --purple:#c084fc;--orange:#fb923c;--teal:#2dd4bf;
   --font-serif:'Noto Serif SC',serif;
   --font-sans:'Noto Sans SC',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.7}
 
-/* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(7,9,12,0.94);backdrop-filter:blur(16px);
-  border-bottom:0.5px solid var(--border);height:54px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 36px}
-.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-serif);font-size:14px}
-.lm{width:28px;height:28px;border-radius:6px;
-  background:linear-gradient(135deg,var(--red),var(--orange));
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;font-family:var(--font-mono)}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(7,9,12,0.95);backdrop-filter:blur(16px);
+  border-bottom:0.5px solid var(--border);height:52px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 32px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--font-serif);font-size:13px}
+.lm{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--red),var(--orange));
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;font-family:var(--font-mono)}
 nav{display:flex;gap:2px}
-.ni{padding:4px 10px;border-radius:5px;font-size:11px;color:var(--text2);
-  text-decoration:none;transition:all .18s;font-family:var(--font-sans)}
+.ni{padding:4px 10px;border-radius:5px;font-size:11px;color:var(--text2);font-family:var(--font-sans);
+  background:none;border:none;cursor:pointer;outline:none;transition:all .15s}
 .ni:hover{background:var(--bg3);color:var(--text)}
-.ts{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.05em}
+.today-badge{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.04em}
 
-/* HERO */
-.hero{padding:52px 36px 40px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:380px;height:380px;
-  background:radial-gradient(circle,rgba(248,81,73,0.04) 0%,transparent 70%);pointer-events:none}
-.eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--red);letter-spacing:.15em;
-  text-transform:uppercase;margin-bottom:14px}
-.htitle{font-family:var(--font-serif);font-size:33px;font-weight:700;line-height:1.25;
-  color:var(--text);margin-bottom:14px;max-width:600px}
+.prog-wrap{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:11px 32px}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.prog-label{font-size:12px;color:var(--text2)}
+.prog-count{font-family:var(--font-mono);font-size:12px;color:var(--green)}
+.prog-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--teal));border-radius:2px;transition:width .4s ease;width:0%}
+.prog-secs{display:flex;gap:14px;margin-top:7px;flex-wrap:wrap}
+.ps{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+.psdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+.hero{padding:38px 32px 30px;border-bottom:0.5px solid var(--border)}
+.eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin-bottom:11px}
+.htitle{font-family:var(--font-serif);font-size:29px;font-weight:700;line-height:1.25;color:var(--text);margin-bottom:9px}
 .htitle span{color:var(--red)}
-.hsub{font-size:13px;color:var(--text2);max-width:540px;line-height:1.85;margin-bottom:26px}
-.hstats{display:flex;gap:28px;flex-wrap:wrap}
-.hs{display:flex;flex-direction:column;gap:2px}
-.hsn{font-family:var(--font-mono);font-size:20px;font-weight:500}
-.hsl{font-size:10px;color:var(--text3);letter-spacing:.04em}
+.hsub{font-size:12px;color:var(--text2);max-width:580px;line-height:1.85}
 
-/* MAIN */
-.main{max-width:1380px;margin:0 auto;padding:0 36px 80px}
+.main{max-width:1320px;margin:0 auto;padding:0 32px 80px}
 
-/* TIME DIMENSION TABS */
-.tdim{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:28px 0}
-.tdcard{background:var(--bg2);border:0.5px solid var(--border);border-radius:12px;
-  padding:16px 18px;position:relative;overflow:hidden}
-.tdcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.tdm .tdcard::before{background:var(--purple)}
-.tdw .tdcard::before{background:var(--blue)}
-.tdd .tdcard::before{background:var(--red)}
-.tdlabel{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:8px}
-.tdm .tdlabel{color:var(--purple)}.tdw .tdlabel{color:var(--blue)}.tdd .tdlabel{color:var(--red)}
-.tdtitle{font-family:var(--font-serif);font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
-.tdlist{font-size:11px;color:var(--text2);line-height:1.85}
-.tdlist li{list-style:none;padding-left:12px;position:relative}
-.tdlist li::before{content:'·';position:absolute;left:0;color:var(--text3)}
+.sec{padding:30px 0 0}
+.shead{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:11px;border-bottom:0.5px solid var(--border)}
+.snum{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:16px}
+.sicon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.stitle{font-family:var(--font-serif);font-size:16px;font-weight:600;color:var(--text)}
+.sfreq{margin-left:auto}
+.freq{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:10px}
+.fd{background:rgba(248,81,73,0.1);color:var(--red);border:0.5px solid rgba(248,81,73,0.2)}
+.fw{background:rgba(121,192,255,0.1);color:var(--blue);border:0.5px solid rgba(121,192,255,0.2)}
+.fm{background:rgba(192,132,252,0.1);color:var(--purple);border:0.5px solid rgba(192,132,252,0.2)}
 
-/* SECTION */
-.sec{padding:36px 0 0}
-.shead{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;
-  border-bottom:0.5px solid var(--border)}
-.snum{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:18px}
-.sicon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.stitle{font-family:var(--font-serif);font-size:17px;font-weight:600;color:var(--text)}
-.sdesc{font-size:11px;color:var(--text2);margin-left:auto;max-width:280px;text-align:right;line-height:1.6}
+.sublabel{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;
+  margin:16px 0 9px;display:flex;align-items:center;gap:8px}
+.sublabel::after{content:'';flex:1;height:0.5px;background:var(--border)}
 
-/* SUBSECTION */
-.subsec{margin-bottom:22px}
-.subtitle{font-size:11px;font-weight:500;color:var(--text2);font-family:var(--font-mono);
-  letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;padding-left:2px;
-  display:flex;align-items:center;gap:8px}
-.subtitle::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
 
-/* CARDS */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:10px}
-.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;
-  padding:15px 17px;transition:border-color .18s,background .18s;overflow:hidden}
-.card:hover{border-color:var(--border2);background:var(--bg3)}
-.ctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;gap:6px}
-.cname{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
-.badges{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
-.badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap;letter-spacing:.03em}
-.bo{background:rgba(192,132,252,0.12);color:#c084fc;border:0.5px solid rgba(192,132,252,0.22)}
-.bf{background:rgba(63,185,80,0.1);color:#3fb950;border:0.5px solid rgba(63,185,80,0.18)}
-.bm{background:rgba(121,192,255,0.1);color:#79c0ff;border:0.5px solid rgba(121,192,255,0.18)}
-.bp{background:rgba(251,146,60,0.1);color:#fb923c;border:0.5px solid rgba(251,146,60,0.18)}
-.bw{background:rgba(248,81,73,0.1);color:#f85149;border:0.5px solid rgba(248,81,73,0.18)}
-.curl{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;
-  border-bottom:0.5px solid rgba(212,167,44,0.28);transition:color .15s,border-color .15s;
-  word-break:break-all;display:block;margin-bottom:7px;line-height:1.5}
-.curl:hover{color:var(--gold2);border-color:var(--gold2)}
-.cdesc{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:9px}
-.ctags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px}
-.tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);color:var(--text3);border:0.5px solid var(--border)}
-.trust{display:flex;align-items:center;gap:7px;padding-top:8px;border-top:0.5px solid var(--border)}
-.tlabel{font-size:10px;color:var(--text3);min-width:40px;font-family:var(--font-mono)}
-.ttrack{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
-.tfill{height:100%;border-radius:2px}
-.t5{background:linear-gradient(90deg,#1D9E75,#3fb950);width:100%}
-.t4{background:linear-gradient(90deg,#185FA5,#79c0ff);width:80%}
-.t3{background:linear-gradient(90deg,#BA7517,#fb923c);width:60%}
-.t2{background:linear-gradient(90deg,#8a3030,#f85149);width:40%}
-.tscore{font-size:10px;font-family:var(--font-mono);min-width:30px;text-align:right}
-.s5{color:#3fb950}.s4{color:#79c0ff}.s3{color:#fb923c}.s2{color:#f85149}
-.warn{margin-top:8px;padding:6px 9px;background:rgba(251,146,60,0.07);
-  border:0.5px solid rgba(251,146,60,0.18);border-radius:5px;font-size:11px;color:#fb923c;line-height:1.6}
-.info{margin-top:8px;padding:6px 9px;background:rgba(121,192,255,0.06);
-  border:0.5px solid rgba(121,192,255,0.15);border-radius:5px;font-size:11px;color:#79c0ff;line-height:1.6}
+.cl-item{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;
+  padding:13px 15px;cursor:pointer;transition:all .18s;user-select:none}
+.cl-item:hover{border-color:var(--border2);background:var(--bg3)}
+.cl-item.checked{border-color:rgba(63,185,80,0.3);background:rgba(63,185,80,0.03)}
+.cl-item.checked .cl-name{color:var(--text3);text-decoration:line-through}
+.cl-item.checked .chk{background:var(--green);border-color:var(--green)}
+.cl-item.checked .chk::after{opacity:1}
+.cl-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0;
+  margin-top:1px;transition:all .15s;position:relative}
+.chk::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:10px;color:#fff;opacity:0;transition:opacity .15s}
+.cl-info{flex:1;min-width:0}
+.cl-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;transition:color .15s}
+.cl-src{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;
+  display:block;margin-bottom:6px;border-bottom:0.5px solid rgba(212,167,44,0.25);width:fit-content;transition:color .15s}
+.cl-src:hover{color:var(--gold2)}
+.cl-what{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:7px}
+.cl-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.cl-tag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);color:var(--text3);border:0.5px solid var(--border)}
+.cl-time{font-family:var(--font-mono);font-size:10px;color:var(--text3);background:var(--bg4);padding:2px 7px;border-radius:4px;border:0.5px solid var(--border)}
+.cl-rule{margin-top:8px;padding:6px 10px;background:rgba(121,192,255,0.05);border-left:2px solid rgba(121,192,255,0.3);
+  border-radius:0 5px 5px 0;font-size:11px;color:var(--blue);line-height:1.65}
+.cl-warn{margin-top:8px;padding:6px 9px;background:rgba(251,146,60,0.06);border:0.5px solid rgba(251,146,60,0.18);
+  border-radius:5px;font-size:11px;color:var(--orange);line-height:1.6}
+.cl-item.checked .cl-rule,.cl-item.checked .cl-warn{opacity:0.4}
 
-/* DATA HIGHLIGHT ROW */
-.datarow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;
-  margin:14px 0;padding:14px 16px;background:var(--bg2);
-  border:0.5px solid var(--border);border-radius:10px}
-.dritem{display:flex;flex-direction:column;gap:3px}
-.drv{font-family:var(--font-mono);font-size:15px;font-weight:500}
-.drl{font-size:11px;color:var(--text2)}
-.drs{font-size:10px;color:var(--text3);font-style:italic}
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px}
+.cal-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;padding:12px 14px}
+.cal-ttl{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
+.cal-d .cal-ttl{color:var(--red)}.cal-w .cal-ttl{color:var(--blue)}.cal-m .cal-ttl{color:var(--purple)}.cal-s .cal-ttl{color:var(--gold)}
+.cal-list{font-size:11px;color:var(--text2);line-height:1.9}
+.cal-list li{list-style:none;padding-left:13px;position:relative}
+.cal-list li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%}
+.cal-d .cal-list li::before{background:var(--red)}.cal-w .cal-list li::before{background:var(--blue)}
+.cal-m .cal-list li::before{background:var(--purple)}.cal-s .cal-list li::before{background:var(--gold)}
+.cal-dt{color:var(--text3);font-family:var(--font-mono);font-size:10px}
 
-/* FREQ BADGE */
-.freq{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:10px;
-  padding:2px 8px;border-radius:10px;margin-right:4px}
-.fd{background:var(--red-d);color:var(--red);border:0.5px solid rgba(248,81,73,0.2)}
-.fw{background:var(--blue-d);color:var(--blue);border:0.5px solid rgba(121,192,255,0.2)}
-.fm{background:var(--purple-d);color:var(--purple);border:0.5px solid rgba(192,132,252,0.2)}
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.theme-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:13px 15px}
+.th-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.th-tag{font-size:10px;padding:2px 8px;border-radius:10px;font-family:var(--font-mono)}
+.th-pol{background:rgba(192,132,252,0.12);color:#c084fc}
+.th-ind{background:rgba(121,192,255,0.12);color:#79c0ff}
+.th-sea{background:rgba(212,167,44,0.1);color:#d4a72c}
+.th-med{background:rgba(63,185,80,0.1);color:#3fb950}
+.th-name{font-size:13px;font-weight:500;color:var(--text)}
+.th-sig{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:7px}
+.th-verify{font-family:var(--font-mono);font-size:10px;color:var(--text3);line-height:1.8}
+.th-a{color:var(--gold);text-decoration:none;border-bottom:0.5px solid rgba(212,167,44,0.25)}
+.th-a:hover{color:var(--gold2)}
 
-/* EVENT CARD */
-.ecards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.ecard{background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;
-  padding:15px 17px;transition:border-color .18s}
-.ecard:hover{border-color:var(--border2)}
-.etop{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.etag{font-size:10px;padding:2px 8px;border-radius:10px;font-family:var(--font-mono)}
-.et-pol{background:rgba(192,132,252,0.12);color:#c084fc}
-.et-ind{background:rgba(121,192,255,0.12);color:#79c0ff}
-.et-rep{background:rgba(63,185,80,0.1);color:#3fb950}
-.et-mkt{background:rgba(248,81,73,0.1);color:#f85149}
-.et-sea{background:rgba(212,167,44,0.1);color:#d4a72c}
-.ename{font-size:13px;font-weight:500;color:var(--text)}
-.edesc{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:8px}
-.etiming{font-family:var(--font-mono);font-size:10px;color:var(--text3)}
-
-/* LEGEND */
-.legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 16px;
-  background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;margin:22px 0 0}
-.ll{font-size:11px;font-weight:500;color:var(--text2);margin-right:4px}
-.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
-
-/* DISCLAIMER */
-.disc{margin:36px 0 0;padding:18px 22px;background:var(--bg2);border:0.5px solid var(--border);
-  border-radius:11px;border-left:3px solid var(--orange)}
-.discttl{font-family:var(--font-serif);font-size:13px;font-weight:600;color:var(--orange);
-  margin-bottom:9px;display:flex;align-items:center;gap:6px}
-.discbody{font-size:11px;color:var(--text2);line-height:1.9}
-.discbody li{margin-bottom:5px;padding-left:14px;position:relative}
-.discbody li::before{content:'▸';position:absolute;left:0;color:var(--text3)}
-
-/* PRIORITY TABLE */
-.ptable{width:100%;border-collapse:collapse;font-size:12px;margin-top:16px}
-.ptable th{text-align:left;font-weight:500;font-size:10px;color:var(--text3);
-  font-family:var(--font-mono);letter-spacing:.08em;padding:9px 12px;
-  border-bottom:0.5px solid var(--border);background:var(--bg2)}
-.ptable td{padding:10px 12px;border-bottom:0.5px solid var(--border);
-  vertical-align:top;color:var(--text2);line-height:1.6}
+.ptable{width:100%;border-collapse:collapse;font-size:12px;margin-top:13px}
+.ptable th{text-align:left;font-weight:500;font-size:10px;color:var(--text3);font-family:var(--font-mono);
+  letter-spacing:.08em;padding:8px 11px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.ptable td{padding:9px 11px;border-bottom:0.5px solid var(--border);vertical-align:top;color:var(--text2);line-height:1.6}
 .ptable tr:hover td{background:var(--bg3)}
 .ptable tr:last-child td{border-bottom:none}
 .pb{font-family:var(--font-mono);font-size:10px;padding:2px 7px;border-radius:4px}
@@ -189,386 +132,443 @@ nav{display:flex;gap:2px}
 .pb3{background:rgba(251,146,60,0.1);color:#fb923c}
 .pb4{background:rgba(94,102,120,0.15);color:#8a94a8}
 
-footer{padding:24px 36px;border-top:0.5px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.disc{margin:28px 0 0;padding:15px 19px;background:var(--bg2);border:0.5px solid var(--border);
+  border-radius:10px;border-left:3px solid var(--orange)}
+.disc-ttl{font-size:12px;font-weight:500;color:var(--orange);margin-bottom:7px}
+.disc-body{font-size:11px;color:var(--text2);line-height:1.9}
+.disc-body li{margin-bottom:4px;padding-left:13px;position:relative;list-style:none}
+.disc-body li::before{content:'▸';position:absolute;left:0;color:var(--text3)}
+
+footer{padding:20px 32px;border-top:0.5px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .ft{font-size:10px;color:var(--text3);font-family:var(--font-mono)}
 
 @media(max-width:768px){
-  .hdr{padding:0 16px}.hero{padding:36px 16px 28px}.main{padding:0 16px 60px}
-  .htitle{font-size:24px}.tdim{grid-template-columns:1fr}
-  nav{display:none}.sdesc{display:none}.hstats{gap:18px}}
-
-@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card,.ecard{animation:fu .35s ease both}
-.card:nth-child(1),.ecard:nth-child(1){animation-delay:.04s}
-.card:nth-child(2),.ecard:nth-child(2){animation-delay:.08s}
-.card:nth-child(3),.ecard:nth-child(3){animation-delay:.12s}
-.card:nth-child(4),.ecard:nth-child(4){animation-delay:.16s}
-.card:nth-child(5),.ecard:nth-child(5){animation-delay:.20s}
-.card:nth-child(6),.ecard:nth-child(6){animation-delay:.24s}
+  .hdr,.prog-wrap,.hero,.main{padding-left:16px;padding-right:16px}
+  .htitle{font-size:23px}
+  nav{display:none}
+  .prog-secs{display:none}
+  .cl-grid,.theme-grid,.cal-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="hdr">
-  <div class="logo"><div class="lm">A∑</div><span>A股交易方向与市场情绪</span></div>
+  <div class="logo"><div class="lm">A∑</div><span>A股每日检查清单</span></div>
   <nav>
-    <a class="ni" href="javascript:void(0)" onclick="navJump('monthly')">月维度</a>
-    <a class="ni" href="javascript:void(0)" onclick="navJump('weekly')">周维度</a>
-    <a class="ni" href="javascript:void(0)" onclick="navJump('daily')">日维度</a>
-    <a class="ni" href="javascript:void(0)" onclick="navJump('event')">事件驱动</a>
-    <a class="ni" href="javascript:void(0)" onclick="navJump('priority')">配置建议</a>
+    <button class="ni" onclick="document.getElementById('daily').scrollIntoView({behavior:'smooth'})">日维度</button>
+    <button class="ni" onclick="document.getElementById('weekly').scrollIntoView({behavior:'smooth'})">周维度</button>
+    <button class="ni" onclick="document.getElementById('monthly').scrollIntoView({behavior:'smooth'})">月维度</button>
+    <button class="ni" onclick="document.getElementById('event').scrollIntoView({behavior:'smooth'})">事件驱动</button>
+    <button class="ni" onclick="document.getElementById('calendar').scrollIntoView({behavior:'smooth'})">发布日历</button>
+    <button class="ni" onclick="document.getElementById('priority').scrollIntoView({behavior:'smooth'})">配置建议</button>
   </nav>
-  <span class="ts">UPDATED 2026-04-09</span>
+  <span class="today-badge" id="today-date"></span>
 </header>
 
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-top">
+    <span class="prog-label">今日扫描进度</span>
+    <span class="prog-count" id="prog-text">0 / 0 项已完成</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-secs" id="prog-secs"></div>
+</div>
+
+<!-- HERO -->
 <section class="hero">
   <div class="eyebrow">私募基金经理 · A股交易方向决策参考</div>
   <h1 class="htitle">A股<span>多维度</span>交易数据框架</h1>
-  <p class="hsub">月维度行业景气方向 · 周维度市场流动性变化 · 日维度风险偏好监测，及事件驱动型与主题交易机会跟踪。所有数据源经实际核实，标注可信度与获取途径，不确定项明确说明。</p>
-  <div class="hstats">
-    <div class="hs"><span class="hsn" style="color:var(--red)">2.61万亿</span><span class="hsl">两融余额（3/31，历史高位）</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--orange)">2.4万亿</span><span class="hsl">近期日均成交额</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--green)">+15.2%</span><span class="hsl">1-2月规上工业企业利润增速</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--blue)">49.0</span><span class="hsl">1月制造业PMI（荣枯线以下）</span></div>
-    <div class="hs"><span class="hsn" style="color:var(--purple)">4月</span><span class="hsl">券商共识"决断窗口"</span></div>
-  </div>
+  <p class="hsub">每次打开，按清单逐项点击直达官网查看最新数据，勾选已查项目追踪扫描进度。本页不存储任何数值，不存在数据过时问题，每次均为当日最新数据。</p>
 </section>
 
 <div class="main">
 
-<!-- 三维度框架总览 -->
-<div class="tdim">
-  <div class="tdcard tdm">
-    <div class="tdlabel">月 · Monthly</div>
-    <div class="tdtitle">行业景气方向</div>
-    <ul class="tdlist">
-      <li>PMI / PPI / CPI 基本面验证</li>
-      <li>申万行业指数月度涨跌排名</li>
-      <li>工业企业利润分行业数据</li>
-      <li>公募基金季报仓位变化</li>
-      <li>中观景气：挖掘机销量、货运量等</li>
-    </ul>
-  </div>
-  <div class="tdcard tdw">
-    <div class="tdlabel">周 · Weekly</div>
-    <div class="tdtitle">市场流动性变化</div>
-    <ul class="tdlist">
-      <li>两融余额周度变化方向</li>
-      <li>北向/南向资金周度净流量</li>
-      <li>ETF资金周度净申赎</li>
-      <li>公募基金新发行规模</li>
-      <li>DR007 / 国债收益率变化</li>
-    </ul>
-  </div>
-  <div class="tdcard tdd">
-    <div class="tdlabel">日 · Daily</div>
-    <div class="tdtitle">市场风险偏好</div>
-    <ul class="tdlist">
-      <li>全市场成交额及量比</li>
-      <li>涨停/跌停数量、炸板率</li>
-      <li>换手率（全A/各板块）</li>
-      <li>涨跌比、赚钱效应</li>
-      <li>龙虎榜机构买卖动向</li>
-    </ul>
-  </div>
-</div>
-
-<div class="legend">
-  <span class="ll">数据来源类型：</span>
-  <span class="li"><span class="badge bo">官方</span> 交易所/监管机构</span>
-  <span class="li"><span class="badge bf">免费</span> 公开可获取</span>
-  <span class="li"><span class="badge bm">有限免费</span> 注册基础版</span>
-  <span class="li"><span class="badge bp">付费</span> 订阅制</span>
-  <span class="li"><span class="freq fd">日</span>日度 <span class="freq fw">周</span>周度 <span class="freq fm">月</span>月度</span>
-</div>
-
-<!-- ── MODULE 1: 月维度 行业景气 ── -->
-<section class="sec" id="monthly">
+<!-- ═══ 01 日维度 ═══ -->
+<section class="sec" id="daily">
   <div class="shead">
     <span class="snum">01</span>
-    <div class="sicon" style="background:rgba(192,132,252,0.1)">📅</div>
-    <h2 class="stitle">月维度：行业景气方向</h2>
-    <div class="sdesc">宏观基本面 → 中观行业验证 → 估值分位<br>核心逻辑：景气向上 + 估值合理 = 配置方向</div>
+    <div class="sicon" style="background:rgba(248,81,73,0.1)">📊</div>
+    <h2 class="stitle">日维度 · 市场风险偏好</h2>
+    <div class="sfreq"><span class="freq fd">每个交易日收盘后查看</span></div>
   </div>
+  <div class="sublabel">核心情绪指标</div>
+  <div class="cl-grid" id="g-daily">
 
-  <div class="datarow" style="border-left:3px solid var(--purple)">
-    <div class="dritem"><div class="drv" style="color:var(--purple)">49.0</div><div class="drl">1月制造业PMI（NBS）</div><div class="drs">较上月-0.3，连续2月荣枯线下</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--green)">+15.2%</div><div class="drl">1-2月工业企业利润增速</div><div class="drs">规上企业，统计局3月27日发布</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--blue)">+6.3%</div><div class="drl">1-2月规上工业增加值增速</div><div class="drs">统计局3月16日发布</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--orange)">+2.8%</div><div class="drl">1-2月社零增速</div><div class="drs">消费端偏弱，统计局3月16日</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">月度基本面官方数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">国家统计局 · 月度数据发布</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.stats.gov.cn/sj/zxfb/" target="_blank" rel="noopener">stats.gov.cn/sj/zxfb</a>
-        <p class="cdesc">PMI、CPI、PPI、工业增加值、社零、固投、房地产等全部核心宏观指标官方首发来源。每月固定时间窗口发布（PMI月末、CPI/PPI月初约第10天、工业数据月中约第15-17天）。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">官方首发</span><span class="tag">数据最权威</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">财新 Caixin PMI（制造业+服务业）</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.caixinglobal.com/tag/pmi/" target="_blank" rel="noopener">caixinglobal.com/tag/pmi</a>
-        <p class="cdesc">标普全球编制的财新PMI，样本以中小企业为主，与官方NBS PMI互补形成"大中小企业双视角"。每月第1个工作日发布。与NBS PMI背离时，反映中小企业景气与大企业的分化，对A股中小盘选股有参考价值。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">中小企业视角</span><span class="tag">官方NBS互补</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">申万行业指数 · 月度涨跌统计</span><div class="badges"><span class="badge bo">官方</span><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.swsresearch.com/swindex/html/index_publishing.html" target="_blank" rel="noopener">swsresearch.com · 申万行业指数</a>
-        <p class="cdesc">申万宏源发布的31个一级行业指数，是A股行业景气分析最通用的分类标准。月度涨跌排名反映资金景气偏好变化。注意：指数本身免费，完整历史数据需通过Wind/Choice获取。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">31个一级行业</span><span class="tag">行业对比标准口径</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">Wind资讯 / Choice（东方财富）</span><div class="badges"><span class="badge bp">付费</span></div></div>
-        <a class="curl" href="https://www.wind.com.cn" target="_blank" rel="noopener">wind.com.cn · choice.eastmoney.com</a>
-        <p class="cdesc">国内最主流的金融数据终端，整合申万行业估值分位（PE/PB历史百分位）、工业企业利润分行业细项、公募基金季报持仓变化等。是月度行业景气分析的主要数据整合平台。</p>
-        <div class="ctags"><span class="tag">行业估值分位</span><span class="tag">付费终端</span><span class="tag">公募持仓</span></div>
-        <div class="warn">⚠ 核心数据均需付费，Choice为Wind的平价替代，部分功能有限</div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">中国人民银行 · 金融统计数据</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="http://www.pbc.gov.cn/diaochatongjisi/resource/cms/2019/09/2019091315121023654.htm" target="_blank" rel="noopener">pbc.gov.cn · 货币金融数据</a>
-        <p class="cdesc">人民银行月度发布M1/M2、社会融资规模、信贷数据，是A股流动性环境判断的基础宏观数据。M1-M2剪刀差是判断企业活期存款（经营意愿）与整体货币的重要信号。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">M1/M2/社融</span><span class="tag">信贷数据</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">中国汽车工业协会 / 中汽协</span><div class="badges"><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="http://www.caam.org.cn/tjsj" target="_blank" rel="noopener">caam.org.cn/tjsj · 月度产销数据</a>
-        <p class="cdesc">汽车（含新能源）月度产销数据，是消费景气中观高频指标之一，对汽车产业链（动力电池、钢铁、化工）的月度景气判断有直接参考意义。每月中旬前后发布上月数据。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">新能源汽车渗透率</span><span class="tag">行业中观验证</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">全市场成交额 &amp; 换手率</div>
+        <a class="cl-src" href="https://stock.eastmoney.com/shichang.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · 大盘数据</a>
+        <div class="cl-what">查看沪深京三市合计成交额、万得全A换手率。反映市场整体热度，是日度情绪扫描的第一步。</div>
+        <div class="cl-meta"><span class="cl-tag">次日前可查</span><span class="cl-time">收盘后约15分钟</span></div>
+      </div></div>
+      <div class="cl-rule">📐 成交额：&lt;1万亿冷清 · 1-2万亿正常 · 2-3万亿活跃 · &gt;3万亿极热<br>换手率：&lt;0.8%低迷 · 0.8-1.5%正常 · &gt;1.5%活跃 · &gt;3%极端过热</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">涨停 / 跌停家数 &amp; 炸板率</div>
+        <a class="cl-src" href="https://stock.eastmoney.com/a/czjbhq.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · 涨跌停统计</a>
+        <div class="cl-what">查看当日涨停总数、跌停总数、炸板率（涨停后开板比例）。炸板率是题材情绪最直接的温度计。</div>
+        <div class="cl-meta"><span class="cl-tag">口径需固定平台</span><span class="cl-time">收盘后可查</span></div>
+      </div></div>
+      <div class="cl-rule">📐 涨停&gt;100家 + 炸板&lt;30% → 情绪强烈<br>涨停&lt;30家 + 炸板&gt;70% → 情绪低迷<br>⚠ 不同平台口径不同（含ST/20cm差异），固定同一平台比较</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">涨跌家数比 &amp; 个股赚钱效应</div>
+        <a class="cl-src" href="http://data.10jqka.com.cn/market/newhot/" target="_blank" rel="noopener" onclick="event.stopPropagation()">同花顺 · 市场数据中心</a>
+        <div class="cl-what">查看全市场上涨/下跌家数、个股涨跌中位数。判断资金扩散程度——是结构性行情还是普涨/普跌格局。</div>
+        <div class="cl-meta"><span class="cl-tag">日度</span><span class="cl-time">收盘后</span></div>
+      </div></div>
+      <div class="cl-rule">📐 上涨&gt;4000家 → 普涨，赚钱效应强<br>上涨&lt;1500家 → 普跌，避险为主<br>涨跌比&gt;3:1 → 资金积极做多</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">行业板块资金净流向排名</div>
+        <a class="cl-src" href="https://data.eastmoney.com/bkzj/hy.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · 行业资金流向</a>
+        <div class="cl-what">查看申万一级行业当日主力净流入/净流出排名。判断当日资金在哪些行业集中流入，是板块轮动的高频信号。</div>
+        <div class="cl-meta"><span class="cl-tag">日度</span><span class="cl-time">盘中+收盘后</span></div>
+      </div></div>
+      <div class="cl-rule">📐 连续3日净流入的行业 → 趋势性资金建仓信号<br>连续3日净流出的前强势板块 → 警惕高位减仓信号</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">龙虎榜 · 机构席位买卖动向</div>
+        <a class="cl-src" href="https://data.eastmoney.com/stock/lhb.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · 龙虎榜数据</a>
+        <div class="cl-what">查看当日龙虎榜上榜个股及机构专用席位净买入/净卖出。机构集中买入为景气度佐证，集中卖出需警惕。</div>
+        <div class="cl-meta"><span class="cl-tag">官方披露</span><span class="cl-time">收盘后约1小时</span></div>
+      </div></div>
+      <div class="cl-rule">📐 多家机构席位同向净买入同一标的 → 机构认可信号<br>注意：龙虎榜本身为高波动股触发，非低风险标的</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">主要指数PE/PB历史分位估值</div>
+        <a class="cl-src" href="https://danjuanfunds.com/djmodule/value-center" target="_blank" rel="noopener" onclick="event.stopPropagation()">蛋卷基金 · 指数估值中心</a>
+        <div class="cl-what">查看沪深300/中证500/创业板等指数当前PE/PB的历史分位数。数据来源为中证指数官方数据。</div>
+        <div class="cl-meta"><span class="cl-tag">日度更新</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 分位&lt;20% → 历史低估，安全边际高<br>分位&gt;80% → 历史高估，控制仓位<br>分位20-50% → 合理偏低，可正常配置</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'daily')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">重大公告扫描（业绩预告/重大合同）</div>
+        <a class="cl-src" href="http://www.cninfo.com.cn/new/index" target="_blank" rel="noopener" onclick="event.stopPropagation()">cninfo.com.cn · 证监会指定披露平台</a>
+        <div class="cl-what">扫描当日重大公告：业绩预告、重大合同、股权变动、定增方案。事件驱动交易机会的第一手来源，完全免费。</div>
+        <div class="cl-meta"><span class="cl-tag">实时更新</span><span class="cl-tag">免费</span><span class="cl-tag">官方指定</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点筛选：业绩预增&gt;50%的中小盘；重大合同金额&gt;营收10%；控股权变动<br>此为唯一可信公告来源，其他平台均为二次整合</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 2: 周维度 流动性 ── -->
+<!-- ═══ 02 周维度 ═══ -->
 <section class="sec" id="weekly">
   <div class="shead">
     <span class="snum">02</span>
     <div class="sicon" style="background:rgba(121,192,255,0.1)">💧</div>
-    <h2 class="stitle">周维度：市场流动性变化</h2>
-    <div class="sdesc">增量资金 · 杠杆水位 · 机构行为<br>核心逻辑：流动性边际变化决定市场弹性</div>
+    <h2 class="stitle">周维度 · 市场流动性变化</h2>
+    <div class="sfreq"><span class="freq fw">每周一次，建议周五收盘后</span></div>
   </div>
+  <div class="sublabel">资金结构与增量指标</div>
+  <div class="cl-grid" id="g-weekly">
 
-  <div class="datarow" style="border-left:3px solid var(--blue)">
-    <div class="dritem"><div class="drv" style="color:var(--red)">2.61万亿</div><div class="drl">两融余额（3月末）</div><div class="drs">超2015年6月牛市高点，需关注风险</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--orange)">38.75万</div><div class="drl">参与融资融券个人投资者（3月末）</div><div class="drs">较2月末51.22万明显下降（Wind数据）</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--blue)">73.0%</div><div class="drl">涨停封板率（近期周均）</div><div class="drs">国泰海通微观行为洞察手册</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--green)">2.4万亿</div><div class="drl">全A日均成交额</div><div class="drs">1月14日历史单日高点3.94万亿</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">周度流动性核心数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">上交所 · 融资融券汇总/明细</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.sse.com.cn/market/othersdata/margin/sum/" target="_blank" rel="noopener">sse.com.cn · 融资融券汇总数据</a>
-        <p class="cdesc">上交所官方每日发布融资融券余额明细，是两融数据的原始来源。深交所同步发布深市数据，合并即为全市场两融余额。截至3月末两融余额2.61万亿，超2015年历史高点2.05万亿。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">原始官方来源</span><span class="tag">逐股明细</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">深交所 · 融资融券统计</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.szse.cn/market/bond/rzrq/index.html" target="_blank" rel="noopener">szse.cn · 融资融券市场统计</a>
-        <p class="cdesc">深交所官方两融数据，与上交所数据合并构成全市场两融全貌。注意：两融余额历史高位并不直接等于市场顶部信号，需结合增速变化和个人投资者参与数量共同判断。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">深市官方</span><span class="tag">需与沪市合并</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">沪深港通 · 北向/南向资金流向</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.sse.com.cn/services/tradingservice/connectivity/szhk/" target="_blank" rel="noopener">sse.com.cn · 沪深港通专栏</a>
-        <p class="cdesc">沪深交易所官方披露北向资金（陆股通）每日净买入额，是外资情绪的重要参考。需注意：2023年起北向资金披露口径有所调整，日内实时数据不再公开，仅日终汇总可查。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">外资流向参考</span><span class="tag">实时数据已取消</span></div>
-        <div class="warn">⚠ 2023年起日内实时北向数据已停止公开披露，现仅可查日终净额，不可做日内择时依据</div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">中国人民银行 · 公开市场操作</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="http://www.pbc.gov.cn/zhengcehuobisi/125207/125213/125431/index.html" target="_blank" rel="noopener">pbc.gov.cn · 公开市场操作</a>
-        <p class="cdesc">人民银行每日公告逆回购/买断式逆回购操作量及DR007利率，是判断银行间流动性松紧的直接来源。周度净回收/净投放量反映央行态度，对债券/股票流动性均有影响。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">DR007利率</span><span class="tag">央行流动性操作</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">中基协 · 公募基金发行数据</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.amac.org.cn/researchstatistics/report/fundreport/" target="_blank" rel="noopener">amac.org.cn · 基金统计数据</a>
-        <p class="cdesc">中国基金业协会月度发布公募基金规模及产品发行统计，是判断增量资金入市节奏的重要来源。新发行基金规模放量通常滞后于赚钱效应，是市场情绪确认信号而非领先信号。</p>
-        <div class="ctags"><span class="tag freq fm">月</span><span class="tag">公募规模</span><span class="tag">新发行统计</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">乌龟量化 · 市场情绪仪表盘</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://wglh.com/market/margin/" target="_blank" rel="noopener">wglh.com · 市场情绪数据</a>
-        <p class="cdesc">整合两融余额走势、换手率、涨跌停家数、北上资金等市场微观数据的可视化平台，数据来源为官方交易所数据的二次整合。注册免费使用基础图表，是快速浏览情绪数据的实用工具。</p>
-        <div class="ctags"><span class="tag">多指标聚合</span><span class="tag">注册免费</span><span class="tag">二手整合</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">两融余额 · 周度变化方向</div>
+        <a class="cl-src" href="https://www.sse.com.cn/market/othersdata/margin/sum/" target="_blank" rel="noopener" onclick="event.stopPropagation()">sse.com.cn · 上交所融资融券汇总</a>
+        <div class="cl-what">查看沪市两融余额（需加上深交所数据得全市场总量）。重点观察周度增减方向和加速/减速，而非绝对数字大小。</div>
+        <div class="cl-meta"><span class="cl-tag">日更新</span><span class="cl-tag">官方原始</span><span class="cl-time">周五汇总</span></div>
+      </div></div>
+      <div class="cl-rule">📐 连续3周增加且加速 → 杠杆资金积极入场，情绪扩张<br>连续3周下降 → 去杠杆，警惕流动性收缩<br>⚠ 绝对值超历史高点不等于市场顶部，需结合全市场市值占比判断</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">北向资金 · 周度净流向</div>
+        <a class="cl-src" href="https://data.eastmoney.com/hsgtcjg/" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · 沪深港通持股统计</a>
+        <div class="cl-what">查看北向陆股通周度净买入总额及行业分布。注意：2023年8月起日内实时数据已停止公开，现仅可查日终汇总数据。</div>
+        <div class="cl-meta"><span class="cl-tag">仅日终数据</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 连续净流入&gt;3周 → 外资趋势性布局信号<br>单周大幅净流出&gt;100亿 → 外资情绪走弱<br>⚠ 所有"实时北向"平台均为估算，不可用于日内交易</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">主要宽基ETF · 周度净申赎</div>
+        <a class="cl-src" href="https://data.eastmoney.com/funds/etf.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">eastmoney.com · ETF实时行情</a>
+        <div class="cl-what">查看沪深300/中证500/科创50等宽基ETF及行业主题ETF的周度净申购/净赎回规模。国家队托底通常体现在宽基ETF大幅净申购。</div>
+        <div class="cl-meta"><span class="cl-tag">日更新</span><span class="cl-time">周五汇总</span></div>
+      </div></div>
+      <div class="cl-rule">📐 宽基ETF持续大额净申购 → 国家队/被动资金入场<br>科技主题ETF净申购持续加速 → 机构主动加仓科技方向信号</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">央行公开市场操作 · 周净投放</div>
+        <a class="cl-src" href="http://www.pbc.gov.cn/zhengcehuobisi/125207/125213/125431/index.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">pbc.gov.cn · 公开市场操作公告</a>
+        <div class="cl-what">查看本周逆回购/买断式逆回购净投放或净回收规模，及DR007利率水平。DR007是银行间流动性松紧的基准利率。</div>
+        <div class="cl-meta"><span class="cl-tag">每个交易日上午</span><span class="cl-tag">央行官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 连续净投放 + DR007低于政策利率 → 货币宽松，利好股市<br>连续净回收 + DR007明显上行 → 流动性收紧，对股市压制</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">公募基金新发行规模</div>
+        <a class="cl-src" href="https://www.amac.org.cn/researchstatistics/report/fundreport/" target="_blank" rel="noopener" onclick="event.stopPropagation()">amac.org.cn · 中基协基金统计</a>
+        <div class="cl-what">查看近期偏股型基金新发行规模。新发规模滞后于赚钱效应，放量是情绪确认信号，历史上往往出现在阶段高点附近。</div>
+        <div class="cl-meta"><span class="cl-tag">月度官方数据</span><span class="cl-tag">免费</span></div>
+      </div></div>
+      <div class="cl-rule">📐 月度新发&gt;500亿 → 人气旺盛，但历史经验显示接近阶段性高点概率升高<br>月度新发&lt;100亿持续 → 悲观极致，底部区域特征</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'weekly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">国泰海通 · 投资者微观行为洞察手册</div>
+        <a class="cl-src" href="https://www.htsc.com.cn/research/strategy/" target="_blank" rel="noopener" onclick="event.stopPropagation()">htsc.com.cn · 策略研究周报</a>
+        <div class="cl-what">每周发布综合情绪框架报告，整合换手率分位、融资情绪、ETF资金、外资流向为单一周报，是市场最受认可的A股微观结构分析框架之一。</div>
+        <div class="cl-meta"><span class="cl-tag freq fw">每周</span><span class="cl-tag">Wind/公众号</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点关注：换手率历史分位 · 近20日/近60日融资买入占比 · 各类资金净流入排名<br>融资情绪指标&gt;40% → 历史过热水平，需警惕</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 3: 日维度 风险偏好 ── -->
-<section class="sec" id="daily">
+<!-- ═══ 03 月维度 ═══ -->
+<section class="sec" id="monthly">
   <div class="shead">
     <span class="snum">03</span>
-    <div class="sicon" style="background:rgba(248,81,73,0.1)">📊</div>
-    <h2 class="stitle">日维度：市场风险偏好</h2>
-    <div class="sdesc">量价情绪 · 涨跌停分布 · 板块轮动<br>核心逻辑：短期情绪过热/过冷的反转信号</div>
+    <div class="sicon" style="background:rgba(192,132,252,0.1)">📅</div>
+    <h2 class="stitle">月维度 · 行业景气方向</h2>
+    <div class="sfreq"><span class="freq fm">每月数据窗口发布后更新</span></div>
   </div>
+  <div class="sublabel">宏观景气验证（每月固定时间查看，见下方日历）</div>
+  <div class="cl-grid" id="g-monthly">
 
-  <div class="datarow" style="border-left:3px solid var(--red)">
-    <div class="dritem"><div class="drv" style="color:var(--orange)">3.18%</div><div class="drl">1月14日万得全A历史峰值换手率</div><div class="drs">历史上1.5%以上为活跃，3%以上为极端过热</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--red)">88家</div><div class="drl">日均涨停家数（周均峰值）</div><div class="drs">国泰海通微观手册，1月高峰期数据</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--blue)">RSI 80.4</div><div class="drl">全A RSI_14D（1月峰值）</div><div class="drs">历史过热水平80+，24年10月高点91.3</div></div>
-    <div class="dritem"><div class="drv" style="color:var(--green)">66.8%</div><div class="drl">全A个股30日均线以上占比</div><div class="drs">过热临界约80%，当前处于中性偏高</div></div>
-  </div>
-
-  <div class="subsec">
-    <div class="subtitle">日度风险偏好数据源</div>
-    <div class="cards">
-      <div class="card">
-        <div class="ctop"><span class="cname">上交所 / 深交所 · 股票成交概况</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.sse.com.cn/market/stockdata/overview/monthly/" target="_blank" rel="noopener">sse.com.cn · 股票成交概况</a>
-        <p class="cdesc">交易所官方发布日/月度成交额、换手率、涨跌停数量等。是市场成交情绪数据的原始来源，但日内实时数据不公开，次日可查。与东财/同花顺等聚合平台数据交叉验证可发现细微差异。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">官方原始数据</span><span class="tag">次日可查</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">东方财富网 · 大盘数据/龙虎榜</span><div class="badges"><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://stock.eastmoney.com/shichang.html" target="_blank" rel="noopener">stock.eastmoney.com/shichang</a>
-        <p class="cdesc">A股日度市场情绪的最主流聚合平台，涵盖全市场涨跌停统计、板块资金流向、龙虎榜、大宗交易等。数据来自交易所二次整合，时效性好，但计算口径（如涨停家数）可能与其他平台有细微差异。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">涨跌停统计</span><span class="tag">龙虎榜</span><span class="tag">免费</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">同花顺 · 数据中心</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="http://data.10jqka.com.cn/market/rzrq/" target="_blank" rel="noopener">data.10jqka.com.cn/market</a>
-        <p class="cdesc">涵盖两融、沪深港通、板块资金流向、主力资金、大单追踪等多维度日度数据。注册免费使用基础功能，高级功能需付费。是A股日度情绪跟踪的重要聚合平台。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">主力资金追踪</span><span class="tag">板块轮动</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">中证指数公司 · 行业指数实时行情</span><div class="badges"><span class="badge bo">官方</span><span class="badge bf">免费</span></div></div>
-        <a class="curl" href="https://www.csindex.com.cn/" target="_blank" rel="noopener">csindex.com.cn · 中证指数官网</a>
-        <p class="cdesc">中证指数有限公司发布沪深300、中证500、行业指数等实时行情，是A股最权威的指数提供商。PE/PB估值数据（历史百分位）是判断各行业估值位置的官方基准。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">PE/PB历史分位</span><span class="tag">官方指数</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">国泰海通 · 投资者微观行为洞察手册</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://www.htsc.com.cn/research/strategy/" target="_blank" rel="noopener">htsc.com.cn · 策略研究 · 微观手册</a>
-        <p class="cdesc">国泰海通策略团队每周发布的微观结构追踪报告，含换手率分位、融资情绪指标、ETF资金、外资流向等综合情绪数据，是市场最受认可的A股微观情绪追踪框架之一，通过Wind/公众号可获取。</p>
-        <div class="ctags"><span class="tag freq fw">周</span><span class="tag">综合情绪框架</span><span class="tag">需关注公众号/Wind</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="card">
-        <div class="ctop"><span class="cname">蛋卷基金 · 指数估值中心</span><div class="badges"><span class="badge bm">有限免费</span></div></div>
-        <a class="curl" href="https://danjuanfunds.com/djmodule/value-center" target="_blank" rel="noopener">danjuanfunds.com/djmodule/value-center</a>
-        <p class="cdesc">提供沪深300、中证500等主要指数及行业ETF的PE/PB历史分位估值，数据来源为中证指数官方数据，可视化友好，适合快速判断当前各类资产的历史估值位置。注册免费使用。</p>
-        <div class="ctags"><span class="tag freq fd">日</span><span class="tag">指数估值分位</span><span class="tag">注册免费</span></div>
-        <div class="trust"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">NBS制造业PMI + 财新PMI</div>
+        <a class="cl-src" href="https://www.stats.gov.cn/sj/zxfb/" target="_blank" rel="noopener" onclick="event.stopPropagation()">stats.gov.cn · 统计局最新发布</a>
+        <div class="cl-what">NBS官方PMI（大型国企为主）+ 财新PMI（中小民企为主），两者结合形成完整景气视图。重点看新订单指数和出厂价格指数分项。</div>
+        <div class="cl-meta"><span class="cl-tag">月末+次月第1工作日</span><span class="cl-tag">官方首发</span></div>
+      </div></div>
+      <div class="cl-rule">📐 &gt;50扩张 · &lt;50收缩<br>新订单-产成品库存差值为正 → 需求好于供给<br>财新显著高于NBS → 中小民企景气相对更好，利好中小盘</div>
     </div>
+
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">PPI / CPI 同比增速</div>
+        <a class="cl-src" href="https://www.stats.gov.cn/sj/zxfb/" target="_blank" rel="noopener" onclick="event.stopPropagation()">stats.gov.cn · 统计局发布</a>
+        <div class="cl-what">PPI是工业企业盈利能力的先行指标，CPI反映消费端价格。PPI由负转正是上游资源/化工/钢铁盈利改善的直接信号。</div>
+        <div class="cl-meta"><span class="cl-tag">每月约第9-10天</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 PPI同比由负转正 → 上游周期股盈利拐点信号<br>PPI-CPI剪刀差收窄 → 中下游利润压力减小<br>CPI持续低迷 → 需求端偏弱，消费板块谨慎</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">M1 / M2 同比 · 社融规模</div>
+        <a class="cl-src" href="http://www.pbc.gov.cn/diaochatongjisi/resource/cms/2019/09/2019091315121023654.htm" target="_blank" rel="noopener" onclick="event.stopPropagation()">pbc.gov.cn · 货币金融统计</a>
+        <div class="cl-what">M1代表企业活期存款（经营意愿），M2代表广义货币。M1-M2剪刀差是判断企业资金活化程度的核心指标。</div>
+        <div class="cl-meta"><span class="cl-tag">每月约第10-15天</span><span class="cl-tag">央行官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 M1同比转正且加速 → 企业活期扩张，顺周期板块受益<br>社融超预期+居民中长贷改善 → 地产/消费链修复信号<br>社融持续低于预期 → 需求端疲弱，谨慎顺周期</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">规上工业企业利润 · 分行业</div>
+        <a class="cl-src" href="https://www.stats.gov.cn/sj/zxfb/" target="_blank" rel="noopener" onclick="event.stopPropagation()">stats.gov.cn · 工业企业利润数据</a>
+        <div class="cl-what">统计局每月末发布规上工业企业利润，含分行业细项。是A股制造业上市公司盈利验证的直接数据，可判断哪些行业利润在加速改善。</div>
+        <div class="cl-meta"><span class="cl-tag">每月约25-28日</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点行业：计算机/电子、汽车、化工、钢铁、电力<br>利润增速连续3月改善 → 景气向上确认，可考虑加配<br>单月利润大幅转负 → 警惕盈利风险</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">申万行业指数 · 月度涨跌排名</div>
+        <a class="cl-src" href="https://www.swsresearch.com/swindex/html/index_publishing.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">swsresearch.com · 申万宏源行业指数</a>
+        <div class="cl-what">查看31个申万一级行业月度涨跌幅排名。结合基本面数据判断：资金认可的景气方向是否与经济数据一致，识别超涨或错杀板块。</div>
+        <div class="cl-meta"><span class="cl-tag">月度汇总</span><span class="cl-tag">行业标准口径</span></div>
+      </div></div>
+      <div class="cl-rule">📐 涨幅前5行业 → 当前资金景气偏好方向<br>基本面改善但涨幅靠后 → 可能存在错误定价机会<br>连涨3月+估值历史高位 → 警惕拥挤度风险</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'monthly')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">新能源汽车月度产销数据</div>
+        <a class="cl-src" href="http://www.caam.org.cn/tjsj" target="_blank" rel="noopener" onclick="event.stopPropagation()">caam.org.cn · 中汽协产销统计</a>
+        <div class="cl-what">新能源汽车月度销量及渗透率，是判断动力电池/正负极/铜箔等汽车产业链景气的中观指标，每月中旬发布上月数据。</div>
+        <div class="cl-meta"><span class="cl-tag">每月约第8-10天</span><span class="cl-tag">行业协会官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 渗透率突破新高 → 产业链量价齐升信号<br>销量环比连续下滑 → 库存积压，上游原材料谨慎<br>总销量同比增速加速 → 新能源全产业链受益</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ── MODULE 4: 事件驱动 ── -->
+<!-- ═══ 04 事件驱动 ═══ -->
 <section class="sec" id="event">
   <div class="shead">
     <span class="snum">04</span>
     <div class="sicon" style="background:rgba(212,167,44,0.1)">⚡</div>
-    <h2 class="stitle">事件驱动型 / 主题交易机会</h2>
-    <div class="sdesc">政策催化 · 行业报告 · 季节性日历<br>核心逻辑：事件触发错误定价的修复窗口</div>
+    <h2 class="stitle">事件驱动 · 主题交易机会</h2>
+    <div class="sfreq"><span class="freq fd">触发即查，随时更新</span></div>
+  </div>
+  <div class="sublabel">政策事件一手来源（直读原文，不经二手解读）</div>
+  <div class="cl-grid" id="g-event">
+
+    <div class="cl-item" onclick="chk(this,'event')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">国务院 · 产业政策原文</div>
+        <a class="cl-src" href="http://www.gov.cn/zhengce/" target="_blank" rel="noopener" onclick="event.stopPropagation()">gov.cn/zhengce · 国务院政策文件库</a>
+        <div class="cl-what">所有重大产业政策的法定首发来源。十五五规划、"人工智能+"、各类补贴方案均在此发布。建议直接阅读原文，判断政策力度和受益范围，避免媒体二次解读失真。</div>
+        <div class="cl-meta"><span class="cl-tag">不定期</span><span class="cl-tag">官方首发</span></div>
+      </div></div>
+      <div class="cl-rule">📐 使用方法：政策出台后先读原文，确认受益行业范围和资金支持力度，再看市场反应，判断是否存在过度解读或低估</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'event')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">证监会 · 监管规则与市场政策</div>
+        <a class="cl-src" href="http://www.csrc.gov.cn/csrc/c100003/index.shtml" target="_blank" rel="noopener" onclick="event.stopPropagation()">csrc.gov.cn · 监管规则公告</a>
+        <div class="cl-what">融资融券保证金调整、IPO节奏变化、退市规则、短线交易新规等直接影响市场流动性结构的政策在此首发。</div>
+        <div class="cl-meta"><span class="cl-tag">不定期</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点关注：两融保证金比例（影响杠杆空间）· 印花税（影响交易成本）· 大宗交易/减持规则（影响资金行为）</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'event')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">工信部 · 重点行业政策与数据</div>
+        <a class="cl-src" href="https://www.miit.gov.cn/jgsj/index.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">miit.gov.cn · 工业和信息化部</a>
+        <div class="cl-what">AI、机器人、新能源汽车、低空经济、集成电路等产业政策的主管部门，规划文件和行业数据是主题交易的政策确认来源。</div>
+        <div class="cl-meta"><span class="cl-tag">不定期</span><span class="cl-tag">官方</span></div>
+      </div></div>
+      <div class="cl-rule">📐 重点追踪：集成电路产业发展规划、机器人/低空经济标准出台，是对应主题交易的催化节点</div>
+    </div>
+
+    <div class="cl-item" onclick="chk(this,'event')">
+      <div class="cl-top"><div class="chk"></div><div class="cl-info">
+        <div class="cl-name">财联社电报 · 盘中实时快讯</div>
+        <a class="cl-src" href="https://www.cls.cn/" target="_blank" rel="noopener" onclick="event.stopPropagation()">cls.cn · 财联社实时资讯</a>
+        <div class="cl-what">A股影响力最大的实时快讯平台，"电报效应"对盘中个股情绪有直接影响。但准确率不稳定，重要信息须等官方原文确认。</div>
+        <div class="cl-meta"><span class="cl-tag">实时</span><span class="cl-tag">情绪信号</span></div>
+      </div></div>
+      <div class="cl-warn">⚠ 快讯只反映情绪，不作为独立决策依据。"消息人士称/某机构表示"类快讯需等官方文件确认后再操作</div>
+    </div>
+
   </div>
 
-  <div class="subsec">
-    <div class="subtitle">政策事件跟踪数据源</div>
-    <div class="ecards">
-      <div class="ecard">
-        <div class="etop"><span class="etag et-pol">政策驱动</span><span class="ename">中央政府官网 · 政策全文</span></div>
-        <a class="curl" href="http://www.gov.cn/zhengce/" target="_blank" rel="noopener">gov.cn/zhengce · 国务院政策文件库</a>
-        <p class="edesc">国务院政策文件全文库，是产业政策解读的原始来源。十五五规划、"人工智能+"、"反内卷"等产业政策均在此首发，避免二手解读失真。建议直接阅读原文判断政策力度。</p>
-        <div class="etiming">🕐 不定期 · 实时更新</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="ecard">
-        <div class="etop"><span class="etag et-pol">政策驱动</span><span class="ename">证监会 · 监管文件与公告</span></div>
-        <a class="curl" href="http://www.csrc.gov.cn/csrc/c100003/index.shtml" target="_blank" rel="noopener">csrc.gov.cn · 监管规则与公告</a>
-        <p class="edesc">证监会官网发布监管政策、市场改革措施（如融资融券调整、IPO节奏、退市规则）等。短线交易新规（4月施行）、两融保证金比例调整均在此首发，是影响市场流动性结构的政策事件源头。</p>
-        <div class="etiming">🕐 不定期 · 重要事项影响短期风险偏好</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="ecard">
-        <div class="etop"><span class="etag et-rep">业绩驱动</span><span class="ename">巨潮资讯 · 上市公司公告</span></div>
-        <a class="curl" href="http://www.cninfo.com.cn/" target="_blank" rel="noopener">cninfo.com.cn · 全量公告检索</a>
-        <p class="cdesc">证监会指定的上市公司信息披露平台，是A股所有公司公告、业绩预告、重大事项的法定披露渠道。业绩预告、重大合同签订、股权变动等事件驱动交易机会的原始来源。完全免费。</p>
-        <div class="etiming">🕐 日度 · 业绩期集中 · 全年持续跟踪</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="ecard">
-        <div class="etop"><span class="etag et-ind">产业主题</span><span class="ename">工信部 · 重点行业数据与政策</span></div>
-        <a class="curl" href="https://www.miit.gov.cn/jgsj/index.html" target="_blank" rel="noopener">miit.gov.cn · 工业和信息化部</a>
-        <p class="cdesc">工信部是AI、机器人、新能源汽车、低空经济、集成电路等产业政策的主管部门，其规划文件、补贴政策、产业数据是相关主题交易的政策确认来源，建议与发改委文件交叉验证。</p>
-        <div class="etiming">🕐 不定期 · 十五五规划关键信号窗口</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t5"></div></div><span class="tscore s5">★★★★★</span></div>
-      </div>
-      <div class="ecard">
-        <div class="etop"><span class="etag et-sea">日历效应</span><span class="ename">A股重要事件日历</span></div>
-        <a class="curl" href="https://stock.eastmoney.com/a/calendar.html" target="_blank" rel="noopener">eastmoney.com · 投资日历</a>
-        <p class="cdesc">跟踪经济数据发布窗口（PMI/CPI/PPI）、业绩报告期（1月/4月/8月/10月）、重要会议（两会3月、中央经济工作会议12月）等季节性节点，是事件驱动交易的时间框架基础。</p>
-        <div class="etiming">🕐 持续跟踪 · 两会/经济数据周期性</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t4"></div></div><span class="tscore s4">★★★★</span></div>
-      </div>
-      <div class="ecard">
-        <div class="etop"><span class="etag et-mkt">情绪催化</span><span class="ename">财联社 · 电报资讯</span></div>
-        <a class="curl" href="https://www.cls.cn/" target="_blank" rel="noopener">cls.cn · 财联社实时资讯</a>
-        <p class="cdesc">A股市场最重要的实时资讯平台，尤其是"电报"功能的快讯对市场情绪有直接影响（"电报效应"）。注意：快讯质量参差不齐，重要信息需核实官方原文，不建议单独作为交易依据。</p>
-        <div class="etiming">🕐 实时 · 快讯影响短期市场情绪</div>
-        <div class="warn" style="margin-top:8px">⚠ 快讯时效性高但准确率不稳定，应与官方原始信息交叉验证</div>
-        <div class="trust" style="margin-top:8px"><span class="tlabel">可信度</span><div class="ttrack"><div class="tfill t3"></div></div><span class="tscore s3">★★★</span></div>
+  <div class="sublabel" style="margin-top:20px">2026年主线主题 · 基本面验证信号跟踪</div>
+  <div class="theme-grid">
+    <div class="theme-card">
+      <div class="th-top"><span class="th-tag th-ind">AI产业链</span><span class="th-name">国产算力 · 存储 · 端侧</span></div>
+      <div class="th-sig">十五五规划2030年AI产业10万亿+，"人工智能+"写入政府工作报告。当前处于算力国产替代+端侧渗透率提升双主线阶段，基本面验证持续进行中。</div>
+      <div class="th-verify">
+        验证来源：<a class="th-a" href="http://www.gov.cn/zhengce/" target="_blank">政府工作报告原文</a> · <a class="th-a" href="https://data.eastmoney.com/bkzj/hy.html" target="_blank">电子/计算机资金流</a><br>
+        催化信号：国产GPU季度出货量 · AI应用商业化落地
       </div>
     </div>
-  </div>
-
-  <div class="subsec" style="margin-top:20px">
-    <div class="subtitle">2026年A股重点主题交易方向（已核实的研究共识）</div>
-    <div class="ecards">
-      <div class="ecard" style="border-color:rgba(121,192,255,0.2)">
-        <div class="etop"><span class="etag et-ind">AI产业链</span><span class="ename">国产算力 · 存储 · 端侧</span></div>
-        <p class="edesc">十五五规划明确2030年AI产业规模10万亿+，"人工智能+"首次写入政府工作报告。AI服务器国产替代（华为昇腾）、存储芯片（澜起/北斗导航）、人形机器人等为主要主题方向。</p>
-        <div class="etiming">📌 数据验证来源：两会政府工作报告全文（gov.cn）· 申万行业指数（电子/计算机）</div>
+    <div class="theme-card">
+      <div class="th-top"><span class="th-tag th-pol">六大新兴支柱</span><span class="th-name">集成电路 · 低空经济 · 储能</span></div>
+      <div class="th-sig">两会明确六大新兴支柱产业，2030年目标10万亿。政策确定性高，但各细分景气节奏不同，需逐一跟踪基本面兑现情况。</div>
+      <div class="th-verify">
+        验证来源：<a class="th-a" href="https://www.miit.gov.cn/" target="_blank">工信部规划文件</a> · <a class="th-a" href="http://www.cninfo.com.cn/" target="_blank">巨潮订单公告</a><br>
+        催化信号：补贴细则落地 · 重大项目招标结果
       </div>
-      <div class="ecard" style="border-color:rgba(63,185,80,0.2)">
-        <div class="etop"><span class="etag et-pol">六大新兴支柱</span><span class="ename">集成电路 · 生物医药 · 低空经济</span></div>
-        <p class="edesc">两会明确六大新兴支柱产业：集成电路、航空航天、生物医药、低空经济、新型储能、智能机器人。2025年产值近6万亿，2030年目标10万亿。政策确定性高，是"十五五元年"主线配置逻辑。</p>
-        <div class="etiming">📌 数据验证来源：政府工作报告（2026年3月）· 中证行业指数涨跌</div>
+    </div>
+    <div class="theme-card">
+      <div class="th-top"><span class="th-tag th-sea">反内卷周期</span><span class="th-name">锂电 · 光伏 · 化工供给侧</span></div>
+      <div class="th-sig">行业自律政策推动供给收缩，年中前后有望从交易政策预期向定价景气拐点转变。价格止跌企稳是核心催化信号，需实时跟踪商品价格数据。</div>
+      <div class="th-verify">
+        验证来源：<a class="th-a" href="http://www.cninfo.com.cn/" target="_blank">上市公司减产/业绩公告</a> · <a class="th-a" href="https://www.caam.org.cn/tjsj" target="_blank">新能源汽车产销数据</a><br>
+        催化信号：碳酸锂/组件价格止跌 · 主要厂商减产公告
       </div>
-      <div class="ecard" style="border-color:rgba(212,167,44,0.2)">
-        <div class="etop"><span class="etag et-sea">反内卷周期</span><span class="ename">锂电 · 光伏 · 化工供给侧</span></div>
-        <p class="edesc">行业自律政策推动供给收缩，从交易政策预期向定价景气拐点转变（东吴证券研判，年中为关键节点）。锂电电解液、正负极、光伏主产业链、农化纯碱为重点关注方向。价格数据是催化剂。</p>
-        <div class="etiming">📌 数据验证来源：卓创/百川盈孚商品价格 · 上市公司业绩预告</div>
-      </div>
-      <div class="ecard" style="border-color:rgba(192,132,252,0.2)">
-        <div class="etop"><span class="etag et-ind">创新药出海</span><span class="ename">BD交易 · AACR · FDA申报</span></div>
-        <p class="edesc">Q1国内创新药BD交易53件，首付款超33亿美元，交易总额超600亿美元（接近2025年全年）。AACR年会（4月）为重要催化窗口。FDA申报进展和海外合作授权是核心事件触发器。</p>
-        <div class="etiming">📌 数据验证来源：FDA官网 · clinicaltrials.gov · 巨潮资讯BD公告</div>
+    </div>
+    <div class="theme-card">
+      <div class="th-top"><span class="th-tag th-med">创新药出海</span><span class="th-name">BD交易 · AACR · FDA申报</span></div>
+      <div class="th-sig">2026年Q1 BD交易总额已接近2025年全年，出海动能强劲。AACR年会（4月）、ASCO（6月）为重要催化窗口，FDA申报进展是核心事件触发器。</div>
+      <div class="th-verify">
+        验证来源：<a class="th-a" href="https://www.fda.gov/patients/drug-development-process" target="_blank">FDA官网</a> · <a class="th-a" href="https://clinicaltrials.gov" target="_blank">ClinicalTrials.gov</a> · <a class="th-a" href="http://www.cninfo.com.cn/" target="_blank">巨潮BD公告</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── MODULE 5: 配置优先级 ── -->
-<section class="sec" id="priority">
+<!-- ═══ 05 数据发布日历 ═══ -->
+<section class="sec" id="calendar">
   <div class="shead">
     <span class="snum">05</span>
+    <div class="sicon" style="background:rgba(45,212,191,0.1)">🗓</div>
+    <h2 class="stitle">数据发布规律日历</h2>
+    <div class="sfreq"><span class="freq fm">固定时间窗口，提前标注</span></div>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-card cal-d">
+      <div class="cal-ttl">每个交易日</div>
+      <ul class="cal-list">
+        <li>成交额/换手率 <span class="cal-dt">收盘后15min</span></li>
+        <li>涨跌停统计 <span class="cal-dt">收盘后</span></li>
+        <li>龙虎榜数据 <span class="cal-dt">收盘后约1h</span></li>
+        <li>板块资金流向 <span class="cal-dt">盘中+收盘</span></li>
+        <li>央行公开市场操作 <span class="cal-dt">上午9:30公告</span></li>
+        <li>两融余额 <span class="cal-dt">次日更新</span></li>
+      </ul>
+    </div>
+    <div class="cal-card cal-w">
+      <div class="cal-ttl">每周固定</div>
+      <ul class="cal-list">
+        <li>北向资金周度汇总 <span class="cal-dt">周五收盘后</span></li>
+        <li>ETF净申赎汇总 <span class="cal-dt">周五收盘后</span></li>
+        <li>国泰海通微观周报 <span class="cal-dt">周末发布</span></li>
+        <li>DR007周均值汇总 <span class="cal-dt">周五</span></li>
+      </ul>
+    </div>
+    <div class="cal-card cal-m">
+      <div class="cal-ttl">每月固定窗口</div>
+      <ul class="cal-list">
+        <li>制造业PMI（NBS） <span class="cal-dt">月最后一天</span></li>
+        <li>财新PMI <span class="cal-dt">次月第1工作日</span></li>
+        <li>CPI / PPI <span class="cal-dt">约第9-10天</span></li>
+        <li>M1/M2/社融/信贷 <span class="cal-dt">约第10-15天</span></li>
+        <li>新能源汽车产销 <span class="cal-dt">约第8-10天</span></li>
+        <li>规上工业增加值/社零 <span class="cal-dt">约第15-17天</span></li>
+        <li>工业企业利润 <span class="cal-dt">约第25-28天</span></li>
+        <li>公募基金规模 <span class="cal-dt">下月约第20天</span></li>
+      </ul>
+    </div>
+    <div class="cal-card cal-s">
+      <div class="cal-ttl">2026年重要时间窗口</div>
+      <ul class="cal-list">
+        <li>4月 <span class="cal-dt">AACR年会（创新药催化）</span></li>
+        <li>4月 <span class="cal-dt">短线交易新规正式施行</span></li>
+        <li>4-5月 <span class="cal-dt">年报/一季报密集披露期</span></li>
+        <li>6月 <span class="cal-dt">ASCO肿瘤学会年会</span></li>
+        <li>年中 <span class="cal-dt">反内卷景气验证节点</span></li>
+        <li>10-11月 <span class="cal-dt">三季报密集披露期</span></li>
+        <li>12月 <span class="cal-dt">中央经济工作会议</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 06 配置建议 ═══ -->
+<section class="sec" id="priority">
+  <div class="shead">
+    <span class="snum">06</span>
     <div class="sicon" style="background:rgba(63,185,80,0.1)">🎯</div>
     <h2 class="stitle">数据订阅优先级 · 配置建议</h2>
   </div>
@@ -576,8 +576,8 @@ footer{padding:24px 36px;border-top:0.5px solid var(--border);
     <thead>
       <tr>
         <th style="width:80px">优先级</th>
-        <th style="width:120px">时间维度</th>
-        <th style="width:220px">数据源</th>
+        <th style="width:90px">维度</th>
+        <th style="width:210px">数据源</th>
         <th>决策用途</th>
         <th style="width:80px">成本</th>
       </tr>
@@ -585,84 +585,119 @@ footer{padding:24px 36px;border-top:0.5px solid var(--border);
     <tbody>
       <tr>
         <td><span class="pb pb1">必须</span></td>
-        <td><span class="freq fm">月</span></td>
-        <td style="color:var(--text)">国家统计局 + 财新PMI + 人民银行月报</td>
-        <td>宏观景气验证：PMI/CPI/PPI/社融，行业景气基本面底层数据，无可替代</td>
-        <td><span style="color:#3fb950">免费</span></td>
-      </tr>
-      <tr>
-        <td><span class="pb pb1">必须</span></td>
-        <td><span class="freq fw">周</span></td>
-        <td style="color:var(--text)">上交所/深交所两融数据 + 央行公开市场操作</td>
-        <td>流动性方向判断：杠杆水位变化 + DR007利率，是市场流动性边际最直接的官方数据</td>
-        <td><span style="color:#3fb950">免费</span></td>
-      </tr>
-      <tr>
-        <td><span class="pb pb1">必须</span></td>
         <td><span class="freq fd">日</span></td>
-        <td style="color:var(--text)">巨潮资讯 + 中证指数 + 东财/同花顺市场数据</td>
-        <td>日度情绪跟踪：业绩公告原文 + 估值分位 + 涨跌停/成交额情绪指标</td>
+        <td style="color:var(--text)">东财大盘数据 + 巨潮资讯 + 蛋卷估值</td>
+        <td>成交情绪 + 公告事件 + 估值分位，日度扫描基础层，全部免费，约5分钟完成</td>
+        <td><span style="color:#3fb950">免费</span></td>
+      </tr>
+      <tr>
+        <td><span class="pb pb1">必须</span></td>
+        <td><span class="freq fw">周</span></td>
+        <td style="color:var(--text)">上交所/深交所两融 + 央行公开市场</td>
+        <td>杠杆水位变化方向 + 银行间流动性松紧，官方原始数据，免费直查</td>
+        <td><span style="color:#3fb950">免费</span></td>
+      </tr>
+      <tr>
+        <td><span class="pb pb1">必须</span></td>
+        <td><span class="freq fm">月</span></td>
+        <td style="color:var(--text)">国家统计局 + 财新PMI + 人民银行</td>
+        <td>宏观景气验证底层数据，PMI/CPI/PPI/社融，无可替代，全部免费</td>
         <td><span style="color:#3fb950">免费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb2">高度建议</span></td>
         <td><span class="freq fw">周</span></td>
-        <td style="color:var(--text)">国泰海通微观行为洞察手册（Wind/公众号）</td>
-        <td>专业的综合情绪框架，整合换手率/融资/ETF/外资为单一周报，节省分析时间</td>
-        <td><span style="color:#fb923c">Wind付费</span></td>
+        <td style="color:var(--text)">国泰海通微观行为洞察手册</td>
+        <td>整合所有情绪指标为单一框架，节省分析时间，Wind付费可获 或 关注公众号</td>
+        <td><span style="color:#fb923c">Wind/免费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb2">高度建议</span></td>
         <td><span class="freq fm">月</span></td>
-        <td style="color:var(--text)">Wind/Choice 行业估值分位 + 公募持仓变化</td>
-        <td>行业轮动：历史PE/PB分位 + 机构持仓集中度，是月度行业配置决策核心工具</td>
+        <td style="color:var(--text)">Wind/Choice 行业估值分位 + 公募持仓</td>
+        <td>行业轮动的估值锚 + 机构持仓集中度，月度配置决策核心工具</td>
         <td><span style="color:#fb923c">付费终端</span></td>
       </tr>
       <tr>
         <td><span class="pb pb3">视需求</span></td>
         <td><span class="freq fd">日</span></td>
-        <td style="color:var(--text)">卓创资讯 / 百川盈孚（大宗商品价格）</td>
-        <td>反内卷主题跟踪：锂电/光伏/化工价格的周度变化是触发事件驱动交易的关键先行指标</td>
+        <td style="color:var(--text)">卓创资讯 / 百川盈孚（商品价格）</td>
+        <td>反内卷主题跟踪：锂/光伏/化工价格变化，是景气拐点的先行催化信号</td>
         <td><span style="color:#fb923c">付费</span></td>
       </tr>
       <tr>
         <td><span class="pb pb4">可替代</span></td>
         <td><span class="freq fd">日</span></td>
-        <td style="color:var(--text)">蛋卷估值中心 + 乌龟量化</td>
-        <td>快速可视化验证，适合无付费终端时作为估值分位和情绪数据的免费替代方案</td>
+        <td style="color:var(--text)">乌龟量化 · 市场情绪仪表盘</td>
+        <td>两融/换手/涨跌停可视化聚合，无付费终端时的快速替代方案</td>
         <td><span style="color:#3fb950">注册免费</span></td>
       </tr>
     </tbody>
   </table>
 </section>
 
-<!-- DISCLAIMER -->
 <div class="disc">
-  <div class="discttl">⚠ 已核实的数据盲区与重要说明</div>
-  <ul class="discbody">
-    <li><b>北向资金实时数据已停止公开</b>：2023年8月起，沪深交易所不再实时公开北向陆股通的分钟级数据，仅保留日终净额披露。所有宣称提供实时北向资金数据的商业平台，均为估算或延迟数据，不可作为日内交易信号。</li>
-    <li><b>两融余额创历史高位的解读需谨慎</b>：Wind数据显示3月末两融余额2.61万亿，超2015年峰值2.05万亿。但A股市值体量已大幅增加，绝对值对比需结合市值占比判断，不能简单类比2015年牛市顶部。</li>
-    <li><b>涨跌停家数口径存在差异</b>：不同平台（东财/同花顺/新浪）对当日涨停家数统计口径略有不同（含ST/不含ST、含20cm涨停/不含），同一日可能出现67家与78家的差异。建议统一使用同一平台的历史口径进行比较。</li>
-    <li><b>事件驱动主题交易方向的来源说明</b>：AI产业链/六大支柱/创新药出海等主题，来源为2026年两会政府工作报告和主要券商年度策略报告（东吴/兴业/中信建投/广发等），属于机构共识，不代表本框架的独立判断，且主题行情的持续性取决于基本面验证。</li>
-    <li><b>卓创/百川盈孚商品价格数据</b>：该数据已在搜索中被多家机构引用，但本次核实未能确认其完整的数据获取方式和成本。已知其为付费商业数据库，免费版功能有限。对于反内卷主题，上市公司公告中的产品价格信息是可免费获取的替代方案。</li>
-    <li><b>本页所有数据</b>：仅供辅助决策分析参考，不构成投资建议。核实截至2026年4月9日。</li>
+  <div class="disc-ttl">⚠ 重要说明</div>
+  <ul class="disc-body">
+    <li><b>本页不存储任何数值</b>：所有具体数据均需前往原始来源获取当日最新值，本页仅提供框架结构、直达链接和判读标准，不存在"数据过时"问题。</li>
+    <li><b>勾选状态不持久化</b>：刷新页面后勾选状态重置，每日使用时重新勾选，确保每次都是完整的新一轮扫描。</li>
+    <li><b>北向资金实时数据已停止公开</b>：2023年8月起仅可查日终净额，任何声称提供实时北向数据的商业平台均为估算，不可用于日内交易判断。</li>
+    <li><b>涨跌停口径差异</b>：东财/同花顺/新浪统计口径略有不同，需固定同一平台进行历史比较，不可跨平台比较绝对数字。</li>
+    <li><b>本页所有内容</b>：仅供辅助决策参考，不构成投资建议。框架核实截至2026年4月9日。</li>
   </ul>
 </div>
 
 </div><!-- /.main -->
 
 <footer>
-  <span class="ft">A股交易方向与市场情绪框架 · 私募基金经理决策参考 · 核实截至 2026-04-09</span>
+  <span class="ft">A股交易方向与市场情绪 · 每日检查清单 · 框架核实截至 2026-04-09</span>
   <span class="ft">数据来源：上交所 · 深交所 · 中证指数 · 国家统计局 · 人民银行 · 中基协 · 证监会 · 巨潮资讯</span>
 </footer>
 
 <script>
-function navJump(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  var top = el.getBoundingClientRect().top + window.pageYOffset - 64;
-  window.scrollTo({ top: top, behavior: 'smooth' });
+// 显示今日日期
+(function(){
+  var d = new Date();
+  var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+  var wk = ['日','一','二','三','四','五','六'];
+  document.getElementById('today-date').textContent =
+    y + '-' + (m<10?'0'+m:m) + '-' + (day<10?'0'+day:day) + '  周' + wk[d.getDay()];
+})();
+
+// 各分区计数
+var counts = {daily:0, weekly:0, monthly:0, event:0};
+var totals = {};
+var colors = {daily:'var(--red)', weekly:'var(--blue)', monthly:'var(--purple)', event:'var(--gold)'};
+var labels = {daily:'日维度', weekly:'周维度', monthly:'月维度', event:'事件驱动'};
+
+function initCounts(){
+  ['daily','weekly','monthly','event'].forEach(function(s){
+    totals[s] = document.querySelectorAll('#g-'+s+' .cl-item').length;
+    counts[s] = 0;
+  });
+  updateProgress();
 }
+
+function chk(el, sec){
+  el.classList.toggle('checked');
+  counts[sec] = document.querySelectorAll('#g-'+sec+' .cl-item.checked').length;
+  updateProgress();
+}
+
+function updateProgress(){
+  var total = 0, done = 0;
+  Object.keys(totals).forEach(function(s){ total += totals[s]; done += counts[s]; });
+  document.getElementById('prog-text').textContent = done + ' / ' + total + ' 项已完成';
+  document.getElementById('prog-fill').style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+  var html = '';
+  Object.keys(labels).forEach(function(s){
+    html += '<div class="ps"><div class="psdot" style="background:'+colors[s]+'"></div>'
+          + labels[s] + ': ' + counts[s] + '/' + totals[s] + '</div>';
+  });
+  document.getElementById('prog-secs').innerHTML = html;
+}
+
+initCounts();
 </script>
 </body>
 </html>
