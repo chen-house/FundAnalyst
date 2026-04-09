@@ -271,6 +271,23 @@ body {
   background: var(--bg3);
 }
 
+/* ── CHECKLIST ── */
+.card { cursor: pointer; }
+.card.checked { border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.03); }
+.card.checked .card-name { color: var(--text3); text-decoration: line-through; }
+.card.checked .card-desc { opacity: 0.5; }
+.chk-circle {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--text3); flex-shrink: 0;
+  margin-top: 1px; transition: all .15s; position: relative; display: inline-flex;
+}
+.card.checked .chk-circle { background: var(--green); border-color: var(--green); }
+.chk-circle::after { content: '✓'; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); font-size: 10px; color: #0a0c0f; opacity: 0; transition: opacity .15s; }
+.card.checked .chk-circle::after { opacity: 1; }
+.card-top-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.card-top-row .card-top { flex: 1; margin-bottom: 0; }
+
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -600,23 +617,35 @@ footer {
     <span>全球宏观数据图谱</span>
   </div>
   <nav class="header-nav">
-    <a class="nav-item" href="#liquidity">流动性</a>
-    <a class="nav-item" href="#fx">汇率</a>
-    <a class="nav-item" href="#flows">资金流</a>
-    <a class="nav-item" href="#gold">黄金</a>
-    <a class="nav-item" href="#copper">铜</a>
-    <a class="nav-item" href="#priority">配置优先级</a>
+    <button class="nav-item" onclick="document.getElementById('liquidity').scrollIntoView({behavior:'smooth'})">流动性</button>
+    <button class="nav-item" onclick="document.getElementById('fx').scrollIntoView({behavior:'smooth'})">汇率</button>
+    <button class="nav-item" onclick="document.getElementById('flows').scrollIntoView({behavior:'smooth'})">资金流</button>
+    <button class="nav-item" onclick="document.getElementById('gold').scrollIntoView({behavior:'smooth'})">黄金</button>
+    <button class="nav-item" onclick="document.getElementById('copper').scrollIntoView({behavior:'smooth'})">铜</button>
+    <button class="nav-item" onclick="document.getElementById('priority').scrollIntoView({behavior:'smooth'})">配置优先级</button>
   </nav>
-  <span class="header-badge">UPDATED 2026-04-09</span>
+  <span class="header-badge" id="today-date"></span>
 </header>
 
 <div class="accent-line"></div>
+
+<!-- PROGRESS BAR -->
+<div style="background:#111318;border-bottom:0.5px solid rgba(255,255,255,0.07);padding:11px 40px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+    <span style="font-size:12px;color:#9ba3b4">今日扫描进度</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ade80" id="prog-text">0 / 0 项已完成</span>
+  </div>
+  <div style="height:4px;background:#1e232b;border-radius:2px;overflow:hidden">
+    <div id="prog-fill" style="height:100%;background:linear-gradient(90deg,#c9a84c,#f0cc7a);border-radius:2px;transition:width .4s ease;width:0%"></div>
+  </div>
+  <div id="prog-secs" style="display:flex;gap:14px;margin-top:7px;flex-wrap:wrap"></div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-eyebrow">私募基金经理 · 全球资产配置决策参考</div>
   <h1 class="hero-title">宏观主要矛盾<span>数据源</span>整合框架</h1>
-  <p class="hero-sub">覆盖美国、日本、欧洲金融条件与流动性边际变化，全球主要经济体汇率比价，大类资产资金流动监测，以及黄金、铜期现货库存与央行持仓分析。所有数据源均经过实际核实，标注可信度与获取方式。</p>
+  <p class="hero-sub">覆盖美国、日本、欧洲金融条件与流动性边际变化，全球主要经济体汇率比价，大类资产资金流动监测，以及黄金、铜期现货库存与央行持仓分析。每次打开点击直达官网查看最新数据，本页不存储任何数值。</p>
   <div class="hero-stats">
     <div class="stat">
       <span class="stat-num">18+</span>
@@ -631,12 +660,12 @@ footer {
       <span class="stat-label">官方/央行来源</span>
     </div>
     <div class="stat">
-      <span class="stat-num">-0.43</span>
-      <span class="stat-label">美国NFCI（3/27）</span>
+      <span class="stat-num" style="font-size:14px;color:#9ba3b4">→ 点击直达</span>
+      <span class="stat-label">NFCI / Fed资产负债表</span>
     </div>
     <div class="stat">
-      <span class="stat-num">$6.7T</span>
-      <span class="stat-label">Fed总资产（4/1）</span>
+      <span class="stat-num" style="font-size:14px;color:#9ba3b4">→ 点击直达</span>
+      <span class="stat-label">WGC央行购金 / LME库存</span>
     </div>
   </div>
 </section>
@@ -660,15 +689,15 @@ footer {
     <div class="section-desc">美国 / 欧元区 / 日本<br>金融条件指数 · 央行资产负债表 · 利率</div>
   </div>
   <div class="cards">
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">FRED · St. Louis Fed</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
       <div class="card-url-row">
         <a class="card-url" href="https://fred.stlouisfed.org" target="_blank" rel="noopener">fred.stlouisfed.org</a>
       </div>
-      <p class="card-desc">美联储经济数据库，覆盖资产负债表（WALCL）、联邦基金利率、SOFR、TGA账户余额、逆回购规模等核心流动性指标。每周四4:30ET发布H.4.1报告。截至2026年4月1日，Fed总资产约$6.7万亿。</p>
+      <p class="card-desc">美联储经济数据库，覆盖资产负债表（WALCL）、联邦基金利率、SOFR、TGA账户余额、逆回购规模等核心流动性指标。每周四4:30ET发布H.4.1报告。点击直达查看最新Fed总资产规模。</p>
       <div class="card-tags">
         <span class="tag">每周更新</span><span class="tag">API可用</span><span class="tag">CSV下载</span><span class="tag">历史数据完整</span>
       </div>
@@ -679,15 +708,15 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">Chicago Fed · NFCI / ANFCI</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
       <div class="card-url-row">
         <a class="card-url" href="https://www.chicagofed.org/research/data/nfci/current-data" target="_blank" rel="noopener">chicagofed.org/research/data/nfci</a>
       </div>
-      <p class="card-desc">美国国家金融条件指数，含风险/信贷/杠杆三分项，每周三8:30ET更新。2026年3月27日读数为−0.43（宽松区间）。ANFCI剔除经济周期因素，是更纯粹的金融条件信号。</p>
+      <p class="card-desc">美国国家金融条件指数，含风险/信贷/杠杆三分项，每周三8:30ET更新。ANFCI剔除经济周期因素，是更纯粹的金融条件信号。点击直达查看最新读数（负值=宽松，正值=收紧）。</p>
       <div class="card-tags">
         <span class="tag">每周三8:30ET</span><span class="tag">含ANFCI</span><span class="tag">三分项拆解</span>
       </div>
@@ -698,15 +727,15 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">Fed FCI-G（联储金融条件指数）</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
       <div class="card-url-row">
         <a class="card-url" href="https://www.federalreserve.gov/econres/notes/feds-notes/a-new-index-to-measure-us-financial-conditions-20230630.html" target="_blank" rel="noopener">federalreserve.gov · FEDS Notes</a>
       </div>
-      <p class="card-desc">联储自建金融条件指数，综合国债收益率、公司债利差、抵押贷款利率、股票市值、房价六大变量。月/季度更新，最新数据截至2026年3月20日，提供CSV下载及源码。</p>
+      <p class="card-desc">联储自建金融条件指数，综合国债收益率、公司债利差、抵押贷款利率、股票市值、房价六大变量。月/季度更新，提供CSV下载及源码。点击直达查看最新数据。</p>
       <div class="card-tags">
         <span class="tag">月/季度</span><span class="tag">CSV+代码开放</span><span class="tag">六变量综合</span>
       </div>
@@ -717,8 +746,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">ECB · 欧央行数据门户</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -736,8 +765,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">BOJ · 日本央行统计</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -755,8 +784,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">Goldman Sachs GS FCI</span>
         <div class="badges"><span class="badge b-paid">付费</span></div>
       </div>
@@ -786,8 +815,8 @@ footer {
     <div class="section-desc">NEER/REER · 美元指数 · CFTC持仓</div>
   </div>
   <div class="cards">
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">BIS 有效汇率指数 NEER/REER</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -805,8 +834,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">Fed H.10 外汇汇率</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -824,8 +853,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">CFTC COT 期货持仓报告</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -843,8 +872,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">MacroMicro 汇率可视化</span>
         <div class="badges"><span class="badge b-mixed">有限免费</span></div>
       </div>
@@ -873,8 +902,8 @@ footer {
     <div class="section-desc">基金流量 · 跨境资本 · 外国持有美债</div>
   </div>
   <div class="cards">
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">EPFR Global</span>
         <div class="badges"><span class="badge b-paid">付费</span></div>
       </div>
@@ -893,8 +922,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">IIF 国际金融协会资本流动追踪</span>
         <div class="badges"><span class="badge b-mixed">有限免费</span></div>
       </div>
@@ -912,8 +941,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">美国财政部 TIC 数据</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -931,8 +960,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">BIS 国际银行统计 LBS/CBS</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -961,15 +990,15 @@ footer {
     <div class="section-desc">WGC · COMEX仓单 · LBMA定盘 · CFTC持仓</div>
   </div>
   <div class="cards">
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">WGC Goldhub · 央行黄金持仓</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-mixed">有限免费</span></div>
       </div>
       <div class="card-url-row">
         <a class="card-url" href="https://www.gold.org/goldhub/data/gold-reserves-by-country" target="_blank" rel="noopener">gold.org/goldhub/data/gold-reserves-by-country</a>
       </div>
-      <p class="card-desc">世界黄金协会官方数据门户，汇编IMF IFS央行持仓统计。2026年2月最新数据：全球央行净买入19吨（低于2025年月均26吨），人行连续16个月增持至2308吨（占储备10%）。注册后可访问更多历史数据。</p>
+      <p class="card-desc">世界黄金协会官方数据门户，汇编IMF IFS央行持仓统计，发布月度央行买卖报告。点击直达查看最新央行净购买量及各国持仓数据（含人行）。注册后可访问更多历史数据。</p>
       <div class="card-tags">
         <span class="tag">月度更新</span><span class="tag">滞后约6周</span><span class="tag">IMF IFS底层数据</span>
       </div>
@@ -981,8 +1010,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">IMF IFS / COFER</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1000,15 +1029,15 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">COMEX 黄金仓库库存</span>
         <div class="badges"><span class="badge b-free">免费</span></div>
       </div>
       <div class="card-url-row">
         <a class="card-url" href="https://www.cmegroup.com/trading/metals/precious/gold.html" target="_blank" rel="noopener">cmegroup.com · 黄金合约 GC</a>
       </div>
-      <p class="card-desc">CME Group每日发布COMEX黄金仓库库存，区分已登记（Registered）与合格（Eligible）仓单。截至2026年4月6日，黄金库存约16.3百万盎司。库存持续下降是现货需求强劲信号。</p>
+      <p class="card-desc">CME Group每日发布COMEX黄金仓库库存，区分已登记（Registered）与合格（Eligible）仓单。库存持续下降是现货需求强劲信号，点击直达查看最新数据。</p>
       <div class="card-tags">
         <span class="tag">日度更新</span><span class="tag">CME官方来源</span><span class="tag">Registered/Eligible分项</span>
       </div>
@@ -1019,8 +1048,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">LBMA 黄金定盘价</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1038,8 +1067,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">CFTC COT · 黄金期货持仓（GC）</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1068,8 +1097,8 @@ footer {
     <div class="section-desc">LME · SHFE · COMEX · 套利价差</div>
   </div>
   <div class="cards">
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">LME · 仓库库存报告</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1087,8 +1116,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">SHFE · 上期所库存</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1106,8 +1135,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">COMEX · 铜仓库库存</span>
         <div class="badges"><span class="badge b-free">免费</span></div>
       </div>
@@ -1125,8 +1154,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">MacroMicro · 三所合并铜库存</span>
         <div class="badges"><span class="badge b-mixed">有限免费</span></div>
       </div>
@@ -1144,8 +1173,8 @@ footer {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-top">
+    <div class="card" onclick="chkCard(this)">
+      <div class="card-top-row"><div class="chk-circle"></div><div class="card-top">
         <span class="card-name">CFTC COT · 铜期货持仓（HG）</span>
         <div class="badges"><span class="badge b-official">官方</span><span class="badge b-free">免费</span></div>
       </div>
@@ -1231,5 +1260,77 @@ footer {
   <span class="footer-text">数据来源：Fed · BIS · IMF · WGC · CME · LME · SHFE · CFTC · ECB · BOJ</span>
 </footer>
 
+<script>
+// 今日日期
+(function(){
+  var d = new Date();
+  var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+  var wk = ['日','一','二','三','四','五','六'];
+  document.getElementById('today-date').textContent =
+    y + '-' + (m<10?'0'+m:m) + '-' + (day<10?'0'+day:day) + '  周' + wk[d.getDay()];
+})();
+
+// 分区映射
+var secMap = {
+  liquidity:'流动性', fx:'汇率', flows:'资金流', gold:'黄金', copper:'铜'
+};
+var secColors = {
+  liquidity:'#60a5fa', fx:'#2dd4bf', flows:'#fb923c', gold:'#c9a84c', copper:'#f87171'
+};
+
+function getSection(card) {
+  var sec = card.closest('section');
+  if (!sec) return 'other';
+  return sec.id || 'other';
+}
+
+var counts = {};
+var totals = {};
+
+function initProgress() {
+  Object.keys(secMap).forEach(function(id) {
+    var sec = document.getElementById(id);
+    if (sec) {
+      totals[id] = sec.querySelectorAll('.card').length;
+      counts[id] = 0;
+    }
+  });
+  renderProgress();
+}
+
+function chkCard(el) {
+  // Don't toggle if clicking a link
+  el.classList.toggle('checked');
+  var id = getSection(el);
+  if (counts[id] !== undefined) {
+    var sec = document.getElementById(id);
+    counts[id] = sec ? sec.querySelectorAll('.card.checked').length : 0;
+  }
+  renderProgress();
+}
+
+function renderProgress() {
+  var total = 0, done = 0;
+  Object.keys(totals).forEach(function(id){ total += totals[id]; done += (counts[id]||0); });
+  document.getElementById('prog-text').textContent = done + ' / ' + total + ' 项已完成';
+  document.getElementById('prog-fill').style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+  var html = '';
+  Object.keys(secMap).forEach(function(id){
+    if (totals[id]) {
+      html += '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#5e6678">'
+            + '<div style="width:6px;height:6px;border-radius:50%;background:' + secColors[id] + ';flex-shrink:0"></div>'
+            + secMap[id] + ': ' + (counts[id]||0) + '/' + totals[id] + '</div>';
+    }
+  });
+  document.getElementById('prog-secs').innerHTML = html;
+}
+
+// Prevent link clicks from toggling card
+document.querySelectorAll('.card a').forEach(function(a){
+  a.addEventListener('click', function(e){ e.stopPropagation(); });
+});
+
+initProgress();
+</script>
 </body>
 </html>
