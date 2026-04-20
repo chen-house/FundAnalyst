@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI产业链配置 · 情景模拟器</title>
+<title>AI产业链配置 · 情景模拟器 v2</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'JetBrains Mono','SF Mono',monospace;background:#0a0a0f;color:#e2e8f0;padding:24px 16px;min-height:100vh}
-.wrap{max-width:880px;margin:0 auto}
+.wrap{max-width:900px;margin:0 auto}
 h1{font-size:20px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .sub{font-size:11px;color:#64748b;line-height:1.6;margin-bottom:24px}
 .row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -36,7 +36,7 @@ h1{font-size:20px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .green{color:#22c55e}.red{color:#ef4444}
 .sector-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .sector-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.sector-name{font-size:10px;width:100px;color:#94a3b8;flex-shrink:0}
+.sector-name{font-size:10px;width:110px;color:#94a3b8;flex-shrink:0}
 .sector-w{font-size:10px;width:40px;color:#64748b;flex-shrink:0}
 .sector-bar{flex:1;height:6px;background:#1a1a25;border-radius:3px;overflow:hidden}
 .sector-bar-inner{height:100%;border-radius:3px;transition:width .4s ease}
@@ -45,7 +45,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}
 th{padding:6px 8px;text-align:left;color:#64748b;font-weight:500;font-size:10px;border-bottom:1px solid #1e1e2e}
 td{padding:8px;border-bottom:1px solid rgba(30,30,46,.5)}
 .tk{font-weight:600}.tn{color:#64748b;font-weight:400;margin-left:6px;font-size:10px}
-.badge{font-size:9px;padding:2px 6px;border-radius:4px;display:inline-block}
+.badge{font-size:8px;padding:2px 5px;border-radius:3px;display:inline-block;margin:1px 2px}
 .contrib-bar{width:40px;height:4px;background:#1a1a25;border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
 .contrib-bar-inner{height:100%;border-radius:2px}
 .compare{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -55,12 +55,13 @@ td{padding:8px;border-bottom:1px solid rgba(30,30,46,.5)}
 .compare-item .cp{font-size:10px;margin-top:2px}
 .method{font-size:10px;color:#64748b;line-height:1.8}
 .method strong{color:#94a3b8}
+.split-detail{font-size:9px;color:#64748b;margin-top:2px;line-height:1.5}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>AI产业链配置 · 情景模拟器</h1>
-<p class="sub">基于六环节框架（算运存封电热）的12个月前瞻性收益模拟 · 标*为建议新增标的</p>
+<h1>AI产业链配置 · 情景模拟器 v2</h1>
+<p class="sub">基于六环节框架（算运存封电热）· 跨环节标的已拆分标注 · 标*为建议新增标的</p>
 
 <div class="row">
 <label>投入金额 $</label>
@@ -70,6 +71,7 @@ td{padding:8px;border-bottom:1px solid rgba(30,30,46,.5)}
 <div class="tabs" id="tabs"></div>
 <div id="scenarioBox"></div>
 <div class="card" id="bigNum"></div>
+<div class="card" id="sectorSummary"></div>
 <div class="card" id="sectorBreakdown"></div>
 <div class="card" id="holdingsTable"></div>
 <div class="card" id="compareGrid"></div>
@@ -77,31 +79,85 @@ td{padding:8px;border-bottom:1px solid rgba(30,30,46,.5)}
 </div>
 
 <script>
+// ========== 六大环节定义及颜色 ==========
+const SECTORS = {
+  "算力":   {color:"#a78bfa", label:"算力 (GPU/ASIC)"},
+  "运力":   {color:"#3b82f6", label:"运力 (光模块/网络芯片)"},
+  "存力":   {color:"#06b6d4", label:"存力 (HBM/DRAM/NAND)"},
+  "封测":   {color:"#f59e0b", label:"封测/设备"},
+  "电力":   {color:"#10b981", label:"电力 (配电/发电)"},
+  "热管理": {color:"#ef4444", label:"热管理 (液冷)"},
+  "材料":   {color:"#fbbf24", label:"材料 (PCB/铜箔)"},
+};
+
+// ========== 每只标的的环节拆分 ==========
+// splits: 该标的总权重在六大环节中的精确拆分
 const H=[
-{t:"AVGO",n:"Broadcom",w:12,s:"算力+运力",c:"Anthropic+Google核心",bull:55,base:22,bear:-25,stress:-42,sc:"#8b5cf6"},
-{t:"MU",n:"Micron",w:10,s:"存力(HBM)",c:"双链受益",bull:70,base:30,bear:-30,stress:-50,sc:"#06b6d4"},
-{t:"MRVL",n:"Marvell",w:7,s:"运力+算力",c:"Google ASIC",bull:65,base:25,bear:-35,stress:-48,sc:"#6366f1"},
-{t:"COHR",n:"Coherent",w:7,s:"运力(光模块)",c:"间接受益",bull:80,base:28,bear:-30,stress:-45,sc:"#3b82f6"},
-{t:"6857.T",n:"Advantest*",w:6,s:"封测/设备",c:"全链条",bull:60,base:20,bear:-20,stress:-38,sc:"#f59e0b"},
-{t:"VRT",n:"Vertiv*",w:6,s:"电力+液冷",c:"基建受益",bull:50,base:18,bear:-15,stress:-30,sc:"#10b981"},
-{t:"SNDK",n:"Sandisk",w:5,s:"存力(NAND)",c:"间接受益",bull:60,base:15,bear:-40,stress:-55,sc:"#0891b2"},
-{t:"LITE",n:"Lumentum",w:4,s:"运力(光器件)",c:"间接受益",bull:70,base:22,bear:-28,stress:-42,sc:"#818cf8"},
-{t:"Kioxia",n:"铠侠",w:4,s:"存力(NAND)",c:"间接受益",bull:55,base:12,bear:-35,stress:-50,sc:"#60a5fa"},
-{t:"5801",n:"古河電工",w:3,s:"运力(光纤)",c:"间接受益",bull:40,base:10,bear:-20,stress:-35,sc:"#60a5fa"},
-{t:"NOK",n:"Nokia",w:3,s:"运力(网络)",c:"弱关联",bull:30,base:8,bear:-15,stress:-25,sc:"#93c5fd"},
-{t:"5706",n:"三井金属",w:3,s:"材料(铜箔)",c:"间接受益",bull:45,base:12,bear:-18,stress:-30,sc:"#fbbf24"},
-{t:"3103",n:"ユニチカ",w:2,s:"材料(玻璃布)",c:"弱关联",bull:35,base:5,bear:-25,stress:-40,sc:"#fcd34d"},
-{t:"INTC",n:"Intel",w:2,s:"算力/封测",c:"弱关联",bull:40,base:5,bear:-30,stress:-45,sc:"#a78bfa"}
+{t:"AVGO",n:"Broadcom",w:12,
+  splits:[{sec:"算力",pct:5,why:"Google TPU ASIC设计方，XPU市场份额72%"},{sec:"运力",pct:7,why:"Tomahawk交换芯片+CPO光引擎+SerDes"}],
+  c:"Anthropic+Google核心",bull:55,base:22,bear:-25,stress:-42},
+
+{t:"MU",n:"Micron",w:10,
+  splits:[{sec:"存力",pct:10,why:"HBM3E/HBM4（~50%收入）+DDR5（~30%）+NAND（~20%）"}],
+  c:"双链受益",bull:70,base:30,bear:-30,stress:-50},
+
+{t:"MRVL",n:"Marvell",w:7,
+  splits:[{sec:"算力",pct:3,why:"Google/Amazon定制ASIC设计，XPU市场份额13%"},{sec:"运力",pct:4,why:"PAM4 DSP、以太网PHY、光模块驱动芯片"}],
+  c:"Google ASIC",bull:65,base:25,bear:-35,stress:-48},
+
+{t:"COHR",n:"Coherent",w:7,
+  splits:[{sec:"运力",pct:7,why:"800G/1.6T硅光模块+EML激光器核心供应商"}],
+  c:"间接受益",bull:80,base:28,bear:-30,stress:-45},
+
+{t:"6857.T",n:"Advantest*",w:6,
+  splits:[{sec:"封测",pct:6,why:"ATE半导体测试设备，全球市占率~50%，测试GPU/TPU/HBM"}],
+  c:"全链条",bull:60,base:20,bear:-20,stress:-38},
+
+{t:"VRT",n:"Vertiv*",w:6,
+  splits:[{sec:"电力",pct:3.5,why:"数据中心UPS/配电/母线槽"},{sec:"热管理",pct:2.5,why:"CDU液冷系统+精密空调，NVIDIA合作伙伴"}],
+  c:"基建受益",bull:50,base:18,bear:-15,stress:-30},
+
+{t:"SNDK",n:"Sandisk",w:5,
+  splits:[{sec:"存力",pct:5,why:"纯NAND闪存运营商（企业级SSD+消费级）"}],
+  c:"间接受益",bull:60,base:15,bear:-40,stress:-55},
+
+{t:"LITE",n:"Lumentum",w:4,
+  splits:[{sec:"运力",pct:4,why:"光器件/EML激光器/VCSEL，光模块上游核心元件"}],
+  c:"间接受益",bull:70,base:22,bear:-28,stress:-42},
+
+{t:"Kioxia",n:"铠侠",w:4,
+  splits:[{sec:"存力",pct:4,why:"全球NAND第二大厂，与SK Hynix联合开发HBF"}],
+  c:"间接受益",bull:55,base:12,bear:-35,stress:-50},
+
+{t:"5801",n:"古河電工",w:3,
+  splits:[{sec:"运力",pct:3,why:"光纤/光缆制造商，数据中心互联基础设施"}],
+  c:"间接受益",bull:40,base:10,bear:-20,stress:-35},
+
+{t:"NOK",n:"Nokia",w:3,
+  splits:[{sec:"运力",pct:3,why:"IP路由/光网络设备，数据中心网络非核心供应商"}],
+  c:"弱关联",bull:30,base:8,bear:-15,stress:-25},
+
+{t:"5706",n:"三井金属",w:3,
+  splits:[{sec:"材料",pct:3,why:"高端电解铜箔，AI服务器高层PCB关键材料"}],
+  c:"间接受益",bull:45,base:12,bear:-18,stress:-30},
+
+{t:"3103",n:"ユニチカ",w:2,
+  splits:[{sec:"材料",pct:2,why:"超薄低热膨胀玻璃布，半导体封装基板材料"}],
+  c:"弱关联",bull:35,base:5,bear:-25,stress:-40},
+
+{t:"INTC",n:"Intel",w:2,
+  splits:[{sec:"算力",pct:1,why:"CPU/Gaudi加速器（市占率极低）"},{sec:"封测",pct:1,why:"EMIB先进封装技术，CoWoS替代方案"}],
+  c:"弱关联",bull:40,base:5,bear:-30,stress:-45}
 ];
 
 const S={
 bull:{name:"🚀 最佳情景",color:"#16a34a",bg:"rgba(22,163,74,.08)",bd:"rgba(22,163,74,.25)",
 desc:"AI Capex持续超预期 + HBM/光模块供给紧张延续至2027 + BOJ渐进加息不引发波动 + 无重大地缘冲击",
-a:["超大规模云厂商2026 Capex实际执行率>95%，2027继续增长20%+","HBM价格维持高位至2027H1，NAND价格持续上行","800G/1.6T光模块需求翻倍，CPO开始商业化放量","日元温和贬值（USD/JPY 155-165），利好日本出口商","BOJ加息至1%但市场有序消化"],
+a:["超大规模云厂商2026 Capex执行率>95%，2027继续增长20%+","HBM价格维持高位至2027H1，NAND价格持续上行","800G/1.6T光模块需求翻倍，CPO开始商业化放量","日元温和贬值（USD/JPY 155-165），利好日本出口商","BOJ加息至1%但市场有序消化"],
 prob:"20-25%",tf:"12个月"},
 base:{name:"📊 基准情景",color:"#2563eb",bg:"rgba(37,99,235,.08)",bd:"rgba(37,99,235,.25)",
 desc:"AI Capex按指引执行 + 供需紧张但边际缓解 + 地缘风险可控 + BOJ缓慢加息",
-a:["超大规模云厂商Capex执行率85-95%，符合市场预期","HBM涨价放缓但不转跌，NAND周期下半年见顶信号","光模块需求强劲但部分产能缓解，ASP温和上行","日元区间震荡（USD/JPY 145-155）","BOJ年内再加息1-2次至1%，市场基本消化","中东局势持续但不进一步恶化"],
+a:["超大规模云厂商Capex执行率85-95%，符合市场预期","HBM涨价放缓但不转跌，NAND周期下半年见顶信号","光模块需求强劲但部分产能缓解，ASP温和上行","日元区间震荡（USD/JPY 145-155）","BOJ年内再加息1-2次至1%，市场基本消化"],
 prob:"45-50%",tf:"12个月"},
 bear:{name:"⚠️ 不利情景",color:"#d97706",bg:"rgba(217,119,6,.08)",bd:"rgba(217,119,6,.25)",
 desc:"AI Capex增速放缓 + 供需提前转松 + 周期见顶信号明确",
@@ -124,6 +180,20 @@ function calcReturn(scenario){
     return{...h,ret:r,contrib};
   });
   return{details,total};
+}
+
+function calcSectorAgg(scenario){
+  const map={};
+  H.forEach(h=>{
+    const r=h[scenario];
+    h.splits.forEach(sp=>{
+      if(!map[sp.sec]) map[sp.sec]={w:0,c:0};
+      map[sp.sec].w += sp.pct;
+      // contribution is proportional: (sp.pct / h.w) * (h.w/100) * r = sp.pct/100 * r
+      map[sp.sec].c += (sp.pct/100)*r;
+    });
+  });
+  return Object.entries(map).map(([n,v])=>({n,...v})).sort((a,b)=>b.c-a.c);
 }
 
 function getAmt(){return Number(document.getElementById("amtInput").value)||100000}
@@ -160,44 +230,81 @@ function render(){
       <div class="sub3">$${amt.toLocaleString()} → $${Math.round(amt+pnl).toLocaleString()}</div>
     </div>`;
 
-  // Sector aggregation
-  const sMap={};
-  res.details.forEach(d=>{
-    if(!sMap[d.s])sMap[d.s]={w:0,c:0,sc:d.sc};
-    sMap[d.s].w+=d.w;sMap[d.s].c+=d.contrib;
+  // ========== 六大环节汇总（精确拆分后） ==========
+  const sectors=calcSectorAgg(cur);
+  const totalW=sectors.reduce((a,s)=>a+s.w,0);
+  let sumHtml=`<div class="card-title">六大环节汇总（跨环节标的已精确拆分）</div>`;
+  sumHtml+=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px">`;
+  sectors.forEach(sec=>{
+    const info=SECTORS[sec.n]||{color:"#64748b",label:sec.n};
+    const vcls=sec.c>=0?"green":"red";
+    sumHtml+=`<div style="background:${info.color}11;border:1px solid ${info.color}33;border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:9px;color:${info.color};margin-bottom:4px">${info.label}</div>
+      <div style="font-size:18px;font-weight:700;color:${info.color}">${sec.w.toFixed(1)}%</div>
+      <div style="font-size:10px;margin-top:2px" class="${vcls}">贡献 ${sec.c>=0?"+":""}${sec.c.toFixed(1)}%</div>
+    </div>`;
   });
-  const sectors=Object.entries(sMap).map(([n,v])=>({n,...v})).sort((a,b)=>b.c-a.c);
+  sumHtml+=`</div>`;
+  sumHtml+=`<div style="font-size:9px;color:#64748b;text-align:right">权重合计 ${totalW.toFixed(1)}% · 剩余为现金/弹药</div>`;
+  document.getElementById("sectorSummary").innerHTML=sumHtml;
+
+  // ========== 环节贡献条形图 ==========
   const maxSC=Math.max(...sectors.map(x=>Math.abs(x.c)),0.1);
   let secHtml=`<div class="card-title">环节贡献拆解</div>`;
-  sectors.forEach(s=>{
-    const barW=Math.min(Math.abs(s.c)/maxSC*100,100);
-    const barColor=s.c>=0?s.sc:"#ef4444";
-    const valCls=s.c>=0?"green":"red";
+  sectors.forEach(sec=>{
+    const info=SECTORS[sec.n]||{color:"#64748b"};
+    const barW=Math.min(Math.abs(sec.c)/maxSC*100,100);
+    const barColor=sec.c>=0?info.color:"#ef4444";
+    const valCls=sec.c>=0?"green":"red";
+    // find which holdings contribute to this sector
+    const contributors=[];
+    H.forEach(h=>{
+      h.splits.forEach(sp=>{
+        if(sp.sec===sec.n) contributors.push(`${h.t} ${sp.pct}%`);
+      });
+    });
     secHtml+=`<div class="sector-row">
-      <div class="sector-dot" style="background:${s.sc}"></div>
-      <div class="sector-name">${s.n}</div>
-      <div class="sector-w">${s.w}%</div>
+      <div class="sector-dot" style="background:${info.color}"></div>
+      <div class="sector-name">${sec.n}</div>
+      <div class="sector-w">${sec.w.toFixed(1)}%</div>
       <div class="sector-bar"><div class="sector-bar-inner" style="width:${barW}%;background:${barColor}"></div></div>
-      <div class="sector-val ${valCls}">${s.c>=0?"+":""}${s.c.toFixed(1)}%</div>
+      <div class="sector-val ${valCls}">${sec.c>=0?"+":""}${sec.c.toFixed(1)}%</div>
+    </div>
+    <div style="margin-left:20px;margin-bottom:8px;font-size:9px;color:#475569">
+      ↳ ${contributors.join(" · ")}
     </div>`;
   });
   document.getElementById("sectorBreakdown").innerHTML=secHtml;
 
-  // Holdings table
+  // ========== 个股明细 ==========
   const sorted=[...res.details].sort((a,b)=>b.contrib-a.contrib);
   const maxC=Math.max(...sorted.map(x=>Math.abs(x.contrib)),0.1);
-  let tHtml=`<div class="card-title">个股明细（按贡献排序）</div><table><thead><tr>
-    <th>标的</th><th>环节</th><th>权重</th><th>预期回报</th><th>贡献</th><th>盈亏</th></tr></thead><tbody>`;
+  let tHtml=`<div class="card-title">个股明细（按贡献排序 · 环节拆分已标注）</div><table><thead><tr>
+    <th>标的</th><th>环节拆分</th><th>总权重</th><th>预期回报</th><th>贡献</th><th>盈亏</th></tr></thead><tbody>`;
   sorted.forEach(d=>{
     const rCls=d.ret>=0?"green":"red";
     const cCls=d.contrib>=0?"green":"red";
     const barW=(Math.abs(d.contrib)/maxC)*100;
     const pnlVal=amt*(d.w/100)*(d.ret/100);
     const pCls=pnlVal>=0?"green":"red";
+
+    // Build split badges
+    let splitHtml="";
+    d.splits.forEach(sp=>{
+      const info=SECTORS[sp.sec]||{color:"#64748b"};
+      splitHtml+=`<span class="badge" style="background:${info.color}22;color:${info.color}">${sp.sec} ${sp.pct}%</span>`;
+    });
+    // Add why tooltips
+    let whyHtml=`<div class="split-detail">`;
+    d.splits.forEach(sp=>{
+      whyHtml+=`↳ ${sp.sec} ${sp.pct}%：${sp.why}<br>`;
+    });
+    whyHtml+=`</div>`;
+
     tHtml+=`<tr>
       <td><span class="tk">${d.t}</span><span class="tn">${d.n}</span></td>
-      <td><span class="badge" style="background:${d.sc}22;color:${d.sc}">${d.s}</span></td>
-      <td style="color:#94a3b8">${d.w}%</td>
+      <td>${splitHtml}${whyHtml}</td>
+      <td style="color:#94a3b8;font-weight:600">${d.w}%</td>
       <td class="${rCls}" style="font-weight:600">${d.ret>=0?"+":""}${d.ret}%</td>
       <td><span class="contrib-bar"><span class="contrib-bar-inner" style="width:${barW}%;background:${d.contrib>=0?"#22c55e":"#ef4444"}"></span></span><span class="${cCls}" style="font-weight:500">${d.contrib>=0?"+":""}${d.contrib.toFixed(2)}%</span></td>
       <td class="${pCls}" style="font-weight:500">${pnlVal>=0?"+":""}$${Math.round(pnlVal).toLocaleString()}</td>
@@ -226,11 +333,13 @@ function render(){
   // Methodology
   document.getElementById("methodology").innerHTML=`
     <div class="card-title">模拟方法论与局限性说明</div>
-    <p>• 个股预期回报基于：各环节当前供需格局 + 历史beta + 盈利增速预期 + 估值水位的综合判断</p>
-    <p>• 最佳/基准/不利/极端四个情景覆盖约95%的概率分布</p>
-    <p>• 概率加权期望回报 ≈ 最佳×22.5% + 基准×47.5% + 不利×22.5% + 极端×7.5% ≈ <strong style="color:#22c55e">+12%至+15%</strong></p>
-    <p style="margin-top:8px"><strong>核心局限：</strong>此模型为静态情景分析，不考虑路径依赖、相关性变化、再平衡操作、汇率对冲成本和税费。实际收益将偏离模型预测。</p>
-    <p style="margin-top:4px"><strong>方法论来源：</strong>"卖铲子"投资法 + 产业链瓶颈分析 + Fidelity"AI篮子"方法 + VanEck配置纪律。不构成投资建议。</p>`;
+    <p>• <strong>环节拆分逻辑：</strong>跨环节标的（如AVGO=算力5%+运力7%）的拆分比例基于该公司各业务线的营收占比和战略权重</p>
+    <p>• AVGO：ASIC/XPU业务约占AI相关收入的~42%→算力5%，网络芯片(Tomahawk)+CPO约占~58%→运力7%</p>
+    <p>• MRVL：定制ASIC约占AI收入的~43%→算力3%，网络DSP/PHY约占~57%→运力4%</p>
+    <p>• VRT：配电/UPS约占收入的~58%→电力3.5%，热管理/液冷约占~42%→热管理2.5%</p>
+    <p>• INTC：CPU/加速器→算力1%，EMIB封装服务→封测1%</p>
+    <p style="margin-top:8px">• 概率加权期望回报 ≈ 最佳×22.5% + 基准×47.5% + 不利×22.5% + 极端×7.5% ≈ <strong style="color:#22c55e">+12%至+15%</strong></p>
+    <p style="margin-top:4px"><strong>核心局限：</strong>静态情景分析，不考虑路径依赖、相关性变化、再平衡、汇率对冲成本和税费。不构成投资建议。</p>`;
 }
 
 render();
