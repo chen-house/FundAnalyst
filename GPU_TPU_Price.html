@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPU / TPU 租金价格追踪 · 静态快照</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#080b0e;--bg2:#0f1318;--bg3:#161b22;--bg4:#1c2230;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#dde2ed;--text2:#8a95aa;--text3:#4e5a6e;
+  --c1:#7ee8a2;--c2:#79c0ff;--c3:#f0883e;--c4:#d2a8ff;--c5:#ff7b72;--c6:#ffa657;
+  --gold:#c9a84c;--gold2:#f0cc7a;
+  --tier1:#ff7b72;--tier2:#f0883e;--tier3:#79c0ff;--tier4:#8a95aa;
+  --hyper:#d2a8ff;--neo:#79c0ff;--retail:#7ee8a2;
+  --font-serif:'Noto Serif SC',serif;
+  --font-sans:'Noto Sans SC',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.7}
+
+.hdr{position:sticky;top:0;z-index:100;background:rgba(8,11,14,0.95);backdrop-filter:blur(16px);
+  border-bottom:0.5px solid var(--border);height:52px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 32px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--font-serif);font-size:13px}
+.lm{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#7ee8a2,#79c0ff);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#080b0e;font-family:var(--font-mono)}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+.ni{padding:4px 10px;border-radius:5px;font-size:11px;color:var(--text2);font-family:var(--font-sans);
+  background:none;border:none;cursor:pointer;outline:none;transition:all .15s;text-decoration:none}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.today-badge{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.04em}
+
+.hero{padding:36px 32px 24px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(126,232,162,0.05) 0%,transparent 70%);pointer-events:none}
+.eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--c1);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.htitle{font-family:var(--font-serif);font-size:28px;font-weight:700;line-height:1.25;color:var(--text);margin-bottom:9px}
+.htitle span{color:var(--c1)}
+.hsub{font-size:12.5px;color:var(--text2);max-width:780px;line-height:1.85}
+
+.kpibar{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:22px;max-width:1100px}
+.kpi{background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;padding:11px 14px}
+.kpi-label{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.06em;margin-bottom:5px}
+.kpi-value{font-family:var(--font-mono);font-size:18px;font-weight:500;color:var(--text)}
+.kpi-delta{font-size:10.5px;color:var(--text2);margin-top:3px}
+.kpi-delta.up{color:var(--c5)}.kpi-delta.dn{color:var(--c1)}
+
+.main{max-width:1320px;margin:0 auto;padding:0 32px 80px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 12px;padding:13px 16px;
+  background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;align-items:center}
+.tb-label{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:.08em;margin-right:4px}
+.tb-grp{display:flex;gap:4px;margin-right:12px;flex-wrap:wrap}
+.tb-btn{font-size:11px;padding:4px 10px;border-radius:5px;background:var(--bg3);border:0.5px solid var(--border);
+  color:var(--text2);cursor:pointer;font-family:var(--font-sans);transition:all .15s}
+.tb-btn:hover{color:var(--text);border-color:var(--border2)}
+.tb-btn.on{background:rgba(126,232,162,0.12);border-color:rgba(126,232,162,0.35);color:var(--c1)}
+
+.sec{padding:30px 0 0}
+.shead{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:11px;border-bottom:0.5px solid var(--border)}
+.snum{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:16px}
+.sicon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-family:var(--font-mono);font-weight:600}
+.stitle{font-family:var(--font-serif);font-size:17px;font-weight:600;color:var(--text)}
+.sdesc{font-size:11px;color:var(--text3);margin-left:8px}
+
+.tier1 .sicon{background:rgba(255,123,114,0.12);color:var(--tier1)}
+.tier2 .sicon{background:rgba(240,136,62,0.12);color:var(--tier2)}
+.tier3 .sicon{background:rgba(121,192,255,0.12);color:var(--tier3)}
+.tier4 .sicon{background:rgba(138,149,170,0.12);color:var(--tier4)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:12px}
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;padding:16px 18px;display:flex;flex-direction:column;gap:11px}
+.card.tier1{border-left:3px solid var(--tier1)}
+.card.tier2{border-left:3px solid var(--tier2)}
+.card.tier3{border-left:3px solid var(--tier3)}
+.card.tier4{border-left:3px solid var(--tier4)}
+
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card-name{font-size:15px;font-weight:600;color:var(--text);font-family:var(--font-serif)}
+.card-sub{font-size:10.5px;color:var(--text3);font-family:var(--font-mono);margin-top:2px}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:9.5px;padding:2px 7px;border-radius:4px;font-family:var(--font-mono);background:var(--bg4);color:var(--text2);border:0.5px solid var(--border)}
+.tag.hot{background:rgba(255,123,114,0.1);color:var(--c5);border-color:rgba(255,123,114,0.22)}
+.tag.new{background:rgba(126,232,162,0.1);color:var(--c1);border-color:rgba(126,232,162,0.22)}
+.tag.eol{background:rgba(138,149,170,0.1);color:var(--text2);border-color:rgba(138,149,170,0.22)}
+
+.price-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ps-cell{padding:8px 10px;border-radius:6px;background:var(--bg3);border:0.5px solid var(--border)}
+.ps-cell.lo{border-left:2px solid var(--retail)}
+.ps-cell.md{border-left:2px solid var(--neo)}
+.ps-cell.hi{border-left:2px solid var(--hyper)}
+.ps-l{font-family:var(--font-mono);font-size:9.5px;color:var(--text3);letter-spacing:.05em;margin-bottom:3px}
+.ps-v{font-family:var(--font-mono);font-size:14px;color:var(--text);font-weight:500}
+.ps-u{font-size:10px;color:var(--text3);margin-left:2px}
+
+.ptable{width:100%;border-collapse:collapse;font-size:11.5px}
+.ptable th{text-align:left;font-weight:500;font-size:9.5px;color:var(--text3);font-family:var(--font-mono);
+  letter-spacing:.08em;padding:6px 8px;border-bottom:0.5px solid var(--border);background:var(--bg3)}
+.ptable th.r,.ptable td.r{text-align:right}
+.ptable td{padding:7px 8px;border-bottom:0.5px solid var(--border);color:var(--text2);font-family:var(--font-sans)}
+.ptable td.num{font-family:var(--font-mono);color:var(--text)}
+.ptable tr:last-child td{border-bottom:none}
+.ptable .ph{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.ph.hyper{background:var(--hyper)}
+.ph.neo{background:var(--neo)}
+.ph.retail{background:var(--retail)}
+.dash{color:var(--text3)}
+
+.chart-wrap{margin-top:6px;background:var(--bg3);border-radius:8px;padding:10px 12px 6px;border:0.5px solid var(--border)}
+.chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.chart-title{font-family:var(--font-mono);font-size:9.5px;color:var(--text3);letter-spacing:.08em}
+.chart-delta{font-family:var(--font-mono);font-size:10px}
+.chart-delta.up{color:var(--c5)}.chart-delta.dn{color:var(--c1)}
+.chart-canvas{width:100%;height:90px}
+
+.note{font-size:10.5px;color:var(--text3);line-height:1.65;padding-top:4px;border-top:0.5px dashed var(--border)}
+.note b{color:var(--text2);font-weight:500}
+
+/* OVERVIEW CHART */
+.overview{margin:14px 0 0;background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;padding:18px 22px}
+.overview-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:10px}
+.overview-title{font-family:var(--font-serif);font-size:15px;font-weight:600;color:var(--text)}
+.overview-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.overview-legend{display:flex;flex-wrap:wrap;gap:10px}
+.ol{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text2);font-family:var(--font-mono)}
+.ol-dot{width:10px;height:2px;border-radius:1px}
+.overview-canvas{width:100%;height:280px}
+
+/* PROVIDER LEGEND */
+.legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 16px;
+  background:var(--bg2);border:0.5px solid var(--border);border-radius:9px;margin:14px 0 0}
+.ll{font-size:11px;font-weight:500;color:var(--text2);margin-right:4px;font-family:var(--font-mono);letter-spacing:.05em}
+.li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.lid{width:9px;height:9px;border-radius:50%}
+
+/* DISCLAIMER */
+.disc{margin:30px 0 0;padding:15px 19px;background:var(--bg2);border:0.5px solid var(--border);
+  border-radius:10px;border-left:3px solid var(--c3)}
+.disc-ttl{font-size:12px;font-weight:600;color:var(--c3);margin-bottom:8px}
+.disc-body{font-size:11.5px;color:var(--text2);line-height:1.95}
+.disc-body li{margin-bottom:4px;padding-left:13px;position:relative;list-style:none}
+.disc-body li::before{content:'▸';position:absolute;left:0;color:var(--text3)}
+.disc-body b{color:var(--text);font-weight:500}
+
+/* SOURCES */
+.src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:14px}
+.src-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:10px 13px}
+.src-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
+.src-tier{font-family:var(--font-mono);font-size:9.5px;color:var(--text3);letter-spacing:.05em;margin-bottom:4px}
+.src-link{font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none;border-bottom:0.5px solid rgba(201,168,76,0.25);word-break:break-all}
+.src-link:hover{color:var(--gold2)}
+
+footer{padding:20px 32px;border-top:0.5px solid var(--border);margin-top:40px;
+  font-size:10.5px;color:var(--text3);text-align:center;font-family:var(--font-mono);letter-spacing:.04em}
+
+@media (max-width: 720px){
+  .hdr{padding:0 16px;height:auto;flex-direction:column;align-items:flex-start;padding-top:10px;padding-bottom:10px;gap:8px}
+  .hero{padding:24px 16px 18px}
+  .htitle{font-size:22px}
+  .main{padding:0 16px 60px}
+  .cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo"><div class="lm">$/h</div><span>算力租金 · 价格追踪</span></div>
+  <nav>
+    <a class="ni" href="#overview">总览</a>
+    <a class="ni" href="#tier1">旗舰</a>
+    <a class="ni" href="#tier2">主流</a>
+    <a class="ni" href="#tier3">上一代</a>
+    <a class="ni" href="#tier4">消费级</a>
+    <a class="ni" href="#sources">数据源</a>
+  </nav>
+  <span class="today-badge" id="snapshotDate">SNAPSHOT 2026-04</span>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">GPU / TPU RENTAL PRICE TRACKER · STATIC v0.1</div>
+  <div class="htitle">英伟达 GPU 与 谷歌 TPU<br/>租金<span>价格 & 趋势</span>追踪</div>
+  <p class="hsub">
+    覆盖 4 类硬件 × 13 家供应商 × 3 种计费档（按需 / 1 年承诺 / 3 年承诺）。
+    数据为<b style="color:var(--text)">静态手工录入</b>，每张卡片标注更新日与来源链接；走势图为月度快照（2025-05 至 2026-04，共 12 期）。
+    单位：NVIDIA 按 <b style="color:var(--text)">USD/GPU·小时</b>，TPU 按 <b style="color:var(--text)">USD/chip·小时</b>。
+  </p>
+  <div class="kpibar">
+    <div class="kpi">
+      <div class="kpi-label">H100 主流价 · MoM</div>
+      <div class="kpi-value" id="kpi-h100">$1.99</div>
+      <div class="kpi-delta dn" id="kpi-h100-d">▼ 24% YoY</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">B200 主流价 · MoM</div>
+      <div class="kpi-value" id="kpi-b200">$4.49</div>
+      <div class="kpi-delta dn" id="kpi-b200-d">▼ 25% 自上市</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">A100 80GB · 散户低位</div>
+      <div class="kpi-value">$0.80</div>
+      <div class="kpi-delta dn">▼ 27% YoY</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">TPU v5p · 按需</div>
+      <div class="kpi-value">$4.20</div>
+      <div class="kpi-delta">2024-Q4 起持平</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="legend">
+    <span class="ll">供应商分层</span>
+    <div class="li"><span class="lid" style="background:var(--hyper)"></span>Hyperscaler 官方云（AWS / GCP / Azure / OCI）</div>
+    <div class="li"><span class="lid" style="background:var(--neo)"></span>Neocloud（CoreWeave / Lambda / Crusoe / Nebius / Together / Fireworks）</div>
+    <div class="li"><span class="lid" style="background:var(--retail)"></span>散户市场（RunPod / Vast.ai / TensorDock / Salad / Hyperbolic）</div>
+  </div>
+
+  <div class="toolbar" id="toolbar">
+    <span class="tb-label">梯队</span>
+    <div class="tb-grp" data-grp="tier">
+      <button class="tb-btn on" data-v="all">全部</button>
+      <button class="tb-btn" data-v="1">旗舰</button>
+      <button class="tb-btn" data-v="2">主流</button>
+      <button class="tb-btn" data-v="3">上一代</button>
+      <button class="tb-btn" data-v="4">消费级</button>
+    </div>
+    <span class="tb-label">类型</span>
+    <div class="tb-grp" data-grp="kind">
+      <button class="tb-btn on" data-v="all">全部</button>
+      <button class="tb-btn" data-v="gpu">NVIDIA GPU</button>
+      <button class="tb-btn" data-v="tpu">Google TPU</button>
+    </div>
+    <span class="tb-label">计费档</span>
+    <div class="tb-grp" data-grp="bill">
+      <button class="tb-btn on" data-v="od">按需 (On-demand)</button>
+      <button class="tb-btn" data-v="1y">1 年承诺</button>
+      <button class="tb-btn" data-v="3y">3 年承诺</button>
+    </div>
+  </div>
+
+  <div id="overview" class="overview">
+    <div class="overview-head">
+      <div>
+        <div class="overview-title">主流型号 12 个月走势 · 散户市场最低价</div>
+        <div class="overview-sub">取每月 RunPod / Vast.ai / Lambda 的最低公开报价；2025-05 → 2026-04</div>
+      </div>
+      <div class="overview-legend" id="overviewLegend"></div>
+    </div>
+    <canvas class="overview-canvas" id="overviewChart"></canvas>
+  </div>
+
+  <!-- TIER 1 -->
+  <section class="sec tier1" id="tier1">
+    <div class="shead">
+      <span class="snum">01</span>
+      <div class="sicon">T1</div>
+      <div class="stitle">第一梯队 · 旗舰训练卡</div>
+      <span class="sdesc">最新一代 / 顶级 HBM / 主要用于前沿模型预训练</span>
+    </div>
+    <div class="cards" data-tier="1"></div>
+  </section>
+
+  <!-- TIER 2 -->
+  <section class="sec tier2" id="tier2">
+    <div class="shead">
+      <span class="snum">02</span>
+      <div class="sicon">T2</div>
+      <div class="stitle">第二梯队 · 主流训练卡</div>
+      <span class="sdesc">出货主力 / 训练 + 大模型推理 / 供应充足</span>
+    </div>
+    <div class="cards" data-tier="2"></div>
+  </section>
+
+  <!-- TIER 3 -->
+  <section class="sec tier3" id="tier3">
+    <div class="shead">
+      <span class="snum">03</span>
+      <div class="sicon">T3</div>
+      <div class="stitle">第三梯队 · 推理 & 上一代</div>
+      <span class="sdesc">中小模型推理 / 微调 / 学术研究 / 上一代旗舰退役价</span>
+    </div>
+    <div class="cards" data-tier="3"></div>
+  </section>
+
+  <!-- TIER 4 -->
+  <section class="sec tier4" id="tier4">
+    <div class="shead">
+      <span class="snum">04</span>
+      <div class="sicon">T4</div>
+      <div class="stitle">第四梯队 · 消费级 & 长尾</div>
+      <span class="sdesc">个人开发者 / 小模型 / Stable Diffusion / 推理穷鬼套餐</span>
+    </div>
+    <div class="cards" data-tier="4"></div>
+  </section>
+
+  <div class="disc">
+    <div class="disc-ttl">阅读须知 · 价格口径与陷阱</div>
+    <ul class="disc-body">
+      <li><b>单位</b>：NVIDIA 一律折算为 <b>USD/GPU·小时</b>（如 AWS p5.48xlarge 整机 8 卡 ÷ 8）；TPU 按 <b>USD/chip·小时</b>（一个 chip ≠ 一个 host，v5p 一个 host 含 4 chip）。</li>
+      <li><b>按需 / 承诺 / Spot 三档差距巨大</b>：以 H100 为例，AWS 按需 $12.29，1 年承诺约 $7.57，3 年承诺约 $4.93，Spot 可低至 $2-3 但随时可被回收。本页"按需"为列表价，不含企业谈判折扣（一般 30-50%）。</li>
+      <li><b>整机 vs 单卡</b>：Hyperscaler 通常只租 8 卡整机，单卡价是除算结果；Neocloud / 散户市场支持单卡按小时。前者实际起租成本远高于单卡价。</li>
+      <li><b>区域差异</b>：本页取北美区代表价。亚太 / 欧洲普遍贵 10-30%；中国区受出口管制有特殊型号（H20 / H200e），价格体系单独。</li>
+      <li><b>Spot 价格未纳入</b>：Vast.ai / Salad 的中断价格波动剧烈，与不可中断价差距 50-80%，需独立追踪。</li>
+      <li><b>TPU 不能跨云租</b>：TPU 仅 GCP 提供，无第三方分销；Trillium / Ironwood 部分区域需配额申请。</li>
+      <li><b>静态快照局限</b>：本页所有价格为人工录入快照，散户市场（RunPod / Vast）实际报价分钟级波动，建议使用前回到原站二次确认。</li>
+    </ul>
+  </div>
+
+  <section class="sec" id="sources">
+    <div class="shead">
+      <span class="snum">05</span>
+      <div class="sicon" style="background:rgba(201,168,76,0.12);color:var(--gold)">SRC</div>
+      <div class="stitle">数据源 · 各家定价页</div>
+      <span class="sdesc">点击进入原站二次确认</span>
+    </div>
+    <div class="src-grid" id="srcGrid"></div>
+  </section>
+
+</div>
+
+<footer>
+  STATIC SNAPSHOT · LAST UPDATED 2026-04-30 · NEXT REVIEW 2026-05-31 · DATA HAND-CURATED, NOT REAL-TIME
+</footer>
+
+<script>
+/* =========================================================
+   DATA — 手工维护。结构：
+   models[] : 每张卡片
+     - id, name, sub (架构 / HBM), kind (gpu|tpu), tier (1-4), tags
+     - prices[] : 每行 { provider, ptype:'hyper'|'neo'|'retail', od, c1y, c3y, asof, src? }
+     - history12 : 长度 12 的数组，2025-05 → 2026-04，散户市场最低 $/h
+     - note : 一句备注
+   ========================================================= */
+
+const MONTHS = ['25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03','26/04'];
+
+const SOURCES = [
+  {name:'AWS EC2 GPU 定价',tier:'Hyperscaler',url:'https://aws.amazon.com/ec2/instance-types/p5/'},
+  {name:'GCP Compute · Accelerator',tier:'Hyperscaler',url:'https://cloud.google.com/compute/gpus-pricing'},
+  {name:'GCP TPU 定价',tier:'Hyperscaler',url:'https://cloud.google.com/tpu/pricing'},
+  {name:'Azure ND H100 / H200',tier:'Hyperscaler',url:'https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/'},
+  {name:'Oracle Cloud GPU',tier:'Hyperscaler',url:'https://www.oracle.com/cloud/compute/gpu/'},
+  {name:'CoreWeave',tier:'Neocloud',url:'https://www.coreweave.com/pricing'},
+  {name:'Lambda Labs',tier:'Neocloud',url:'https://lambda.ai/service/gpu-cloud'},
+  {name:'Crusoe Cloud',tier:'Neocloud',url:'https://crusoe.ai/cloud/pricing/'},
+  {name:'Nebius',tier:'Neocloud',url:'https://nebius.com/prices'},
+  {name:'Together AI',tier:'Neocloud',url:'https://www.together.ai/pricing'},
+  {name:'Fireworks AI',tier:'Neocloud',url:'https://fireworks.ai/pricing'},
+  {name:'RunPod',tier:'Retail',url:'https://www.runpod.io/pricing'},
+  {name:'Vast.ai',tier:'Retail',url:'https://vast.ai/pricing'},
+  {name:'TensorDock',tier:'Retail',url:'https://tensordock.com/'},
+  {name:'Hyperbolic',tier:'Retail',url:'https://hyperbolic.xyz/'},
+  {name:'Salad',tier:'Retail',url:'https://salad.com/pricing'}
+];
+
+const MODELS = [
+  /* ========== TIER 1 · 旗舰 ========== */
+  {
+    id:'gb200', name:'NVIDIA GB200 NVL72', sub:'Blackwell · 192 GB HBM3e · per-GPU', kind:'gpu', tier:1, tags:['new','hot'],
+    prices:[
+      {provider:'AWS p6e (preview)',ptype:'hyper',od:11.50,c1y:7.20,c3y:4.80,asof:'2026-04'},
+      {provider:'CoreWeave (allocation)',ptype:'neo',od:6.99,c1y:4.99,c3y:3.49,asof:'2026-04'},
+      {provider:'Lambda 1-Click',ptype:'neo',od:5.99,c1y:4.49,c3y:null,asof:'2026-04'},
+      {provider:'Together AI',ptype:'neo',od:5.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod (limited)',ptype:'retail',od:6.49,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[null,null,null,null,9.50,8.50,7.99,7.49,6.99,6.49,6.49,5.99],
+    note:'2025-Q4 起小规模出货，2026-Q2 进入主流可得。72 卡机柜整租为主，单卡按需价系除算结果。'
+  },
+  {
+    id:'b200', name:'NVIDIA B200 SXM', sub:'Blackwell · 192 GB HBM3e · 8x SXM 节点', kind:'gpu', tier:1, tags:['new','hot'],
+    prices:[
+      {provider:'AWS p6-b200',ptype:'hyper',od:9.98,c1y:6.20,c3y:4.10,asof:'2026-04'},
+      {provider:'GCP a4',ptype:'hyper',od:9.45,c1y:5.95,c3y:3.85,asof:'2026-04'},
+      {provider:'Azure ND B200 v6',ptype:'hyper',od:9.79,c1y:6.10,c3y:4.05,asof:'2026-04'},
+      {provider:'CoreWeave',ptype:'neo',od:5.49,c1y:3.99,c3y:2.79,asof:'2026-04'},
+      {provider:'Lambda 1-Click',ptype:'neo',od:4.99,c1y:3.79,c3y:null,asof:'2026-04'},
+      {provider:'Crusoe',ptype:'neo',od:4.49,c1y:3.49,c3y:2.49,asof:'2026-04'},
+      {provider:'Together AI',ptype:'neo',od:4.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:5.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Hyperbolic',ptype:'retail',od:3.99,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[null,5.99,5.99,5.49,5.49,4.99,4.99,4.79,4.49,4.49,4.29,3.99],
+    note:'B200 对比 H100 训练性能 ~2-3x，但价格仅 ~2x，TCO/Token 已优于 H100。'
+  },
+  {
+    id:'h200', name:'NVIDIA H200 SXM', sub:'Hopper · 141 GB HBM3e · 8x SXM 节点', kind:'gpu', tier:1, tags:[],
+    prices:[
+      {provider:'AWS p5e',ptype:'hyper',od:10.60,c1y:6.55,c3y:4.30,asof:'2026-04'},
+      {provider:'GCP a3-megagpu',ptype:'hyper',od:9.60,c1y:6.05,c3y:3.95,asof:'2026-04'},
+      {provider:'Azure ND H200 v5',ptype:'hyper',od:10.20,c1y:6.30,c3y:4.15,asof:'2026-04'},
+      {provider:'CoreWeave',ptype:'neo',od:5.50,c1y:3.99,c3y:2.79,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:3.29,c1y:2.79,c3y:null,asof:'2026-04'},
+      {provider:'Crusoe',ptype:'neo',od:2.50,c1y:2.10,c3y:1.59,asof:'2026-04'},
+      {provider:'Together AI',ptype:'neo',od:2.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:3.59,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:2.20,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[3.49,3.49,3.29,3.29,2.99,2.99,2.79,2.79,2.59,2.49,2.39,2.20],
+    note:'H200 实际就是 H100 + 更大 HBM，主要受益场景是长上下文推理（Llama-3 405B / Claude 类大窗口）。'
+  },
+  {
+    id:'tpu-v7', name:'Google TPU v7 Ironwood', sub:'Inference + Training · 192GB HBM · per chip', kind:'tpu', tier:1, tags:['new'],
+    prices:[
+      {provider:'GCP us-central / europe',ptype:'hyper',od:5.40,c1y:3.78,c3y:2.43,asof:'2026-04'}
+    ],
+    history12:[null,null,null,null,null,null,5.40,5.40,5.40,5.40,5.40,5.40],
+    note:'2025-Q4 GA，2026 起逐步开放配额。Inference-first 设计，FP8 算力 4614 TFLOPS/chip。'
+  },
+  {
+    id:'tpu-v5p', name:'Google TPU v5p', sub:'Training 旗舰 · 95GB HBM · per chip', kind:'tpu', tier:1, tags:[],
+    prices:[
+      {provider:'GCP us-east5 / us-central2',ptype:'hyper',od:4.20,c1y:2.94,c3y:1.89,asof:'2026-04'}
+    ],
+    history12:[4.20,4.20,4.20,4.20,4.20,4.20,4.20,4.20,4.20,4.20,4.20,4.20],
+    note:'2024-Q4 起价格保持稳定。Pods 最大 8960 chip，主要客户：Anthropic、Salesforce、Midjourney。'
+  },
+
+  /* ========== TIER 2 · 主流 ========== */
+  {
+    id:'h100', name:'NVIDIA H100 SXM', sub:'Hopper · 80 GB HBM3 · 8x SXM 节点', kind:'gpu', tier:2, tags:['hot'],
+    prices:[
+      {provider:'AWS p5.48xlarge',ptype:'hyper',od:12.29,c1y:7.57,c3y:4.93,asof:'2026-04'},
+      {provider:'GCP a3-highgpu-8g',ptype:'hyper',od:11.06,c1y:6.95,c3y:4.55,asof:'2026-04'},
+      {provider:'Azure ND H100 v5',ptype:'hyper',od:11.50,c1y:7.20,c3y:4.70,asof:'2026-04'},
+      {provider:'OCI BM.GPU.H100',ptype:'hyper',od:10.00,c1y:6.50,c3y:4.20,asof:'2026-04'},
+      {provider:'CoreWeave',ptype:'neo',od:4.76,c1y:3.49,c3y:2.49,asof:'2026-04'},
+      {provider:'Lambda 1-Click',ptype:'neo',od:2.49,c1y:1.99,c3y:null,asof:'2026-04'},
+      {provider:'Crusoe',ptype:'neo',od:2.45,c1y:1.99,c3y:1.49,asof:'2026-04'},
+      {provider:'Nebius',ptype:'neo',od:2.00,c1y:1.69,c3y:1.29,asof:'2026-04'},
+      {provider:'Together AI',ptype:'neo',od:1.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod (Secure)',ptype:'retail',od:1.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod (Community)',ptype:'retail',od:1.69,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:1.50,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'TensorDock',ptype:'retail',od:1.79,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[2.49,2.39,2.29,2.19,2.19,2.09,1.99,1.89,1.79,1.69,1.59,1.50],
+    note:'2025 全年单边下行，散户市场已击穿 $1.50；Hyperscaler 牌价名义未变但折扣加大。'
+  },
+  {
+    id:'tpu-trillium', name:'Google TPU v6e (Trillium)', sub:'Mid-tier · 32GB HBM · per chip', kind:'tpu', tier:2, tags:[],
+    prices:[
+      {provider:'GCP 全球',ptype:'hyper',od:2.70,c1y:1.89,c3y:1.22,asof:'2026-04'}
+    ],
+    history12:[2.70,2.70,2.70,2.70,2.70,2.70,2.70,2.70,2.70,2.70,2.70,2.70],
+    note:'相比 v5e 性能 4.7x，价格 2.25x，性价比明显改善。Apple Intelligence、Gemini 推理主力。'
+  },
+  {
+    id:'tpu-v5e', name:'Google TPU v5e', sub:'Inference · 16GB HBM · per chip', kind:'tpu', tier:2, tags:[],
+    prices:[
+      {provider:'GCP 全球',ptype:'hyper',od:1.20,c1y:0.84,c3y:0.54,asof:'2026-04'}
+    ],
+    history12:[1.20,1.20,1.20,1.20,1.20,1.20,1.20,1.20,1.20,1.20,1.20,1.20],
+    note:'TPU 入门档，3 年承诺 $0.54 是全市场最便宜的"加速器/小时"。适合中小推理 + 微调。'
+  },
+
+  /* ========== TIER 3 · 上一代 ========== */
+  {
+    id:'a100-80', name:'NVIDIA A100 SXM 80GB', sub:'Ampere · 80 GB HBM2e', kind:'gpu', tier:3, tags:[],
+    prices:[
+      {provider:'AWS p4de.24xlarge',ptype:'hyper',od:5.12,c1y:3.20,c3y:2.10,asof:'2026-04'},
+      {provider:'GCP a2-ultragpu-8g',ptype:'hyper',od:5.07,c1y:3.15,c3y:2.05,asof:'2026-04'},
+      {provider:'Azure ND A100 v4',ptype:'hyper',od:5.20,c1y:3.25,c3y:2.15,asof:'2026-04'},
+      {provider:'CoreWeave',ptype:'neo',od:2.21,c1y:1.79,c3y:1.39,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:1.79,c1y:1.49,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:1.19,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.80,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'TensorDock',ptype:'retail',od:0.99,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[1.10,1.05,1.00,0.99,0.95,0.92,0.90,0.89,0.85,0.83,0.82,0.80],
+    note:'A100 跌价幅度 2025 全年最大；H100 替代后散户市场库存涌出。'
+  },
+  {
+    id:'a100-40', name:'NVIDIA A100 PCIe 40GB', sub:'Ampere · 40 GB HBM2', kind:'gpu', tier:3, tags:[],
+    prices:[
+      {provider:'GCP a2-highgpu',ptype:'hyper',od:3.67,c1y:2.30,c3y:1.50,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:1.29,c1y:1.05,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.60,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.85,0.82,0.79,0.75,0.72,0.70,0.68,0.65,0.63,0.62,0.61,0.60],
+    note:'40GB 显存对 70B+ 模型已紧张，主要用于 7-13B 推理与教学。'
+  },
+  {
+    id:'l40s', name:'NVIDIA L40S', sub:'Ada Lovelace · 48 GB GDDR6', kind:'gpu', tier:3, tags:[],
+    prices:[
+      {provider:'AWS g6e.48xlarge',ptype:'hyper',od:2.92,c1y:1.85,c3y:1.20,asof:'2026-04'},
+      {provider:'CoreWeave',ptype:'neo',od:1.55,c1y:1.25,c3y:0.95,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:1.40,c1y:1.10,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.99,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.85,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[1.29,1.19,1.15,1.09,1.05,1.05,0.99,0.99,0.95,0.89,0.89,0.85],
+    note:'推理性价比之王，48GB 装得下 32B 量化模型；FP8 推理性能逼近 H100。'
+  },
+  {
+    id:'l4', name:'NVIDIA L4', sub:'Ada · 24 GB GDDR6 · 推理小卡', kind:'gpu', tier:3, tags:[],
+    prices:[
+      {provider:'GCP g2',ptype:'hyper',od:0.71,c1y:0.45,c3y:0.30,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:0.43,c1y:0.35,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.49,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.55,0.52,0.49,0.49,0.46,0.45,0.43,0.43,0.43,0.43,0.43,0.43],
+    note:'低功耗（72W）、单槽，适合大规模推理 fleet。Hugging Face Inference Endpoint 默认型号。'
+  },
+  {
+    id:'a10g', name:'NVIDIA A10G', sub:'Ampere · 24 GB GDDR6', kind:'gpu', tier:3, tags:[],
+    prices:[
+      {provider:'AWS g5.xlarge',ptype:'hyper',od:1.21,c1y:0.78,c3y:0.51,asof:'2026-04'},
+      {provider:'Lambda',ptype:'neo',od:0.60,c1y:0.49,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.39,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.55,0.52,0.49,0.49,0.46,0.45,0.43,0.43,0.41,0.41,0.39,0.39],
+    note:'AWS 独家定制，G5 系列大量部署；推理友好但训练带宽偏弱。'
+  },
+  {
+    id:'tpu-v4', name:'Google TPU v4', sub:'Training · 32GB HBM · per chip', kind:'tpu', tier:3, tags:['eol'],
+    prices:[
+      {provider:'GCP us-central2',ptype:'hyper',od:3.22,c1y:2.25,c3y:1.45,asof:'2026-04'}
+    ],
+    history12:[3.22,3.22,3.22,3.22,3.22,3.22,3.22,3.22,3.22,3.22,3.22,3.22],
+    note:'2026 起进入退役阶段，新分配优先 v5p / Trillium。已用客户保留至合约结束。'
+  },
+
+  /* ========== TIER 4 · 消费级 ========== */
+  {
+    id:'rtx4090', name:'NVIDIA RTX 4090', sub:'Ada · 24 GB GDDR6X · 消费级', kind:'gpu', tier:4, tags:[],
+    prices:[
+      {provider:'RunPod (Community)',ptype:'retail',od:0.74,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.45,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'TensorDock',ptype:'retail',od:0.35,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Hyperbolic',ptype:'retail',od:0.50,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Salad (interrupt.)',ptype:'retail',od:0.20,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.69,0.65,0.59,0.55,0.52,0.49,0.45,0.45,0.42,0.39,0.37,0.35],
+    note:'禁运 + 卡荒早期需求外溢；Hyperscaler 不提供（NVIDIA EULA 禁止数据中心使用消费卡）。'
+  },
+  {
+    id:'rtx5090', name:'NVIDIA RTX 5090', sub:'Blackwell consumer · 32 GB GDDR7', kind:'gpu', tier:4, tags:['new'],
+    prices:[
+      {provider:'RunPod (Community)',ptype:'retail',od:1.29,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.89,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Hyperbolic',ptype:'retail',od:0.99,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[null,null,null,null,1.99,1.79,1.59,1.49,1.29,1.09,0.99,0.89],
+    note:'2025-Q3 起在散户市场出现；显存翻倍至 32GB 后可跑 70B 量化模型。'
+  },
+  {
+    id:'rtx3090', name:'NVIDIA RTX 3090', sub:'Ampere · 24 GB GDDR6X · 上代消费', kind:'gpu', tier:4, tags:[],
+    prices:[
+      {provider:'Vast.ai',ptype:'retail',od:0.22,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.43,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'TensorDock',ptype:'retail',od:0.18,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.32,0.30,0.29,0.28,0.27,0.26,0.25,0.24,0.23,0.22,0.21,0.18],
+    note:'与 4090 显存同为 24GB，但带宽 / FP8 差距明显；适合显存密集、算力非瓶颈的任务。'
+  },
+  {
+    id:'a6000', name:'NVIDIA RTX A6000', sub:'Ampere Pro · 48 GB GDDR6', kind:'gpu', tier:4, tags:[],
+    prices:[
+      {provider:'Lambda',ptype:'neo',od:0.80,c1y:0.65,c3y:null,asof:'2026-04'},
+      {provider:'RunPod',ptype:'retail',od:0.49,c1y:null,c3y:null,asof:'2026-04'},
+      {provider:'Vast.ai',ptype:'retail',od:0.39,c1y:null,c3y:null,asof:'2026-04'}
+    ],
+    history12:[0.65,0.59,0.55,0.55,0.49,0.49,0.45,0.45,0.42,0.39,0.39,0.39],
+    note:'48GB 大显存 + 工作站定位；ECC 内存适合长时间训练，性能介于 A100 和 4090 之间。'
+  }
+];
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+const fmt = v => v == null ? '<span class="dash">—</span>' : `$${v.toFixed(2)}`;
+
+function renderCard(m){
+  const tags = (m.tags || []).map(t => {
+    const map = {hot:'热门',new:'新上市',eol:'退役中'};
+    return `<span class="tag ${t}">${map[t]||t}</span>`;
+  }).join('');
+
+  // summary: hyper avg / neo lo / retail lo
+  const odBy = (pt) => m.prices.filter(p => p.ptype===pt && p.od!=null).map(p=>p.od);
+  const hyperAvg = odBy('hyper').length ? (odBy('hyper').reduce((a,b)=>a+b,0)/odBy('hyper').length) : null;
+  const neoLo = odBy('neo').length ? Math.min(...odBy('neo')) : null;
+  const retailLo = odBy('retail').length ? Math.min(...odBy('retail')) : null;
+
+  const unit = m.kind === 'tpu' ? '/chip·h' : '/GPU·h';
+
+  const rows = m.prices.map(p => `
+    <tr>
+      <td><span class="ph ${p.ptype}"></span>${p.provider}</td>
+      <td class="num r">${fmt(p.od)}</td>
+      <td class="num r">${fmt(p.c1y)}</td>
+      <td class="num r">${fmt(p.c3y)}</td>
+    </tr>
+  `).join('');
+
+  // delta: history12 last vs first non-null
+  const h = m.history12;
+  const firstIdx = h.findIndex(v => v != null);
+  const lastV = h[h.length-1];
+  let delta = '';
+  if (firstIdx >= 0 && lastV != null && firstIdx < h.length-1){
+    const pct = (lastV - h[firstIdx]) / h[firstIdx] * 100;
+    const cls = pct < 0 ? 'dn' : 'up';
+    const arrow = pct < 0 ? '▼' : '▲';
+    delta = `<span class="chart-delta ${cls}">${arrow} ${Math.abs(pct).toFixed(0)}% (${MONTHS[firstIdx]}→${MONTHS[h.length-1]})</span>`;
+  }
+
+  return `
+    <div class="card tier${m.tier}" data-tier="${m.tier}" data-kind="${m.kind}">
+      <div class="card-top">
+        <div>
+          <div class="card-name">${m.name}</div>
+          <div class="card-sub">${m.sub}</div>
+          <div class="card-tags">${tags}</div>
+        </div>
+      </div>
+      <div class="price-summary">
+        <div class="ps-cell hi"><div class="ps-l">HYPERSCALER 均</div><div class="ps-v">${hyperAvg!=null?'$'+hyperAvg.toFixed(2):'—'}<span class="ps-u">${unit}</span></div></div>
+        <div class="ps-cell md"><div class="ps-l">NEOCLOUD 低</div><div class="ps-v">${neoLo!=null?'$'+neoLo.toFixed(2):'—'}<span class="ps-u">${unit}</span></div></div>
+        <div class="ps-cell lo"><div class="ps-l">散户 低</div><div class="ps-v">${retailLo!=null?'$'+retailLo.toFixed(2):'—'}<span class="ps-u">${unit}</span></div></div>
+      </div>
+      <table class="ptable">
+        <thead><tr><th>供应商</th><th class="r">按需</th><th class="r">1y</th><th class="r">3y</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="chart-wrap">
+        <div class="chart-head">
+          <span class="chart-title">12 个月走势 · 散户市场最低 ${unit}</span>
+          ${delta}
+        </div>
+        <canvas class="chart-canvas" id="ch-${m.id}"></canvas>
+      </div>
+      <div class="note"><b>注</b>　${m.note}</div>
+    </div>
+  `;
+}
+
+function buildSparkline(canvasId, data, color){
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: MONTHS,
+      datasets:[{
+        data: data,
+        borderColor: color,
+        backgroundColor: color + '22',
+        borderWidth: 1.5,
+        fill: true,
+        tension: 0.35,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointBackgroundColor: color,
+        spanGaps: true
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:false,
+      plugins:{legend:{display:false},tooltip:{
+        backgroundColor:'#0f1318',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,
+        titleColor:'#dde2ed',bodyColor:'#dde2ed',titleFont:{family:'JetBrains Mono',size:10},
+        bodyFont:{family:'JetBrains Mono',size:11},padding:8,displayColors:false,
+        callbacks:{label:c=>'$'+c.parsed.y.toFixed(2)}
+      }},
+      scales:{
+        x:{ticks:{color:'#4e5a6e',font:{size:9,family:'JetBrains Mono'}},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4e5a6e',font:{size:9,family:'JetBrains Mono'},callback:v=>'$'+v},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }
+    }
+  });
+}
+
+function renderAll(){
+  // group cards by tier
+  [1,2,3,4].forEach(t => {
+    const wrap = document.querySelector(`.cards[data-tier="${t}"]`);
+    const html = MODELS.filter(m=>m.tier===t).map(renderCard).join('');
+    wrap.innerHTML = html;
+  });
+
+  // sparkline colors
+  const colorByTier = {1:'#ff7b72', 2:'#f0883e', 3:'#79c0ff', 4:'#8a95aa'};
+  MODELS.forEach(m => {
+    buildSparkline('ch-'+m.id, m.history12, colorByTier[m.tier]);
+  });
+
+  // overview chart — top 6 models
+  const overviewIds = ['b200','h100','h200','a100-80','l40s','rtx4090'];
+  const overviewColors = ['#ff7b72','#f0883e','#d2a8ff','#79c0ff','#7ee8a2','#ffa657'];
+  const overviewData = overviewIds.map((id,i) => {
+    const m = MODELS.find(x=>x.id===id);
+    return {label:m.name.replace('NVIDIA ',''), data:m.history12, borderColor:overviewColors[i],
+      backgroundColor:'transparent', borderWidth:1.8, tension:0.3, pointRadius:0, pointHoverRadius:4, spanGaps:true};
+  });
+  const legend = overviewIds.map((id,i) => {
+    const m = MODELS.find(x=>x.id===id);
+    return `<div class="ol"><span class="ol-dot" style="background:${overviewColors[i]}"></span>${m.name.replace('NVIDIA ','')}</div>`;
+  }).join('');
+  document.getElementById('overviewLegend').innerHTML = legend;
+
+  new Chart(document.getElementById('overviewChart'), {
+    type:'line',
+    data:{labels:MONTHS, datasets:overviewData},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{
+        mode:'index', intersect:false,
+        backgroundColor:'#0f1318', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        titleColor:'#dde2ed', bodyColor:'#dde2ed',
+        titleFont:{family:'JetBrains Mono',size:10}, bodyFont:{family:'JetBrains Mono',size:11},
+        padding:10, callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}
+      }},
+      scales:{
+        x:{ticks:{color:'#8a95aa',font:{family:'JetBrains Mono',size:10}},grid:{color:'rgba(255,255,255,0.03)'}},
+        y:{ticks:{color:'#8a95aa',font:{family:'JetBrains Mono',size:10},callback:v=>'$'+v},
+           grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }
+    }
+  });
+
+  // sources
+  const tierColor = {Hyperscaler:'var(--hyper)', Neocloud:'var(--neo)', Retail:'var(--retail)'};
+  document.getElementById('srcGrid').innerHTML = SOURCES.map(s => `
+    <div class="src-card">
+      <div class="src-name">${s.name}</div>
+      <div class="src-tier" style="color:${tierColor[s.tier]}">${s.tier.toUpperCase()}</div>
+      <a class="src-link" href="${s.url}" target="_blank" rel="noopener">${s.url.replace('https://','')}</a>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+const filterState = {tier:'all', kind:'all', bill:'od'};
+
+function applyFilters(){
+  document.querySelectorAll('.card').forEach(c => {
+    const t = c.dataset.tier, k = c.dataset.kind;
+    const showTier = filterState.tier==='all' || filterState.tier===t;
+    const showKind = filterState.kind==='all' || filterState.kind===k;
+    c.style.display = (showTier && showKind) ? '' : 'none';
+  });
+  // hide empty sections
+  [1,2,3,4].forEach(t => {
+    const sec = document.getElementById('tier'+t);
+    const wrap = sec.querySelector('.cards');
+    const visible = [...wrap.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+    sec.style.display = visible ? '' : 'none';
+  });
+
+  // billing column highlight
+  document.querySelectorAll('.ptable').forEach(tb => {
+    const ths = tb.querySelectorAll('th');
+    const tds = tb.querySelectorAll('td');
+    [ths, tds].forEach(group => {
+      group.forEach(el => el.style.background = '');
+    });
+    if (filterState.bill !== 'od'){
+      const colIdx = filterState.bill === '1y' ? 2 : 3;
+      tb.querySelectorAll('tr').forEach(tr => {
+        const cells = tr.children;
+        if (cells[colIdx]) cells[colIdx].style.background = 'rgba(126,232,162,0.06)';
+      });
+    } else {
+      tb.querySelectorAll('tr').forEach(tr => {
+        const cells = tr.children;
+        if (cells[1]) cells[1].style.background = 'rgba(126,232,162,0.06)';
+      });
+    }
+  });
+}
+
+document.getElementById('toolbar').addEventListener('click', e => {
+  const btn = e.target.closest('.tb-btn');
+  if (!btn) return;
+  const grp = btn.parentElement.dataset.grp;
+  btn.parentElement.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  filterState[grp] = btn.dataset.v;
+  applyFilters();
+});
+
+renderAll();
+applyFilters();
+</script>
+
+</body>
+</html>
