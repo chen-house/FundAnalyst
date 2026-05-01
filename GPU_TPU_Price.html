@@ -116,7 +116,7 @@ nav{display:flex;gap:2px;flex-wrap:wrap}
 .chart-title{font-family:var(--font-mono);font-size:9.5px;color:var(--text3);letter-spacing:.08em}
 .chart-delta{font-family:var(--font-mono);font-size:10px}
 .chart-delta.up{color:var(--c5)}.chart-delta.dn{color:var(--c1)}
-.chart-canvas{width:100%;height:90px}
+.chart-box{position:relative;width:100%;height:90px}
 
 .note{font-size:10.5px;color:var(--text3);line-height:1.65;padding-top:4px;border-top:0.5px dashed var(--border)}
 .note b{color:var(--text2);font-weight:500}
@@ -129,7 +129,7 @@ nav{display:flex;gap:2px;flex-wrap:wrap}
 .overview-legend{display:flex;flex-wrap:wrap;gap:10px}
 .ol{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text2);font-family:var(--font-mono)}
 .ol-dot{width:10px;height:2px;border-radius:1px}
-.overview-canvas{width:100%;height:280px}
+.overview-box{position:relative;width:100%;height:300px}
 
 /* PROVIDER LEGEND */
 .legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 16px;
@@ -254,7 +254,7 @@ footer{padding:20px 32px;border-top:0.5px solid var(--border);margin-top:40px;
       </div>
       <div class="overview-legend" id="overviewLegend"></div>
     </div>
-    <canvas class="overview-canvas" id="overviewChart"></canvas>
+    <div class="overview-box"><canvas id="overviewChart"></canvas></div>
   </div>
 
   <!-- TIER 1 -->
@@ -639,7 +639,7 @@ function renderCard(m){
           <span class="chart-title">12 个月走势 · 散户市场最低 ${unit}</span>
           ${delta}
         </div>
-        <canvas class="chart-canvas" id="ch-${m.id}"></canvas>
+        <div class="chart-box"><canvas id="ch-${m.id}"></canvas></div>
       </div>
       <div class="note"><b>注</b>　${m.note}</div>
     </div>
